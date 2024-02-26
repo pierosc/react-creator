@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { CC, UCC, removeString, sqlVarToJavaVar } from "../StringFunctions";
+import {
+  CC,
+  UCC,
+  UniqueAndJoin,
+  removeString,
+  sqlVarToJavaVar,
+} from "../StringFunctions";
 
 const useService = (tableStructue, artifactId) => {
   const [servicesList, setServicesList] = useState([]); //TODOS LOS SERVICIOS
@@ -74,7 +80,7 @@ ${serviceImport}`;
   const setCRUDFServices = () => {
     tableStructue.forEach((table) => {
       const pkName = UCC(table.attributes.find((attr) => attr.pk).name);
-      const createService = getAddService(table.name);
+      const createService = getAddService(table);
       //   const readService = getListAllService(table.name);
       const updateService = getEditService(table.name, pkName);
       // const deleteService = getDeleteService(table.name, pkName);
@@ -135,6 +141,25 @@ ${serviceImport}`;
   // |__|     |__| |_______||_______|   |_______/       |__|     | _| `._____| \______/   \______|    |__|      \______/  | _| `._____||_______|
 
   const getServiceImports = (table) => {
+    const attributesRepositoriesImports = table.attributes.map((attr) =>
+      !attr.pk
+        ? attr.relations.map((rel) => {
+            const relRepository = `${UCC(rel.destinyTable)}Repository`;
+            const relEntity = `${UCC(rel.destinyTable)}Entity`;
+            const imports = `import com.${artifactId}.repositories.dB.repo.${relRepository};
+import com.${artifactId}.repositories.dB.entities.${relEntity};`;
+            console.log(imports);
+            return imports;
+          })
+        : []
+    );
+    let AttrRepImp = Array.from(
+      new Set(attributesRepositoriesImports.map(JSON.stringify)),
+      JSON.parse
+    ).join(`
+`);
+
+    // console.log(attributesRepositoriesImports);
     const service = `package com.${artifactId}.business.services;
   
 import java.util.ArrayList;
@@ -153,7 +178,10 @@ import com.${artifactId}.business.domain.${UCC(table.name)}.${UCC(
       table.name
     )}FilterDTO;
 import com.${artifactId}.repositories.dB.entities.${UCC(table.name)}Entity;
-import com.${artifactId}.repositories.dB.repo.${UCC(table.name)}Repository;`;
+import com.${artifactId}.repositories.dB.repo.${UCC(
+      table.name
+    )}Repository;${AttrRepImp}
+`;
     return service;
   };
 
@@ -161,11 +189,32 @@ import com.${artifactId}.repositories.dB.repo.${UCC(table.name)}Repository;`;
   // -------------------------------------------------------------------------------------
 
   const getServiceClass = (table) => {
+    const attributesRepositories = table.attributes.map((attr) =>
+      !attr.pk
+        ? attr.relations.map((rel) => {
+            const relRepository = `${UCC(rel.destinyTable)}Repository`;
+            const relRepositoryInstance = `${CC(rel.destinyTable)}Repository`;
+
+            return `  @Autowired
+  private ${relRepository} ${relRepositoryInstance};`;
+          })
+        : []
+    );
+
+    let uniqueAttrRep = Array.from(
+      new Set(attributesRepositories.map(JSON.stringify)),
+      JSON.parse
+    ).join(`
+`);
+    // console.log(attributesRepositories);
+    // console.log(uniqueAttrRep);
+
     const service = `@Service
 public class ${UCC(table.name)}Service {
 
   @Autowired
   private ${UCC(table.name)}Repository ${CC(table.name)}Repository;
+  ${uniqueAttrRep}
 `;
     return service;
   };
@@ -201,37 +250,48 @@ public class ${UCC(table.name)}Service {
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const getAddService = (tableName) => {
-    const repositoryInstance = `${CC(tableName)}Repository`;
-    const serviceName = `add${UCC(tableName)}`;
-    const input = `${UCC(tableName)}Entity ${CC(tableName)}Entity`;
-    const inputInstance = `${CC(tableName)}Entity`;
-    const inputClass = `${UCC(tableName)}Entity`;
-    const errorMoreThanOne = `"${UCC(tableName)} already exists"`;
+  const getAddService = (table) => {
+    const repositoryInstance = `${CC(table.name)}Repository`;
+    const serviceName = `add${UCC(table.name)}`;
+    const input = `${UCC(table.name)}Entity ${CC(table.name)}Entity`;
+    const inputInstance = `${CC(table.name)}Entity`;
+    const inputClass = `${UCC(table.name)}Entity`;
+    const errorMoreThanOne = `"${UCC(table.name)} already exists"`;
+    const successMsg = `"${inputInstance} added successfully"`;
+    const errorMsg = `"Error adding ${UCC(table.name)}: " + e.getMessage();`;
+
+    const attributesEntitiesSetter = table.attributes.map((attr) =>
+      !attr.pk
+        ? attr.relations.map((rel) => {
+            const relRepository = `${CC(rel.destinyTable)}Repository`;
+            const attrName = `${UCC(attr.name)}`;
+
+            return `      if (${inputInstance}.get${attrName}() != null) {
+        ${inputInstance}.set${attrName}(${relRepository}
+            .findAll(Filter.buildSpecification(${inputInstance}.get${attrName}())).get(0));
+      }`;
+          })
+        : []
+    );
 
     const add = `  public JSONObject ${serviceName}(${input}) {
     try {
-      JSONObject jsonResponse = new JSONObject();
+      
+      ${UniqueAndJoin(attributesEntitiesSetter)}
 
       List<${inputClass}> filteredList = ${repositoryInstance}
       .findAll(Filter.buildSpecification(${inputInstance}));
 
       if ( filteredList.size() > 0) {
-
-        throw new IllegalStateException(${errorMoreThanOne});
-      
+        throw new IllegalStateException(${errorMoreThanOne});  
       }
 
       ${repositoryInstance}.save(${inputInstance});
       
-      jsonResponse.put("mensaje", "${inputInstance} added successfully");
-      return jsonResponse;
+      return Response.JSONObject(${successMsg});
     
     } catch (Exception e) {
-      String mensajeError = "Error adding ${UCC(tableName)}: " + e.getMessage();
-      JSONObject jsonError = new JSONObject();
-      jsonError.put("error", mensajeError);
-      return jsonError;
+      Response.JSONObject(${errorMsg});
     }
   }`;
     return add;

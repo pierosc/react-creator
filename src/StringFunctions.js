@@ -85,3 +85,8 @@ export function sqlVarToJavaVar(sqlVar) {
     return sqlVar;
   }
 }
+
+export function UniqueAndJoin(array) {
+  return Array.from(new Set(array.map(JSON.stringify)), JSON.parse).join(`
+`);
+}

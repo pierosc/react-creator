@@ -108,10 +108,10 @@ function getRelations(relations, attr, tableName) {
     //   console.log(rel);
     // }
 
-    const MTORef = `    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    const MTORef = `    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(referencedColumnName ="${rel.destinyAttr}", name = "${
       attr.name
-    }", insertable = false, updatable = false)
+    }")
     private ${UCC(rel.destinyTable)}Entity ${CC(attr.name)};
 `;
 
@@ -129,7 +129,7 @@ function getRelations(relations, attr, tableName) {
     const OTMRef = `
     @OneToMany(mappedBy = "${CC(
       rel.destinyAttr
-    )}", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    )}", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<${UCC(rel.destinyTable)}Entity> ${
       CC(rel.destinyTable) + UCC(rel.destinyAttr)
     };
