@@ -77,13 +77,18 @@ export const useRepositories = (tableStructue, artifactId) => {
     let repositories = {};
     tableStructue.forEach((table) => {
       //   const imports = getServiceImports(table);
+      const uniqueAttr = table.attributes.find((attr) => attr.unique);
+      console.log(table.attributes);
+
       repositories[table.name] = {};
       repositories[table.name]["imports"] = getRepositoryImports(
         table,
         artifactId
       );
       repositories[table.name]["classStart"] = getRepositoryClassStart(table);
-      repositories[table.name]["repositories"] = [];
+      repositories[table.name]["repositories"] = uniqueAttr
+        ? [getfindByRepository([uniqueAttr], table)]
+        : [];
       repositories[table.name]["classEnd"] = "}";
     });
     setRepositoriesList(repositories);
@@ -161,6 +166,7 @@ import com.${artifactId}.repositories.dB.entities.${UCC(table.name)}Entity;`;
   // |  \ |___ |    |__| ___] |  |  |__| |  \ | |___ ___]
 
   const getfindByRepository = (selectedAttributes, table) => {
+    console.log(selectedAttributes);
     const inputs = selectedAttributes
       .map((attr) => `${sqlVarToJavaVar(attr.type)} ${CC(attr.name)}`)
       .join(", ");

@@ -65,8 +65,7 @@ function DataModel({
           minRows={2}
           defaultValue={code}
           onChange={(e) => {
-            setCode(e.target.value);
-            textAreaRef.target.value = e.target.value;
+            setCode(e?.target?.value);
           }}
           sx={{
             backgroundColor: "rgb(40, 44, 52)",

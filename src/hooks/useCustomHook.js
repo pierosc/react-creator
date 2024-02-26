@@ -16,6 +16,12 @@ const useCustomHook = (table) => {
 
     const states = `  const [inputDTO, setInputDTO] = useState([]);
         const [outputDTO, setOutputDTO] = useState([]);`;
+    const imports = `import {useState } from "react";
+        import { CC, UCC } from "../StringFunctions";
+`;
+    const hookFunction = `export default  const useCustomHook = (table) => {`;
+    const hookReturn = `  return { getUseStates };
+  };`;
   };
   return { getUseStates };
 };

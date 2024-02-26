@@ -2,10 +2,14 @@ import { useState } from "react";
 import {
   CC,
   UCC,
-  UniqueAndJoin,
+  UniqueArray,
+  JoinNewLine,
   removeString,
   sqlVarToJavaVar,
-} from "../StringFunctions";
+} from "../../StringFunctions";
+import { getDeleteService } from "./deleteService";
+import { getAddService } from "./addService";
+import { getEditService } from "./editService";
 
 const useService = (tableStructue, artifactId) => {
   const [servicesList, setServicesList] = useState([]); //TODOS LOS SERVICIOS
@@ -79,10 +83,10 @@ ${serviceImport}`;
 
   const setCRUDFServices = () => {
     tableStructue.forEach((table) => {
-      const pkName = UCC(table.attributes.find((attr) => attr.pk).name);
+      // const pkName = UCC(table.attributes.find((attr) => attr.pk).name);
       const createService = getAddService(table);
       //   const readService = getListAllService(table.name);
-      const updateService = getEditService(table.name, pkName);
+      const updateService = getEditService(table.name);
       // const deleteService = getDeleteService(table.name, pkName);
       const filterService = getFilterService(table);
 
@@ -230,164 +234,22 @@ public class ${UCC(table.name)}Service {
   // -------------------------------------------------------------------------------------
 
   const getListAllService = (tableName) => {
-    const list = `    public List<${UCC(tableName)}ListDTO> get${UCC(
-      tableName
-    )}() {
+    const serviceName = `get${UCC(tableName)}`;
+    const output = `${UCC(tableName)}ListDTO`;
+    const repositoryInstance = `${CC(tableName)}Repository`;
+    const entityClass = `${UCC(tableName)}Entity`;
+    const entityListName = `${CC(tableName)}List`;
+    // const entityInstance = `${CC(tableName)}Entity`;
+
+    const list = `    public List<${output}> ${serviceName}() {
         ModelMapper modelMapper = new ModelMapper();
-        List<${UCC(tableName)}Entity> ${CC(tableName)}List = ${CC(
-      tableName
-    )}Repository.findAll();
+        List<${entityClass}> ${entityListName} = ${repositoryInstance}.findAll();
 
-        return ${CC(tableName)}List.stream()
-                .map(${CC(tableName)} -> modelMapper.map(${CC(
-      tableName
-    )}, ${UCC(tableName)}ListDTO.class))
+        return ${entityListName}.stream()
+                .map(entity -> modelMapper.map(entity, ${output}.class))
                 .collect(Collectors.toList());
-        }`;
-    return list;
-  };
-
-  // -------------------------------------------------------------------------------------
-  // -------------------------------------------------------------------------------------
-
-  const getAddService = (table) => {
-    const repositoryInstance = `${CC(table.name)}Repository`;
-    const serviceName = `add${UCC(table.name)}`;
-    const input = `${UCC(table.name)}Entity ${CC(table.name)}Entity`;
-    const inputInstance = `${CC(table.name)}Entity`;
-    const inputClass = `${UCC(table.name)}Entity`;
-    const errorMoreThanOne = `"${UCC(table.name)} already exists"`;
-    const successMsg = `"${inputInstance} added successfully"`;
-    const errorMsg = `"Error adding ${UCC(table.name)}: " + e.getMessage();`;
-
-    const attributesEntitiesSetter = table.attributes.map((attr) =>
-      !attr.pk
-        ? attr.relations.map((rel) => {
-            const relRepository = `${CC(rel.destinyTable)}Repository`;
-            const attrName = `${UCC(attr.name)}`;
-
-            return `      if (${inputInstance}.get${attrName}() != null) {
-        ${inputInstance}.set${attrName}(${relRepository}
-            .findAll(Filter.buildSpecification(${inputInstance}.get${attrName}())).get(0));
-      }`;
-          })
-        : []
-    );
-
-    const add = `  public JSONObject ${serviceName}(${input}) {
-    try {
-      
-      ${UniqueAndJoin(attributesEntitiesSetter)}
-
-      List<${inputClass}> filteredList = ${repositoryInstance}
-      .findAll(Filter.buildSpecification(${inputInstance}));
-
-      if ( filteredList.size() > 0) {
-        throw new IllegalStateException(${errorMoreThanOne});  
-      }
-
-      ${repositoryInstance}.save(${inputInstance});
-      
-      return Response.JSONObject(${successMsg});
-    
-    } catch (Exception e) {
-      Response.JSONObject(${errorMsg});
-    }
-  }`;
-    return add;
-  };
-
-  // -------------------------------------------------------------------------------------
-  // -------------------------------------------------------------------------------------
-
-  const getEditService = (tableName, pk) => {
-    const serviceName = ` edit${UCC(tableName)}`;
-    const input = `${UCC(tableName)}Entity ${CC(tableName)}Entity`;
-    const inputClass = `${UCC(tableName)}Entity`;
-    const inputInstance = `${CC(tableName)}Entity`;
-    const repositoryInstance = `${CC(tableName)}Repository`;
-
-    const successMsg = `"${UCC(tableName)} edited successfully"`;
-    const errorNotFound = `"${UCC(tableName)} not found"`;
-    const errorMoreThanOne = `filteredList.size() +" ${UCC(tableName)} found"`;
-    const errorCatch = `"Error editing ${UCC(tableName)}: " + e.getMessage()`;
-
-    const edit = `  public JSONObject ${serviceName}(${input}) {
-      try {
-          JSONObject jsonResponse = new JSONObject();
-  
-          List<${inputClass}> filteredList = ${repositoryInstance}
-            .findAll(Filter.buildSpecification(${inputInstance}));
-
-            if (filteredList.isEmpty()) {
-              throw new IllegalStateException(${errorNotFound});
-            } else if (filteredList.size() > 1) {
-              throw new IllegalStateException(${errorMoreThanOne});
-            }
-    
-            ${inputClass} entityToEdit = filteredList.get(0);
-  
-              ModelMapper modelMapper = new ModelMapper();
-              modelMapper.getConfiguration().setSkipNullEnabled(true);
-              modelMapper.map(${inputInstance}, entityToEdit);
-              ${repositoryInstance}.save(entityToEdit);
-  
-              jsonResponse.put("mensaje", ${successMsg});
-              return jsonResponse;
-  
-      } catch (Exception e) {
-          JSONObject jsonError = new JSONObject();
-          e.printStackTrace();
-          jsonError.put("error", ${errorCatch});
-          return jsonError;
-      }
     }`;
-    return edit;
-  };
-
-  // -------------------------------------------------------------------------------------
-  // -------------------------------------------------------------------------------------
-
-  const getDeleteService = (tableName) => {
-    const input = `${UCC(tableName)}DeleteDTO ${CC(tableName)}DeleteDTO`;
-    const inputInstance = `${CC(tableName)}DeleteDTO`;
-    const serviceName = `delete${UCC(tableName)}`;
-    const repositoryInstance = `${CC(tableName)}Repository`;
-    const successMsg = `"${UCC(tableName)} deleted successfully"`;
-
-    const errorMsg = `"No se eliminó ${UCC(tableName)}" `;
-    const errorNotFound = `"${UCC(tableName)} not found"`;
-    const errorMoreThanOne = `filteredList.size() +" ${UCC(tableName)} found"`;
-    const catchErrorMsg = `"Error deleting ${UCC(
-      tableName
-    )}: " + e.getMessage()`;
-
-    const del = `    public JSONObject ${serviceName}(${input}) {
-      try {
-
-        List<${UCC(tableName)}Entity> filteredList = ${repositoryInstance}
-            .findAll(Filter.buildSpecification(${inputInstance}));
-
-        if (filteredList.isEmpty()) {
-          throw new IllegalStateException(${errorNotFound});
-        } else if (filteredList.size() > 1) {
-          throw new IllegalStateException(${errorMoreThanOne});
-        }
-
-        ${UCC(tableName)}Entity entityToDelete = filteredList.get(0);
-        ${repositoryInstance}.delete(entityToDelete);
-
-        return Response.JSONObject(${successMsg});
-
-      } catch (Exception e) {
-        JSONObject jsonError = new JSONObject();
-        e.printStackTrace();
-        jsonError.put("error", ${catchErrorMsg});
-        return jsonError;
-      }
-    }
-`;
-    return del;
+    return list;
   };
 
   // -------------------------------------------------------------------------------------
@@ -436,67 +298,6 @@ public class ${UCC(table.name)}Service {
 
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
-
-  const getLikeFilterService = (table) => {
-    const service = `public List<${UCC(table?.name)}Entity> ${CC(
-      table?.name
-    )}Filter(${UCC(table?.name)}FilterDTO ${CC(table?.name)}FilterDTO) {
-          Specification<${UCC(
-            table?.name
-          )}Entity> specification = (root, query, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>();
-    
-            for (Field field : ${CC(
-              table?.name
-            )}FilterDTO.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-                try {
-                    Object value = field.get(${CC(table?.name)}FilterDTO);
-                    if (value != null && !value.equals(getDefaultValueForType(field.getType()))) {
-                        if (field.getType() == String.class) {
-                            predicates.add(criteriaBuilder.like(
-                                    criteriaBuilder.lower(root.get(field.getName())),
-                                    "%" + value.toString().toLowerCase() + "%"
-                            ));
-                        } else {
-                            predicates.add(criteriaBuilder.equal(root.get(field.getName()), value));
-                        }
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-    
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        };
-    
-        return ${CC(table?.name)}Repository.findAll(specification);
-    }
-    
-    private Object getDefaultValueForType(Class<?> type) {
-      if (type.isPrimitive()) {
-          if (type == int.class) {
-              return 0;
-          } else if (type == char.class) {
-              return '\u0000';
-          } else if (type == boolean.class) {
-              return false;
-          } else if (type == byte.class) {
-              return (byte) 0;
-          } else if (type == short.class) {
-              return (short) 0;
-          } else if (type == long.class) {
-              return 0L;
-          } else if (type == float.class) {
-              return 0.0f;
-          } else if (type == double.class) {
-              return 0.0d;
-          }
-      }
-      return null;
-    }`;
-    return service;
-  };
 
   return {
     addService,

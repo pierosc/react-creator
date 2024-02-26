@@ -163,7 +163,7 @@ public class ${UCC(table.name)}Controller {
   // |___ |__| | \|  |  |  \ |__| |___ |___ |___ |  \ ___]
 
   const getListController = (table) => {
-    return `  @CrossOrigin
+    return `   @CrossOrigin
     @GetMapping("/getAll${UCC(table.name)}")
         public List<${UCC(table.name)}ListDTO> getAll${UCC(table.name)}() {
           return ${CC(table.name)}Service.get${UCC(table.name)}();
@@ -171,19 +171,19 @@ public class ${UCC(table.name)}Controller {
   };
 
   const getAddController = (table) => {
-    return `  @CrossOrigin
+    return `    @CrossOrigin
     @PostMapping("/add${UCC(table.name)}")
-        public String create${UCC(table.name)}(@RequestBody ${UCC(
+    public String create${UCC(table.name)}(@RequestBody ${UCC(
       table.name
     )}Entity ${CC(table.name)}) {
-          return ${CC(table.name)}Service.add${UCC(table.name)}(${CC(
+      return ${CC(table.name)}Service.add${UCC(table.name)}(${CC(
       table.name
     )}).toString();
-        }`;
+    }`;
   };
 
   const getEditController = (table) => {
-    return `  @CrossOrigin
+    return `   @CrossOrigin
     @PutMapping("/edit${UCC(table.name)}")
         public String edit${UCC(table.name)}(@RequestBody ${UCC(
       table.name
@@ -204,7 +204,7 @@ public class ${UCC(table.name)}Controller {
     const serviceInstance = `${CC(table.name)}Service`;
     const deleteService = `delete${UCC(table.name)}`;
 
-    return `  @CrossOrigin
+    return `   @CrossOrigin
   @DeleteMapping("${url}")
   public String ${controllerName} (${input}) {
     return ${serviceInstance}.${deleteService}(${inputInstance}).toString();

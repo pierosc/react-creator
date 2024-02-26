@@ -33,6 +33,9 @@ export const useJPAProject = (
     DTO.addOutputDTO(table, newOutputDTO);
   };
 
+  // -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
+
   const createAddEndpoint = (table) => {
     // const newService = services.getListAllService(table.name);
     // const newServiceImport = `import com.${artifactId}.controllers.responses.${UCC(
@@ -52,8 +55,11 @@ export const useJPAProject = (
 
   const createEditEndpoint = () => {};
 
+  // -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
+
   const createDeleteEndpoint = (table) => {
-    const newService = services.getDeleteService(table.name);
+    const newService = services.getDeleteService(table);
     const newServiceImport = `import com.${artifactId}.business.domain.${UCC(
       table.name
     )}.${UCC(table.name)}DeleteDTO;
@@ -75,6 +81,9 @@ export const useJPAProject = (
     controllers.addImport(table, newControllerImport);
     DTO.addInputDTO(table, newInputDTO);
   };
+
+  // -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
 
   const createFindByEndpoint = (attributes, table) => {
     const newService = services.getFindByService(attributes, table);
@@ -100,5 +109,11 @@ export const useJPAProject = (
 
     DTO.addInputDTO(table, newIDTO);
   };
+
+  // -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
+
+  const setEmptyFiles = () => {};
+
   return { createListEndpoint, createDeleteEndpoint, createFindByEndpoint };
 };

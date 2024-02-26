@@ -63,6 +63,7 @@ function getAttributes(tableAtr, reference, referenceDest) {
     attribute.name = atr.trim().split(" ")[0];
     attribute.type = atr.trim().split(" ")[1];
     attribute.pk = atr.toUpperCase().includes("PRIMARY KEY");
+    attribute.unique = atr.toUpperCase().includes("UNIQUE");
     attribute.nullable = !atr.toUpperCase().includes("NOT NULL");
     attribute.relations = [];
     // const extra = scopeBetween(atr, "[", "]");

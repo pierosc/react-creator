@@ -29,7 +29,7 @@ import InitSQL from "./pages/InitSQL";
 import TableJSONView from "./pages/TableJSONView";
 import FolderView from "./pages/FolderView";
 import DTOInput from "./pages/DTOInput";
-import useService from "./hooks/useService";
+import useService from "./hooks/useService/useService";
 import { useController } from "./hooks/useController";
 import { useRepositories } from "./hooks/useRepositories";
 import { useDTO } from "./hooks/useDTO";
