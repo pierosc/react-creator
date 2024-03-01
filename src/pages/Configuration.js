@@ -35,6 +35,7 @@ function Configuration({
   services,
   controllers,
   repositories,
+  hooks,
   textAreaRef,
 }) {
   let theme = useTheme();
@@ -106,6 +107,7 @@ function Configuration({
               services.setEmptyStructure();
               controllers.setEmptyStructure();
               repositories.setEmptyStructure();
+              hooks.setEmptyStructure();
 
               const initSQL = getInitSql(tableStructure);
               setInitSQL(initSQL);

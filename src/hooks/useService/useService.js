@@ -84,7 +84,7 @@ ${serviceImport}`;
   const setCRUDFServices = () => {
     tableStructue.forEach((table) => {
       // const pkName = UCC(table.attributes.find((attr) => attr.pk).name);
-      const createService = getAddService(table);
+      // const createService = getAddService(table);
       //   const readService = getListAllService(table.name);
       const updateService = getEditService(table.name);
       // const deleteService = getDeleteService(table.name, pkName);
@@ -94,7 +94,7 @@ ${serviceImport}`;
         const newServicesList = { ...prevServicesList };
         const newServices = [
           //   readService,
-          createService,
+          // createService,
           updateService,
           // deleteService,
           filterService,
@@ -152,7 +152,7 @@ ${serviceImport}`;
             const relEntity = `${UCC(rel.destinyTable)}Entity`;
             const imports = `import com.${artifactId}.repositories.dB.repo.${relRepository};
 import com.${artifactId}.repositories.dB.entities.${relEntity};`;
-            console.log(imports);
+            // console.log(imports);
             return imports;
           })
         : []

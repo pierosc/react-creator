@@ -1,11 +1,4 @@
-import {
-  CC,
-  UCC,
-  //   UniqueArray,
-  //   JoinNewLine,
-  //   removeString,
-  //   sqlVarToJavaVar,
-} from "../../StringFunctions";
+import { CC, UCC } from "../../StringFunctions";
 
 export const getDeleteService = (table) => {
   const input = `${UCC(table.name)}DeleteDTO ${CC(table.name)}DeleteDTO`;
@@ -22,30 +15,12 @@ export const getDeleteService = (table) => {
     table.name
   )}: " + e.getMessage()`;
 
-  const uniqueAttr = table.attributes.find((attr) => attr.unique === true);
+  const uniqueAttr =
+    table.attributes.find((attr) => attr.unique === true) ?? {};
+  console.log(uniqueAttr);
 
-  const findEntityToDelete = () => {
-    if (uniqueAttr) {
-      return `Optional<${entityClass}> entityToDelete = ${repositoryInstance}.findBy${UCC(
-        uniqueAttr.name
-      )}(courseCode);`;
-    } else {
-      return `        List<${entityClass}> filteredList = ${repositoryInstance}
-  .findAll(Filter.buildSpecification(${inputInstance}));
-
-if (filteredList.isEmpty()) {
-throw new IllegalStateException(${errorNotFound});
-} else if (filteredList.size() > 1) {
-throw new IllegalStateException(${errorMoreThanOne});
-}
-
-${entityClass} entityToDelete = filteredList.get(0);`;
-    }
-  };
-
-  // ____ ____ ____ _  _ _ ____ ____
-  // [__  |___ |__/ |  | | |    |___
-  // ___] |___ |  \  \/  | |___ |___
+  // -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
 
   const del = `    public JSONObject ${serviceName}(${input}) {
       try {
@@ -73,29 +48,23 @@ ${entityClass} entityToDelete = filteredList.get(0);`;
     }
 `;
   const deleteServiceUniqueAttr = `    public JSONObject ${serviceName}(${input}) {
-  try {
+    try {
 
-    List<${UCC(table.name)}Entity> filteredList = ${repositoryInstance}
-        .findAll(Filter.buildSpecification(${inputInstance}));
+        Optional<${entityClass}> entityToDelete = ${repositoryInstance}.findBy${UCC(
+    uniqueAttr?.name
+  )}(${inputInstance}.get${UCC(uniqueAttr?.name)}());
 
-    if (filteredList.isEmpty()) {
-      throw new IllegalStateException(${errorNotFound});
-    } else if (filteredList.size() > 1) {
-      throw new IllegalStateException(${errorMoreThanOne});
+        ${repositoryInstance}.delete(entityToDelete);
+
+        return Response.JSONObject(${successMsg});
+
+    } catch (Exception e) {
+        JSONObject jsonError = new JSONObject();
+        e.printStackTrace();
+        jsonError.put("error", ${catchErrorMsg});
+        return jsonError;
     }
-
-    ${UCC(table.name)}Entity entityToDelete = filteredList.get(0);
-    ${repositoryInstance}.delete(entityToDelete);
-
-    return Response.JSONObject(${successMsg});
-
-  } catch (Exception e) {
-    JSONObject jsonError = new JSONObject();
-    e.printStackTrace();
-    jsonError.put("error", ${catchErrorMsg});
-    return jsonError;
-  }
-}
+    }
 `;
-  return del;
+  return Object.keys(uniqueAttr).length > 0 ? deleteServiceUniqueAttr : del;
 };

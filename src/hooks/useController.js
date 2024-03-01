@@ -74,7 +74,7 @@ export const useController = (tableStructue, artifactId) => {
   const setCRUDFControllers = () => {
     tableStructue.forEach((table) => {
       // const pkName = UCC(table.attributes.find((attr) => attr.pk).name);
-      const createController = getAddController(table);
+      // const createController = getAddController(table);
       //   const readController = getListController(table);
       const updateController = getEditController(table);
       // const deleteController = getDeleteController(table);
@@ -84,7 +84,7 @@ export const useController = (tableStructue, artifactId) => {
         const newControllersList = { ...prevControllersList };
         const newControllers = [
           //   readController,
-          createController,
+          // createController,
           updateController,
           // deleteController,
           filterController,

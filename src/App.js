@@ -29,6 +29,7 @@ import InitSQL from "./pages/InitSQL";
 import TableJSONView from "./pages/TableJSONView";
 import FolderView from "./pages/FolderView";
 import DTOInput from "./pages/DTOInput";
+import ReactHooks from "./pages/ReactHooks";
 import useService from "./hooks/useService/useService";
 import { useController } from "./hooks/useController";
 import { useRepositories } from "./hooks/useRepositories";
@@ -83,7 +84,7 @@ function APP() {
   const controllers = useController(tableStructure, artifactId);
   const repositories = useRepositories(tableStructure, artifactId);
   const DTO = useDTO(tableStructure, artifactId);
-  const hooks = useCustomHook();
+  const hooks = useCustomHook(tableStructure);
 
   const JPA = useJPAProject(
     repositories,
@@ -140,6 +141,7 @@ function APP() {
                   services.setCRUDFServices();
                   tableStructure.forEach((table) => {
                     JPA.createListEndpoint(table);
+                    JPA.createAddEndpoint(table);
                     JPA.createDeleteEndpoint(table);
                   });
                   controllers.setCRUDFControllers();
@@ -218,6 +220,7 @@ function APP() {
                   <Tab label="IN-DTO's" value="4" />
                   <Tab label="OUT-DTO's" value="5" />
                   <Tab label="init sql" value="6" />
+                  <Tab label="react hooks" value="7" />
                 </TabList>
               </div>
             </Box>
@@ -260,6 +263,9 @@ function APP() {
             <TabPanel value="6" sx={{ padding: "0" }}>
               <InitSQL initSQL={initSQL} />
             </TabPanel>
+            <TabPanel value="7" sx={{ padding: "0" }}>
+              <ReactHooks hooks={hooks} table={table} />
+            </TabPanel>
           </TabContext>
         </div>
       </ThemeProvider>
@@ -282,6 +288,7 @@ function APP() {
             services={services}
             controllers={controllers}
             repositories={repositories}
+            hooks={hooks}
             textAreaRef={textAreaRef}
           />
         </Box>

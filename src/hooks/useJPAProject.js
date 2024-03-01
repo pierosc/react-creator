@@ -37,23 +37,28 @@ export const useJPAProject = (
   // -------------------------------------------------------------------------------------
 
   const createAddEndpoint = (table) => {
-    // const newService = services.getListAllService(table.name);
+    const newService = services.getAddService(table);
     // const newServiceImport = `import com.${artifactId}.controllers.responses.${UCC(
     //   table.name
     // )}.${UCC(table.name)}ListDTO`;
-    // const newController = controllers.getListController(table);
+    const newController = controllers.getAddController(table);
     // const newOutputDTO = DTO.getDTO(
     //   table.attributes,
     //   table,
     //   UCC(table.name) + "ListDTO"
     // );
-    // services.addService(table, newService);
+    services.addService(table, newService);
     // services.addImport(table, newServiceImport);
-    // controllers.addController(table, newController);
+    controllers.addController(table, newController);
     // DTO.addOutputDTO(table, newOutputDTO);
   };
 
-  const createEditEndpoint = () => {};
+  const createEditEndpoint = (table) => {
+    const newService = services.getEditService(table);
+    const newController = controllers.getAddController(table);
+    services.addService(table, newService);
+    controllers.addController(table, newController);
+  };
 
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
@@ -69,12 +74,19 @@ export const useJPAProject = (
       table.name
     )}.${UCC(table.name)}DeleteDTO;
 `;
+    const uniqueAttr = table.attributes.find((attr) => attr.unique === true);
+    // console.log(uniqueAttr);
+    // console.log(uniqueAttr ? [uniqueAttr] : table.attributes);
+
     const newInputDTO = DTO.getDTO(
-      table.attributes,
+      uniqueAttr ? [uniqueAttr] : table.attributes,
       table,
       UCC(table.name) + "DeleteDTO",
       "input"
     );
+
+    // console.log(newInputDTO);
+    // console.log("------------------------");
     services.addService(table, newService);
     services.addImport(table, newServiceImport);
     controllers.addController(table, newController);
@@ -115,5 +127,11 @@ export const useJPAProject = (
 
   const setEmptyFiles = () => {};
 
-  return { createListEndpoint, createDeleteEndpoint, createFindByEndpoint };
+  return {
+    createListEndpoint,
+    createAddEndpoint,
+    createEditEndpoint,
+    createDeleteEndpoint,
+    createFindByEndpoint,
+  };
 };
