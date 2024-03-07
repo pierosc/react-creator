@@ -23,15 +23,17 @@ export const useDTO = (tableStructue, artifactId) => {
     });
   };
 
-  const getDTO = (attributes, table, DTOName, destination) => {
-    console.log("----------");
-    console.groupCollapsed(table.name);
-    console.log(attributes);
+  const getDTO = (attributes, table, DTOName, destination, relations) => {
+    // console.log("----------");
+    // console.groupCollapsed(table.name);
+    // console.log(attributes);
     let dto = {};
-    const DTOAttributes = getDTOAttributes(attributes, destination) ?? [];
+    const DTOAttributes =
+      getDTOAttributes(attributes, relations, destination) ?? [];
     const DTOClass = getDTOClass(DTOName) ?? "";
-    const DTOImports = getDTOImports(table, attributes, destination) ?? "";
-    console.groupEnd();
+    const DTOImports =
+      getDTOImports(table, attributes, destination, relations) ?? "";
+    // console.groupEnd();
     // --------------------------
     dto[DTOName] = {};
     dto[DTOName]["imports"] = DTOImports;
@@ -41,27 +43,27 @@ export const useDTO = (tableStructue, artifactId) => {
     return dto;
   };
 
-  const getDTOImports = (table, attributes, destination) => {
+  const getDTOImports = (table, attributes, destination, relations) => {
     let RelImports = [];
-    // console.log(attributes);
     attributes.forEach((attr) => {
-      // console.log(attr);
       attr.relations.forEach((rel) => {
-        RelImports = [
-          ...RelImports,
-          `import com.${artifactId}.controllers.responses.${UCC(
-            rel.destinyTable
-          )}.${UCC(rel.destinyTable)}ListDTO;`,
-        ];
+        const newImport = `import com.${artifactId}.${
+          destination === "output"
+            ? `controllers.responses.${UCC(rel.destinyTable)}`
+            : `repositories.dB.entities`
+        }.${UCC(rel.destinyTable)}${
+          destination === "output" ? `ListDTO` : `Entity`
+          // `ListDTO`
+        };`;
+
+        RelImports = [...RelImports, newImport];
       });
     });
-    const newDTOImports =
-      destination === "output"
-        ? RelImports.filter(
-            (value, index, self) => self.indexOf(value) === index
-          ).join(`
+    const newDTOImports = relations
+      ? RelImports.filter((value, index, self) => self.indexOf(value) === index)
+          .join(`
 `)
-        : "";
+      : "";
 
     const packageFolder =
       destination === "output" ? `controllers.responses` : `business.domain`;
@@ -89,17 +91,17 @@ public class ${UCC(DTOName)} {`;
     return dtoclass;
   };
 
-  const getDTOAttributes = (attributes, destination) => {
+  const getDTOAttributes = (attributes, relations, destination) => {
     let attrs = [];
     // let imports = [];
     attributes.forEach((attr) => {
-      console.groupCollapsed(attr.name);
-      console.log(destination);
-      console.log(attr.relations);
+      // console.groupCollapsed(attr.name);
+      // console.log(relations);
+      // console.log(attr.relations);
       // console.log(getRelations(attr));
       // if (!attr.pk) {
-      let relationsData = destination == "output" ? getRelations(attr) : [];
-      console.log(relationsData);
+      let relationsData = relations ? getRelations(attr, destination) : [];
+      // console.log(relationsData);
       const attrVar =
         relationsData.length === 0
           ? `   private ${sqlVarToJavaVar(attr.type)} ${CC(attr.name)};`
@@ -109,23 +111,25 @@ public class ${UCC(DTOName)} {`;
       attrs = [...attrs, ...attrsVars];
       // imports = [...imports, ...relationsData.imports];
       // }
-      console.groupEnd();
+      // console.groupEnd();
     });
     return attrs;
   };
 
-  const getRelations = (attr) => {
+  const getRelations = (attr, destination) => {
     // attributes.forEach((attr) => {
+    const object = destination === "output" ? `ListDTO` : `Entity`;
+    // const object = `ListDTO`;,
     let rels = [];
     // let imports = [];
     attr.relations.forEach((rel) => {
-      const MTO = `   private ${UCC(rel.destinyTable)}ListDTO ${CC(
+      const MTO = `   private ${UCC(rel.destinyTable)}${object} ${CC(
         attr.name
       )};`;
-      const OTO = `   private ${UCC(rel.destinyTable)}ListDTO ${CC(
+      const OTO = `   private ${UCC(rel.destinyTable)}${object} ${CC(
         rel.destinyTable
       )};`;
-      const OTM = `   private List<${UCC(rel.destinyTable)}ListDTO> ${
+      const OTM = `   private List<${UCC(rel.destinyTable)}${object}> ${
         CC(rel.destinyTable) + UCC(rel.destinyAttr)
       };`;
 
@@ -138,10 +142,10 @@ public class ${UCC(DTOName)} {`;
       if (rel.relation === "OneToOneO") {
         rels = [...rels, OTO];
       }
-      console.log("---");
-      console.log(rel);
-      console.log(rels);
-      console.log("---");
+      // console.log("---");
+      // console.log(rel);
+      // console.log(rels);
+      // console.log("---");
       // imports = [...imports, `${UCC(rel.destinyTable)}ListDTO`];
       // if (rel.relation === "OneToOneD") {
       //   rels += OTODRef;

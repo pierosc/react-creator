@@ -46,9 +46,44 @@ export function getEstructure(code) {
     tableStructure.push(tableObj);
   });
 
+  // console.log(tableStructure);
+  // console.log("-------------------------");
+  tableStructure = addTransactional(tableStructure);
+  // console.log("-------------------------");
   console.log(tableStructure);
 
   return tableStructure;
+}
+
+function addTransactional(tableStructure) {
+  const newTableStructure = tableStructure.map((workingTable) => {
+    let newTable = { ...workingTable };
+    // console.groupCollapsed(newTable.name);
+    tableStructure.forEach((table) => {
+      // console.group(table.name);
+      table.attributes.forEach((attr) => {
+        // console.group(attr.name);
+        attr.relations.forEach((rel) => {
+          // console.log(rel);
+          if (
+            rel.destinyTable === workingTable.name &&
+            rel.relation === "OneToMany"
+          ) {
+            // console.log("FOUND ONE!!");
+            newTable.transactional = { originTable: table.name };
+            // console.log(newTable);
+          }
+        });
+        // console.groupEnd();
+      });
+      // console.groupEnd();
+    });
+    // console.groupEnd();
+    // console.log(newTable);
+    return newTable;
+  });
+  return newTableStructure;
+  //revisar si la atributo es el many de otra tabla
 }
 
 function getAttributes(tableAtr, reference, referenceDest) {

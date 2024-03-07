@@ -50,7 +50,7 @@ export const getDeleteService = (table) => {
   const deleteServiceUniqueAttr = `    public JSONObject ${serviceName}(${input}) {
     try {
 
-        Optional<${entityClass}> entityToDelete = ${repositoryInstance}.findBy${UCC(
+      ${entityClass} entityToDelete = ${repositoryInstance}.findBy${UCC(
     uniqueAttr?.name
   )}(${inputInstance}.get${UCC(uniqueAttr?.name)}());
 

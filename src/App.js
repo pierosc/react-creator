@@ -138,21 +138,12 @@ function APP() {
                 variant="outlined"
                 size="large"
                 onClick={() => {
-                  services.setCRUDFServices();
                   tableStructure.forEach((table) => {
                     JPA.createListEndpoint(table);
                     JPA.createAddEndpoint(table);
+                    JPA.createEditEndpoint(table);
                     JPA.createDeleteEndpoint(table);
-                  });
-                  controllers.setCRUDFControllers();
-                  repositories.setFilterRepositories();
-                  tableStructure.forEach((table) => {
-                    const filterDTO = DTO.getDTO(
-                      table.attributes,
-                      table,
-                      UCC(table.name) + "FilterDTO"
-                    );
-                    DTO.addInputDTO(table, filterDTO);
+                    JPA.createFilterEndpoint(table);
                   });
                 }}
               >

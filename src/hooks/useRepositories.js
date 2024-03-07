@@ -78,7 +78,7 @@ export const useRepositories = (tableStructue, artifactId) => {
     tableStructue.forEach((table) => {
       //   const imports = getServiceImports(table);
       const uniqueAttr = table.attributes.find((attr) => attr.unique);
-      console.log(table.attributes);
+      // console.log(table.attributes);
 
       repositories[table.name] = {};
       repositories[table.name]["imports"] = getRepositoryImports(
@@ -87,7 +87,7 @@ export const useRepositories = (tableStructue, artifactId) => {
       );
       repositories[table.name]["classStart"] = getRepositoryClassStart(table);
       repositories[table.name]["repositories"] = uniqueAttr
-        ? [getfindByRepository([uniqueAttr], table)]
+        ? [getfindByRepository([uniqueAttr], table, true)]
         : [];
       repositories[table.name]["classEnd"] = "}";
     });
@@ -165,8 +165,8 @@ import com.${artifactId}.repositories.dB.entities.${UCC(table.name)}Entity;`;
   // |__/ |___ |__] |  | [__  |  |  |  | |__/ | |___ [__
   // |  \ |___ |    |__| ___] |  |  |__| |  \ | |___ ___]
 
-  const getfindByRepository = (selectedAttributes, table) => {
-    console.log(selectedAttributes);
+  const getfindByRepository = (selectedAttributes, table, isUnique = false) => {
+    // console.log(selectedAttributes);
     const inputs = selectedAttributes
       .map((attr) => `${sqlVarToJavaVar(attr.type)} ${CC(attr.name)}`)
       .join(", ");
@@ -174,10 +174,12 @@ import com.${artifactId}.repositories.dB.entities.${UCC(table.name)}Entity;`;
     const attrsList = selectedAttributes
       .map((attr) => UCC(attr.name))
       .join("And");
+    const entityClass = `${UCC(table?.name)}Entity`;
+    const returnedDataType = isUnique
+      ? `${entityClass}`
+      : `List<${entityClass}>`;
 
-    const repo = `List<${UCC(
-      table?.name
-    )}Entity> findBy${attrsList}(${inputs});`;
+    const repo = `   ${returnedDataType} findBy${attrsList}(${inputs});`;
 
     return repo;
   };

@@ -10,11 +10,11 @@ import Tab from "@mui/material/Tab";
 function ServiceDTOInput({ DTO, table, selectedService }) {
   const DTOFiles = DTO?.inputDTO[UCC(table.name)] ?? {};
   // const [value, setValue] = React.useState(0);
-
+  console.log(DTOFiles);
   // const handleChange = (event, newValue) => {
   //   setValue(newValue);
   // };
-  // console.log(selectedService);
+  console.log(selectedService);
   // console.log(DTOFiles);
   return (
     <div>

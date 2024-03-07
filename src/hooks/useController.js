@@ -71,31 +71,31 @@ export const useController = (tableStructue, artifactId) => {
     setControllersList(controllers);
   };
 
-  const setCRUDFControllers = () => {
-    tableStructue.forEach((table) => {
-      // const pkName = UCC(table.attributes.find((attr) => attr.pk).name);
-      // const createController = getAddController(table);
-      //   const readController = getListController(table);
-      const updateController = getEditController(table);
-      // const deleteController = getDeleteController(table);
-      const filterController = getFilterController(table);
+  // const setCRUDFControllers = () => {
+  //   tableStructue.forEach((table) => {
+  //     // const pkName = UCC(table.attributes.find((attr) => attr.pk).name);
+  //     // const createController = getAddController(table);
+  //     //   const readController = getListController(table);
+  //     const updateController = getEditController(table);
+  //     // const deleteController = getDeleteController(table);
+  //     const filterController = getFilterController(table);
 
-      setControllersList((prevControllersList) => {
-        const newControllersList = { ...prevControllersList };
-        const newControllers = [
-          //   readController,
-          // createController,
-          updateController,
-          // deleteController,
-          filterController,
-          ...newControllersList[table?.name]["controllers"],
-        ];
-        newControllersList[table?.name]["controllers"] = newControllers;
-        return newControllersList;
-      });
-    });
-    // return controllers;
-  };
+  //     setControllersList((prevControllersList) => {
+  //       const newControllersList = { ...prevControllersList };
+  //       const newControllers = [
+  //         //   readController,
+  //         // createController,
+  //         updateController,
+  //         // deleteController,
+  //         filterController,
+  //         ...newControllersList[table?.name]["controllers"],
+  //       ];
+  //       newControllersList[table?.name]["controllers"] = newControllers;
+  //       return newControllersList;
+  //     });
+  //   });
+  //   // return controllers;
+  // };
 
   const files = () => {
     let controllersFiles = [];
@@ -175,7 +175,7 @@ public class ${UCC(table.name)}Controller {
     @PostMapping("/add${UCC(table.name)}")
     public String create${UCC(table.name)}(@RequestBody ${UCC(
       table.name
-    )}Entity ${CC(table.name)}) {
+    )}AddDTO ${CC(table.name)}) {
       return ${CC(table.name)}Service.add${UCC(table.name)}(${CC(
       table.name
     )}).toString();
@@ -265,7 +265,7 @@ public class ${UCC(table.name)}Controller {
     addImport,
     deleteImport,
     setEmptyStructure,
-    setCRUDFControllers,
+    // setCRUDFControllers,
     controllersList,
     files,
     //CONTROLLERS

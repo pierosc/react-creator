@@ -8,6 +8,9 @@ export const useJPAProject = (
   DTO,
   artifactId
 ) => {
+  // -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
+
   const createListEndpoint = (table) => {
     const newService = services.getListAllService(table.name);
     const newServiceImport = `import com.${artifactId}.controllers.responses.${UCC(
@@ -23,7 +26,8 @@ export const useJPAProject = (
       table.attributes,
       table,
       UCC(table.name) + "ListDTO",
-      "output"
+      "output",
+      true
     );
 
     services.addService(table, newService);
@@ -38,24 +42,49 @@ export const useJPAProject = (
 
   const createAddEndpoint = (table) => {
     const newService = services.getAddService(table);
-    // const newServiceImport = `import com.${artifactId}.controllers.responses.${UCC(
-    //   table.name
-    // )}.${UCC(table.name)}ListDTO`;
+    const newServiceImport = `import com.${artifactId}.business.domain.${UCC(
+      table.name
+    )}.${UCC(table.name)}AddDTO;
+`;
+
     const newController = controllers.getAddController(table);
+    const newControllerImport = `import com.${artifactId}.business.domain.${UCC(
+      table.name
+    )}.${UCC(table.name)}AddDTO;
+`;
     // const newOutputDTO = DTO.getDTO(
     //   table.attributes,
     //   table,
     //   UCC(table.name) + "ListDTO"
     // );
+    const inputAttributes = table.attributes.map((attr) => {
+      return {
+        ...attr,
+        relations: attr.relations.filter((rel) => rel.relation !== "OneToMany"),
+      };
+    });
+    // console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+    // console.log(inputAttributes);
+    const newInputDTO = DTO.getDTO(
+      inputAttributes,
+      table,
+      UCC(table.name) + "AddDTO",
+      "input",
+      true
+    );
     services.addService(table, newService);
-    // services.addImport(table, newServiceImport);
+    services.addImport(table, newServiceImport);
     controllers.addController(table, newController);
-    // DTO.addOutputDTO(table, newOutputDTO);
+    controllers.addImport(table, newControllerImport);
+    DTO.addInputDTO(table, newInputDTO);
   };
+
+  // -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
 
   const createEditEndpoint = (table) => {
     const newService = services.getEditService(table);
-    const newController = controllers.getAddController(table);
+    const newController = controllers.getEditController(table);
     services.addService(table, newService);
     controllers.addController(table, newController);
   };
@@ -126,12 +155,30 @@ export const useJPAProject = (
   // -------------------------------------------------------------------------------------
 
   const setEmptyFiles = () => {};
+  // -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
+
+  const createFilterEndpoint = (table) => {
+    const newService = services.getFilterService(table);
+    const newController = controllers.getFilterController(table);
+    const newRepository = repositories.getFilterRepository(table);
+    const newInputDTO = DTO.getDTO(
+      table.attributes,
+      table,
+      UCC(table.name) + "FilterDTO"
+    );
+    services.addService(table, newService);
+    controllers.addController(table, newController);
+    repositories.addRepository(table, newRepository);
+    DTO.addInputDTO(table, newInputDTO);
+  };
 
   return {
     createListEndpoint,
     createAddEndpoint,
     createEditEndpoint,
     createDeleteEndpoint,
+    createFilterEndpoint,
     createFindByEndpoint,
   };
 };

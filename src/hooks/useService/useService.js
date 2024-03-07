@@ -68,6 +68,7 @@ ${serviceImport}`;
       return newServiceImports;
     });
   };
+
   const setEmptyStructure = () => {
     let services = {};
     tableStructue.forEach((table) => {
@@ -79,32 +80,6 @@ ${serviceImport}`;
       services[table.name]["classEnd"] = "}";
     });
     setServicesList(services);
-  };
-
-  const setCRUDFServices = () => {
-    tableStructue.forEach((table) => {
-      // const pkName = UCC(table.attributes.find((attr) => attr.pk).name);
-      // const createService = getAddService(table);
-      //   const readService = getListAllService(table.name);
-      const updateService = getEditService(table.name);
-      // const deleteService = getDeleteService(table.name, pkName);
-      const filterService = getFilterService(table);
-
-      setServicesList((prevServicesList) => {
-        const newServicesList = { ...prevServicesList };
-        const newServices = [
-          //   readService,
-          // createService,
-          updateService,
-          // deleteService,
-          filterService,
-          ...newServicesList[table?.name]["services"],
-        ];
-        newServicesList[table?.name]["services"] = newServices;
-        return newServicesList;
-      });
-    });
-    // return services;
   };
 
   const files = () => {
@@ -217,6 +192,9 @@ import com.${artifactId}.repositories.dB.repo.${UCC(
 public class ${UCC(table.name)}Service {
 
   @Autowired
+  private ModelMapper modelMapper;
+  
+  @Autowired
   private ${UCC(table.name)}Repository ${CC(table.name)}Repository;
   ${uniqueAttrRep}
 `;
@@ -305,7 +283,7 @@ public class ${UCC(table.name)}Service {
     addImport,
     deleteImport,
     setEmptyStructure,
-    setCRUDFServices,
+    // setCRUDFServices,
     // getServicesFileStructure,
     servicesList,
     files,
