@@ -17,7 +17,7 @@ export const getDeleteService = (table) => {
 
   const uniqueAttr =
     table.attributes.find((attr) => attr.unique === true) ?? {};
-  console.log(uniqueAttr);
+  // console.log(uniqueAttr);
 
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------

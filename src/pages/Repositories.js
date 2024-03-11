@@ -2,7 +2,7 @@ import React from "react";
 import CodeEditor from "../components/CodeEditor/CodeEditor";
 
 function Repositories({ repositoriesList, table }) {
-  console.log(repositoriesList);
+  // console.log(repositoriesList);
   return (
     <div
       className=" p-4 grid gap-2"

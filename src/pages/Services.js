@@ -39,9 +39,9 @@ function Services({
     setAttributes([]);
   }, [table]);
 
-  useEffect(() => {
-    console.log(selectedService);
-  }, [selectedService]);
+  // useEffect(() => {
+  //   console.log(selectedService);
+  // }, [selectedService]);
 
   return (
     <div className="flex flex-col  gap-1">
