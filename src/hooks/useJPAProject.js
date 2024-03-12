@@ -41,30 +41,33 @@ export const useJPAProject = (
   // -------------------------------------------------------------------------------------
 
   const createAddEndpoint = (table) => {
-    const newService = services.getAddService(table);
-    const newServiceImport = `import com.${artifactId}.business.domain.${UCC(
-      table.name
-    )}.${UCC(table.name)}AddDTO;
-`;
+    // const newService = services.getAddService(table);
 
     const newController = controllers.getAddController(table);
-    const newControllerImport = `import com.${artifactId}.business.domain.${UCC(
-      table.name
-    )}.${UCC(table.name)}AddDTO;
-`;
-    // const newOutputDTO = DTO.getDTO(
-    //   table.attributes,
-    //   table,
-    //   UCC(table.name) + "ListDTO"
-    // );
-    const inputAttributes = table.attributes.map((attr) => {
+
+    const isTransactional = Object.keys(table).includes("transactional");
+
+    let inputAttributes = table.attributes.map((attr) => {
       return {
         ...attr,
         relations: attr.relations.filter((rel) => rel.relation !== "OneToMany"),
       };
     });
-    // console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-    // console.log(inputAttributes);
+
+    if (isTransactional) {
+      const uniqueAttr = table.transactional.attributes.find(
+        (attr) => attr.unique
+      );
+      console.log(uniqueAttr);
+      inputAttributes = [
+        ...inputAttributes.filter(
+          (attr) => attr.name !== table.transactional.linkAttr
+        ),
+        uniqueAttr,
+      ];
+    }
+    const newService = services.getAddService(table, inputAttributes);
+
     const newInputDTO = DTO.getDTO(
       inputAttributes,
       table,
@@ -72,10 +75,15 @@ export const useJPAProject = (
       "input",
       true
     );
+    const newInputDTOImport = `import com.${artifactId}.business.domain.${UCC(
+      table.name
+    )}.${UCC(table.name)}AddDTO;
+`;
+
     services.addService(table, newService);
-    services.addImport(table, newServiceImport);
+    services.addImport(table, newInputDTOImport);
     controllers.addController(table, newController);
-    controllers.addImport(table, newControllerImport);
+    controllers.addImport(table, newInputDTOImport);
     DTO.addInputDTO(table, newInputDTO);
   };
 
@@ -84,9 +92,35 @@ export const useJPAProject = (
 
   const createEditEndpoint = (table) => {
     const newService = services.getEditService(table);
+
     const newController = controllers.getEditController(table);
+
+    const isTransactional = Object.keys(table).includes("transactional");
+
+    const inputAttributes = table.attributes.map((attr) => {
+      return {
+        ...attr,
+        relations: attr.relations.filter((rel) => rel.relation !== "OneToMany"),
+      };
+    });
+
+    const newInputDTO = DTO.getDTO(
+      inputAttributes,
+      table,
+      UCC(table.name) + "EditDTO",
+      "input",
+      true
+    );
+    const newInputDTOImport = `import com.${artifactId}.business.domain.${UCC(
+      table.name
+    )}.${UCC(table.name)}EditDTO;
+    `;
+
     services.addService(table, newService);
+    services.addImport(table, newInputDTOImport);
     controllers.addController(table, newController);
+    controllers.addImport(table, newInputDTOImport);
+    DTO.addInputDTO(table, newInputDTO);
   };
 
   // -------------------------------------------------------------------------------------

@@ -70,7 +70,8 @@ function addTransactional(tableStructure) {
             rel.relation === "OneToMany"
           ) {
             // console.log("FOUND ONE!!");
-            newTable.transactional = { originTable: table.name };
+            newTable.transactional = { ...table, linkAttr: rel.destinyAttr };
+            // newTable.isTransactional = true;
             // console.log(newTable);
           }
         });

@@ -2,9 +2,12 @@ import { CC, UCC, UniqueArray, JoinNewLine } from "../../StringFunctions";
 
 export const getEditService = (table) => {
   const serviceName = ` edit${UCC(table.name)}`;
-  const input = `${UCC(table.name)}Entity ${CC(table.name)}Entity`;
-  const inputClass = `${UCC(table.name)}Entity`;
-  const inputInstance = `${CC(table.name)}Entity`;
+  // const input = `${UCC(table.name)}Entity ${CC(table.name)}Entity`;
+  const input = `${UCC(table.name)}EditDTO ${CC(table.name)}EditDTO`;
+  const inputInstance = `${CC(table.name)}EditDTO`;
+  const inputClass = `${UCC(table.name)}EditDTO`;
+  // const inputClass = `${UCC(table.name)}Entity`;
+  // const inputInstance = `${CC(table.name)}Entity`;
   const repositoryInstance = `${CC(table.name)}Repository`;
 
   const successMsg = `"${UCC(table.name)} edited successfully"`;
@@ -38,11 +41,20 @@ export const getEditService = (table) => {
     )
   );
 
-  const UniqueEntityToEdit = `      ${inputClass} entityToEdit = ${repositoryInstance}.findBy${UCC(
-    uniqueAttr?.name
-  )}(${inputInstance}.get${UCC(uniqueAttr?.name)}());`;
+  // *************************************************************************
+  // OBTENER LA ENTIDAD A EDITAR
+  // Descripción: Depende de si existe un atributo 'unique' se usa una técnica
+  // u otra
+  // *************************************************************************
 
-  const ListEntityToEdit = `List<${inputClass}> filteredList = ${repositoryInstance}
+  const UniqueEntityToEdit = `
+${inputClass} entityToEdit = ${repositoryInstance}.findBy${UCC(
+    uniqueAttr?.name
+  )}(${inputInstance}.get${UCC(uniqueAttr?.name)}());
+  `;
+
+  const ListEntityToEdit = `
+List<${inputClass}> filteredList = ${repositoryInstance}
 .findAll(Filter.buildSpecification(${inputInstance}));
 
 if (filteredList.isEmpty()) {
@@ -51,7 +63,8 @@ if (filteredList.isEmpty()) {
   throw new IllegalStateException(${errorMoreThanOne});
 }
 
-${inputClass} entityToEdit = filteredList.get(0);`;
+${inputClass} entityToEdit = filteredList.get(0);
+`;
 
   const entityToEdit =
     Object.keys(uniqueAttr).length > 0 ? UniqueEntityToEdit : ListEntityToEdit;
@@ -62,7 +75,6 @@ ${inputClass} entityToEdit = filteredList.get(0);`;
   const edit = `  public JSONObject ${serviceName}(${input}) {
       try {
           ${attributesEntitiesSetter}
-
           ${entityToEdit}
   
               ModelMapper modelMapper = new ModelMapper();
@@ -73,10 +85,8 @@ ${inputClass} entityToEdit = filteredList.get(0);`;
               return Response.JSONObject(${successMsg});
   
       } catch (Exception e) {
-          JSONObject jsonError = new JSONObject();
-          e.printStackTrace();
-          jsonError.put("error", ${errorCatch});
-          return jsonError;
+          e.printStackTrace();      
+          return Response.JSONObject(${errorCatch});
       }
     }`;
 

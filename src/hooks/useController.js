@@ -171,8 +171,12 @@ public class ${UCC(table.name)}Controller {
   };
 
   const getAddController = (table) => {
+    const addURL = Object.keys(table).includes("transactional")
+      ? `/add${UCC(table.name)}To${UCC(table.transactional.name)}`
+      : `/add${UCC(table.name)}`;
+
     return `    @CrossOrigin
-    @PostMapping("/add${UCC(table.name)}")
+    @PostMapping("${addURL}")
     public String create${UCC(table.name)}(@RequestBody ${UCC(
       table.name
     )}AddDTO ${CC(table.name)}) {
@@ -187,7 +191,7 @@ public class ${UCC(table.name)}Controller {
     @PutMapping("/edit${UCC(table.name)}")
         public String edit${UCC(table.name)}(@RequestBody ${UCC(
       table.name
-    )}Entity ${CC(table.name)}) {
+    )}EditDTO ${CC(table.name)}EditDTO) {
           return ${CC(table.name)}Service.edit${UCC(table.name)}(${CC(
       table.name
     )}).toString();
