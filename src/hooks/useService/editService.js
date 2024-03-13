@@ -6,7 +6,7 @@ export const getEditService = (table) => {
   const input = `${UCC(table.name)}EditDTO ${CC(table.name)}EditDTO`;
   const inputInstance = `${CC(table.name)}EditDTO`;
   const inputClass = `${UCC(table.name)}EditDTO`;
-  // const inputClass = `${UCC(table.name)}Entity`;
+  const entityClass = `${UCC(table.name)}Entity`;
   // const inputInstance = `${CC(table.name)}Entity`;
   const repositoryInstance = `${CC(table.name)}Repository`;
 
@@ -31,10 +31,12 @@ export const getEditService = (table) => {
                   ? `${UCC(rel.destinyTable)}`
                   : `${UCC(attr.name)}`;
 
-              return `      if (${inputInstance}.get${attrName}() != null) {
+              return rel.relation !== "OneToMany"
+                ? `      if (${inputInstance}.get${attrName}() != null) {
         ${inputInstance}.set${attrName}(${relRepository}
             .findAll(Filter.buildSpecification(${inputInstance}.get${attrName}())).get(0));
-      }`;
+      }`
+                : ``;
             })
           : []
       )
@@ -48,13 +50,13 @@ export const getEditService = (table) => {
   // *************************************************************************
 
   const UniqueEntityToEdit = `
-${inputClass} entityToEdit = ${repositoryInstance}.findBy${UCC(
+${entityClass} entityToEdit = ${repositoryInstance}.findBy${UCC(
     uniqueAttr?.name
   )}(${inputInstance}.get${UCC(uniqueAttr?.name)}());
   `;
 
   const ListEntityToEdit = `
-List<${inputClass}> filteredList = ${repositoryInstance}
+List<${entityClass}> filteredList = ${repositoryInstance}
 .findAll(Filter.buildSpecification(${inputInstance}));
 
 if (filteredList.isEmpty()) {
@@ -63,7 +65,7 @@ if (filteredList.isEmpty()) {
   throw new IllegalStateException(${errorMoreThanOne});
 }
 
-${inputClass} entityToEdit = filteredList.get(0);
+${entityClass} entityToEdit = filteredList.get(0);
 `;
 
   const entityToEdit =

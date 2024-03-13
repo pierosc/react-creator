@@ -46,19 +46,32 @@ export const useJPAProject = (
     const newController = controllers.getAddController(table);
 
     const isTransactional = Object.keys(table).includes("transactional");
-
-    let inputAttributes = table.attributes.map((attr) => {
+    console.log(table.name);
+    let inputAttributes = table.attributes;
+    console.log(inputAttributes);
+    inputAttributes = inputAttributes.filter((attr) => {
+      console.log(attr.relations.length);
+      console.log(attr.relations?.[0]?.relation);
+      return !(
+        attr.relations.length === 1 &&
+        attr.relations?.[0]?.relation === "OneToMany"
+      );
+    });
+    console.log(inputAttributes);
+    inputAttributes = inputAttributes.map((attr) => {
       return {
         ...attr,
+        // Eliminar las relaciones OneToMany y si es la única, reliminar todo el atributo
         relations: attr.relations.filter((rel) => rel.relation !== "OneToMany"),
       };
     });
+    console.log(inputAttributes);
 
     if (isTransactional) {
       const uniqueAttr = table.transactional.attributes.find(
         (attr) => attr.unique
       );
-      console.log(uniqueAttr);
+      // console.log(uniqueAttr);
       inputAttributes = [
         ...inputAttributes.filter(
           (attr) => attr.name !== table.transactional.linkAttr

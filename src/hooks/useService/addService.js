@@ -20,8 +20,8 @@ export const getAddService = (table, inputAttributes) => {
   // Descripción: Para atributos de tipo Object que hacen referencia a una
   // entidad se busca la entidad segun el DTO y se asigna la entidad completa
   // *************************************************************************
-  console.log(table.name);
-  console.log(inputAttributes);
+  // console.log(table.name);
+  // console.log(inputAttributes);
   const getAttrName = (rel, attr) =>
     rel.relation === "OneToOneO"
       ? `${UCC(rel.destinyTable)}`
@@ -34,11 +34,12 @@ export const getAddService = (table, inputAttributes) => {
           ? attr.relations.map((rel) => {
               const relRepository = `${CC(rel.destinyTable)}Repository`;
               const attrName = getAttrName(rel, attr);
-
-              return `      if (${inputInstance}.get${attrName}() != null) {
+              return rel.relation !== "OneToMany"
+                ? `      if (${inputInstance}.get${attrName}() != null) {
         ${inputInstance}.set${attrName}(${relRepository}
             .findAll(Filter.buildSpecification(${inputInstance}.get${attrName}())).get(0));
-      }`;
+      }`
+                : ``;
             })
           : []
       )
@@ -84,7 +85,7 @@ ${inputEntityClass} ${inputEntityInstance} = modelMapper.map(${inputInstance}, $
     table?.transactional?.name
   )}Repository.findBy${UCC(uniqueTransAttr?.name)}(${inputInstance}.get${UCC(
     uniqueTransAttr?.name
-  )}()).get${UCC(idAttr?.name)});
+  )}()).get${UCC(idAttr?.name)}());
   `;
 
   // *************************************************************************

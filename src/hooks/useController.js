@@ -194,7 +194,7 @@ public class ${UCC(table.name)}Controller {
     )}EditDTO ${CC(table.name)}EditDTO) {
           return ${CC(table.name)}Service.edit${UCC(table.name)}(${CC(
       table.name
-    )}).toString();
+    )}EditDTO).toString();
         }`;
   };
 

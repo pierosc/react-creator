@@ -60,14 +60,27 @@ ${serviceImport}`;
         newServiceImports[table?.name]["imports"],
         serviceImport
       );
-      //         newServiceImports[table?.name]["imports"] +
-      // `
-      //   ${serviceImport}`;
 
       newServiceImports[table?.name]["imports"] = newImports;
       return newServiceImports;
     });
   };
+
+  //   const addRepo = (table, repo) => {
+  //     setServicesList((prevRepos) => {
+  //       const newServiceRepos = { ...prevRepos };
+  //       const newRepos =
+  //         newServiceRepos[table?.name]["classStart"] +
+  //         `
+  // ${repo}`;
+
+  //       newServiceRepos[table?.name]["classStart"] = newRepos;
+  //       return newServiceRepos;
+  //     });
+  //   };
+
+  // -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
 
   const setEmptyStructure = () => {
     let services = {};
@@ -89,19 +102,9 @@ ${serviceImport}`;
       const imports = service.imports;
       const classStart = service.classStart;
       const classEnd = service.classEnd;
-      const services = service.services.join(`
-`);
-      const file =
-        imports +
-        `
-` +
-        classStart +
-        `
-` +
-        services +
-        `
-` +
-        classEnd;
+      const services = JoinNewLine(service.services);
+
+      const file = JoinNewLine([imports, classStart, services, classEnd]);
 
       servicesFiles.push({
         type: "file",
@@ -120,25 +123,35 @@ ${serviceImport}`;
   // |__|     |__| |_______||_______|   |_______/       |__|     | _| `._____| \______/   \______|    |__|      \______/  | _| `._____||_______|
 
   const getServiceImports = (table) => {
-    const attributesRepositoriesImports = table.attributes.map((attr) =>
-      !attr.pk
-        ? attr.relations.map((rel) => {
-            const relRepository = `${UCC(rel.destinyTable)}Repository`;
-            const relEntity = `${UCC(rel.destinyTable)}Entity`;
-            const imports = `import com.${artifactId}.repositories.dB.repo.${relRepository};
-import com.${artifactId}.repositories.dB.entities.${relEntity};`;
-            // console.log(imports);
-            return imports;
-          })
-        : []
-    );
-    let AttrRepImp = Array.from(
-      new Set(attributesRepositoriesImports.map(JSON.stringify)),
-      JSON.parse
-    ).join(`
-`);
+    const isTransactional = Object.keys(table).includes("transactional");
 
-    // console.log(attributesRepositoriesImports);
+    let attributesRepositoriesImports = UniqueArray(
+      table.attributes.map((attr) =>
+        !attr.pk
+          ? attr.relations.map((rel) => {
+              const relRepository = `${UCC(rel.destinyTable)}Repository`;
+              const relEntity = `${UCC(rel.destinyTable)}Entity`;
+              const imports =
+                rel.relation !== "OneToMany"
+                  ? `import com.${artifactId}.repositories.dB.repo.${relRepository};
+import com.${artifactId}.repositories.dB.entities.${relEntity};`
+                  : ``;
+              return imports;
+            })
+          : []
+      )
+    );
+
+    if (isTransactional) {
+      const transactionalRepo = `import com.${artifactId}.repositories.dB.repo.${UCC(
+        table.transactional.name
+      )}Repository;`;
+      attributesRepositoriesImports = [
+        ...attributesRepositoriesImports,
+        transactionalRepo,
+      ];
+    }
+
     const service = `package com.${artifactId}.business.services;
   
 import java.util.ArrayList;
@@ -159,34 +172,38 @@ import com.${artifactId}.business.domain.${UCC(table.name)}.${UCC(
 import com.${artifactId}.repositories.dB.entities.${UCC(table.name)}Entity;
 import com.${artifactId}.repositories.dB.repo.${UCC(
       table.name
-    )}Repository;${AttrRepImp}
+    )}Repository;${JoinNewLine(attributesRepositoriesImports)}
 `;
     return service;
   };
 
-  // -------------------------------------------------------------------------------------
-  // -------------------------------------------------------------------------------------
+  // *************************************************************************
+  // ASIGNAR ANOTACIONES, NOMBRE DE SERVICIO Y REPOSITORIOS
+  // Descripción:
+  // *************************************************************************
+
+  const getRepo = (tableName) => `@Autowired
+private ${UCC(tableName)}Repository ${CC(tableName)}Repository;`;
 
   const getServiceClass = (table) => {
-    const attributesRepositories = table.attributes.map((attr) =>
-      !attr.pk
-        ? attr.relations.map((rel) => {
-            const relRepository = `${UCC(rel.destinyTable)}Repository`;
-            const relRepositoryInstance = `${CC(rel.destinyTable)}Repository`;
+    const isTransactional = Object.keys(table).includes("transactional");
 
-            return `  @Autowired
-  private ${relRepository} ${relRepositoryInstance};`;
-          })
-        : []
+    let attributesRepositories = UniqueArray(
+      table.attributes.map((attr) =>
+        !attr.pk
+          ? attr.relations.map((rel) => {
+              return rel.relation !== "OneToMany"
+                ? getRepo(rel.destinyTable)
+                : "";
+            })
+          : []
+      )
     );
 
-    let uniqueAttrRep = Array.from(
-      new Set(attributesRepositories.map(JSON.stringify)),
-      JSON.parse
-    ).join(`
-`);
-    // console.log(attributesRepositories);
-    // console.log(uniqueAttrRep);
+    if (isTransactional) {
+      const transactionalRepo = getRepo(table.transactional.name);
+      attributesRepositories = [...attributesRepositories, transactionalRepo];
+    }
 
     const service = `@Service
 public class ${UCC(table.name)}Service {
@@ -196,7 +213,7 @@ public class ${UCC(table.name)}Service {
   
   @Autowired
   private ${UCC(table.name)}Repository ${CC(table.name)}Repository;
-  ${uniqueAttrRep}
+    ${JoinNewLine(attributesRepositories)}
 `;
     return service;
   };

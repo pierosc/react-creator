@@ -104,7 +104,7 @@ public class ${UCC(DTOName)} {`;
       // console.log(relationsData);
       const attrVar =
         relationsData.length === 0
-          ? `   private ${sqlVarToJavaVar(attr.type)} ${CC(attr.name)};`
+          ? `  private ${sqlVarToJavaVar(attr.type)} ${CC(attr.name)};`
           : "";
       const attrsVars =
         relationsData.length === 0 && !attr.pk ? [attrVar] : relationsData;
@@ -123,15 +123,16 @@ public class ${UCC(DTOName)} {`;
     let rels = [];
     // let imports = [];
     attr.relations.forEach((rel) => {
-      const MTO = `   private ${UCC(rel.destinyTable)}${object} ${CC(
-        attr.name
-      )};`;
-      const OTO = `   private ${UCC(rel.destinyTable)}${object} ${CC(
+      const MTO = `  private ${UCC(rel.destinyTable)}${object} ${CC(attr.name)};
+`;
+      const OTO = `  private ${UCC(rel.destinyTable)}${object} ${CC(
         rel.destinyTable
-      )};`;
-      const OTM = `   private List<${UCC(rel.destinyTable)}${object}> ${
+      )};
+`;
+      const OTM = `  private List<${UCC(rel.destinyTable)}${object}> ${
         CC(rel.destinyTable) + UCC(rel.destinyAttr)
-      };`;
+      };
+`;
 
       if (rel.relation === "ManyToOne") {
         rels = [...rels, MTO];
