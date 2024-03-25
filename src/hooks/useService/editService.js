@@ -1,4 +1,5 @@
 import { CC, UCC, UniqueArray, JoinNewLine } from "../../StringFunctions";
+import { updateVarsToExclude } from "../../constants/varsToExclude";
 
 export const getEditService = (table) => {
   const serviceName = ` edit${UCC(table.name)}`;
@@ -7,7 +8,7 @@ export const getEditService = (table) => {
   const inputInstance = `${CC(table.name)}EditDTO`;
   const inputClass = `${UCC(table.name)}EditDTO`;
   const entityClass = `${UCC(table.name)}Entity`;
-  // const inputInstance = `${CC(table.name)}Entity`;
+  const entityInstance = `${CC(table.name)}Entity`;
   const repositoryInstance = `${CC(table.name)}Repository`;
 
   const successMsg = `"${UCC(table.name)} edited successfully"`;
@@ -33,8 +34,9 @@ export const getEditService = (table) => {
 
               return rel.relation !== "OneToMany"
                 ? `      if (${inputInstance}.get${attrName}() != null) {
-        ${inputInstance}.set${attrName}(${relRepository}
+                  entityToEdit.set${attrName}(${relRepository}
             .findAll(Filter.buildSpecification(${inputInstance}.get${attrName}())).get(0));
+            ${inputInstance}.set${attrName}(null);
       }`
                 : ``;
             })
@@ -71,21 +73,34 @@ ${entityClass} entityToEdit = filteredList.get(0);
   const entityToEdit =
     Object.keys(uniqueAttr).length > 0 ? UniqueEntityToEdit : ListEntityToEdit;
 
+  // *************************************************************************
+  // ASIGNAR LA VARIABLE DE TIMESTAMP
+  // *************************************************************************
+  const temporalAttribute = table.attributes.find((attr) =>
+    updateVarsToExclude.includes(attr.name.toUpperCase())
+  );
+
+  const setUpdateTime = `
+  entityToEdit.set${UCC(
+    temporalAttribute?.name
+  )}(new Timestamp(System.currentTimeMillis()));
+`;
+
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
   const edit = `  public JSONObject ${serviceName}(${input}) {
       try {
-          ${attributesEntitiesSetter}
           ${entityToEdit}
-  
-              ModelMapper modelMapper = new ModelMapper();
-              modelMapper.getConfiguration().setSkipNullEnabled(true);
-              modelMapper.map(${inputInstance}, entityToEdit);
-              ${repositoryInstance}.save(entityToEdit);
-  
-              return Response.JSONObject(${successMsg});
-  
+          ${attributesEntitiesSetter}
+          ModelMapper modelMapper = new ModelMapper();
+          modelMapper.getConfiguration().setSkipNullEnabled(true);
+          modelMapper.map(${inputInstance}, entityToEdit);
+          ${temporalAttribute ? setUpdateTime : ""}
+          ${repositoryInstance}.save(entityToEdit);
+        
+          return Response.JSONObject(${successMsg});
+
       } catch (Exception e) {
           e.printStackTrace();      
           return Response.JSONObject(${errorCatch});

@@ -60,6 +60,8 @@ function getColumns(atrs, tableName) {
       attr.name
     )};`;
 
+    const temporal = `@Temporal(TemporalType.TIMESTAMP)`;
+
     const column =
       (attr.relations.filter((rel) => rel.relation === "ManyToOne").length !==
         0 ||
@@ -69,7 +71,8 @@ function getColumns(atrs, tableName) {
           0) &&
       !attr.pk
         ? ""
-        : `    @Column(${name}${nullable}${length})
+        : `  ${attr.type.toUpperCase().includes("TIMESTAMP") ? temporal : ""}
+    @Column(${name}${nullable}${length})
     ${singlePrivate}`;
 
     //ARMANDO LAS PROPIEDADES
@@ -78,7 +81,6 @@ function getColumns(atrs, tableName) {
     const pkLine = `    @Id
     @GeneratedValue(strategy = GenerationType.${getGenerationType(attr.type)})
 `;
-    // const temporal = `@Temporal(TemporalType.TIMESTAMP)`;
 
     //ARMANDO LA ENTIDAD
     //--------------------
@@ -156,10 +158,13 @@ export const getUpperEntitie = (table, artifactId) => {
 
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import java.util.UUID;
 import java.util.List;
 import lombok.Data;
+import java.sql.Timestamp;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -189,7 +194,7 @@ function sqlVarToJavaVar(sqlVar) {
   if (
     sqlVar.toUpperCase().includes("VAR") ||
     sqlVar.toUpperCase().includes("DATE") ||
-    sqlVar.toUpperCase().includes("TIMESTAMP") ||
+    // sqlVar.toUpperCase().includes("TIMESTAMP") ||
     sqlVar.toUpperCase().includes("JSON")
   ) {
     return "String";
@@ -202,6 +207,8 @@ function sqlVarToJavaVar(sqlVar) {
     return "Integer";
   } else if (sqlVar.toUpperCase().includes("FLOAT")) {
     return "float";
+  } else if (sqlVar.toUpperCase().includes("TIMESTAMP")) {
+    return "Timestamp";
   } else {
     return sqlVar;
   }

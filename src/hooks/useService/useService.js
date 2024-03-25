@@ -10,6 +10,7 @@ import {
 import { getDeleteService } from "./deleteService";
 import { getAddService } from "./addService";
 import { getEditService } from "./editService";
+import { getFilterService } from "./filterService";
 
 const useService = (tableStructue, artifactId) => {
   const [servicesList, setServicesList] = useState([]); //TODOS LOS SERVICIOS
@@ -131,10 +132,11 @@ ${serviceImport}`;
           ? attr.relations.map((rel) => {
               const relRepository = `${UCC(rel.destinyTable)}Repository`;
               const relEntity = `${UCC(rel.destinyTable)}Entity`;
+              const destinyTable = `${UCC(rel.destinyTable)}`;
               const imports =
                 rel.relation !== "OneToMany"
                   ? `import com.${artifactId}.repositories.dB.repo.${relRepository};
-import com.${artifactId}.repositories.dB.entities.${relEntity};`
+import com.${artifactId}.controllers.responses.${destinyTable}.${destinyTable}ListDTO;`
                   : ``;
               return imports;
             })
@@ -157,7 +159,10 @@ import com.${artifactId}.repositories.dB.entities.${relEntity};`
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.sql.Timestamp;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
@@ -182,8 +187,8 @@ import com.${artifactId}.repositories.dB.repo.${UCC(
   // Descripción:
   // *************************************************************************
 
-  const getRepo = (tableName) => `@Autowired
-private ${UCC(tableName)}Repository ${CC(tableName)}Repository;`;
+  const getRepo = (tableName) => `  @Autowired
+  private ${UCC(tableName)}Repository ${CC(tableName)}Repository;`;
 
   const getServiceClass = (table) => {
     const isTransactional = Object.keys(table).includes("transactional");
@@ -273,23 +278,23 @@ public class ${UCC(table.name)}Service {
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const getFilterService = (table) => {
-    const input = `${UCC(table?.name)}FilterDTO ${CC(table?.name)}FilterDTO`;
-    const inputInstance = `${CC(table?.name)}FilterDTO`;
-    const output = `List<${UCC(table?.name)}Entity>`;
-    const serviceName = `${CC(table?.name)}Filter`;
-    const repository = `${CC(table?.name)}Repository`;
+  //   const getFilterService = (table) => {
+  //     const input = `${UCC(table?.name)}FilterDTO ${CC(table?.name)}FilterDTO`;
+  //     const inputInstance = `${CC(table?.name)}FilterDTO`;
+  //     const output = `List<${UCC(table?.name)}Entity>`;
+  //     const serviceName = `${CC(table?.name)}Filter`;
+  //     const repository = `${CC(table?.name)}Repository`;
 
-    const service = `    public ${output} ${serviceName}(${input}) {
-      ${output} filteredList = ${repository}
-          .findAll(Filter.buildSpecification(${inputInstance}));
-    
-      return filteredList;
-    }
-`;
+  //     const service = `    public ${output} ${serviceName}(${input}) {
+  //       ${output} filteredList = ${repository}
+  //           .findAll(Filter.buildSpecification(${inputInstance}));
 
-    return service;
-  };
+  //       return filteredList;
+  //     }
+  // `;
+
+  //     return service;
+  //   };
 
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------

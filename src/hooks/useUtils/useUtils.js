@@ -1,6 +1,9 @@
 import React from "react";
+import useDTOMapping from "./useDTOMapping";
 
-const useUtils = () => {
+const useUtils = (artifactId) => {
+  const DTOMap = useDTOMapping(artifactId);
+
   const filterImports = `import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -62,7 +65,7 @@ import java.util.List;`;
         }
     }
 }`;
-  return {};
+  return { DTOMap };
 };
 
 export default useUtils;

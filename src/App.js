@@ -33,7 +33,7 @@ import ReactHooks from "./pages/ReactHooks";
 import useService from "./hooks/useService/useService";
 import { useController } from "./hooks/useController";
 import { useRepositories } from "./hooks/useRepositories";
-import { useDTO } from "./hooks/useDTO";
+import { useDTO } from "./hooks/useDTO/useDTO";
 import { UCC } from "./StringFunctions";
 import { useJPAProject } from "./hooks/useJPAProject";
 import DTOOutput from "./pages/DTOOutput";
@@ -41,6 +41,7 @@ import { boxStyle } from "./syles/BoxStyle";
 import Configuration from "./pages/Configuration";
 import ServiceDTOInput from "./pages/ServiceDTOInput";
 import useCustomHook from "./hooks/useCustomHook";
+import useUtils from "./hooks/useUtils/useUtils";
 
 function APP() {
   const [open, setOpen] = React.useState(true);
@@ -83,7 +84,8 @@ function APP() {
   const services = useService(tableStructure, artifactId);
   const controllers = useController(tableStructure, artifactId);
   const repositories = useRepositories(tableStructure, artifactId);
-  const DTO = useDTO(tableStructure, artifactId);
+  const utils = useUtils(artifactId);
+  const DTO = useDTO(artifactId, utils.DTOMap);
   const hooks = useCustomHook(tableStructure);
 
   const JPA = useJPAProject(

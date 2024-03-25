@@ -1,11 +1,23 @@
 import { useState } from "react";
-import { CC, UCC, removeString, sqlVarToJavaVar } from "../StringFunctions";
+import {
+  CC,
+  JoinNewLine,
+  UCC,
+  removeString,
+  sqlVarToJavaVar,
+} from "../../StringFunctions";
+import { excludeVars } from "./variablesToExclude";
 
-export const useDTO = (tableStructue, artifactId) => {
+export const useDTO = (artifactId, DTOMap) => {
   const [inputDTO, setInputDTO] = useState([]);
   const [outputDTO, setOutputDTO] = useState([]);
 
   const addInputDTO = (table, newIDTO) => {
+    //AGREGAR DTOMAP
+    const DTOName = newIDTO[Object.keys(newIDTO)[0]].className
+      .split("class ")[1]
+      .split(" {")[0];
+    DTOMap.addDTOMap({ table: table.name, name: DTOName });
     setInputDTO((prevIDTOList) => {
       const newIDTOList = { ...prevIDTOList };
       const newIDTOs = { ...newIDTO, ...newIDTOList?.[UCC(table?.name)] };
@@ -15,6 +27,11 @@ export const useDTO = (tableStructue, artifactId) => {
   };
 
   const addOutputDTO = (table, newIDTO) => {
+    //AGREGAR DTOMAP
+    const DTOName = newIDTO[Object.keys(newIDTO)[0]].className
+      .split("class ")[1]
+      .split(" {")[0];
+    DTOMap.addDTOMap({ table: table.name, name: DTOName });
     setOutputDTO((prevIDTOList) => {
       const newIDTOList = { ...prevIDTOList };
       const newIDTOs = { ...newIDTO, ...newIDTOList?.[UCC(table?.name)] };
@@ -23,13 +40,26 @@ export const useDTO = (tableStructue, artifactId) => {
     });
   };
 
-  const getDTO = (attributes, table, DTOName, destination, relations) => {
+  const getDTO = (
+    initialAttributes,
+    table,
+    DTOName,
+    destination,
+    relations,
+    attributesWithNoId = true
+  ) => {
     // console.log("----------");
     // console.groupCollapsed(table.name);
     // console.log(attributes);
+    const attributes = excludeVars(initialAttributes);
     let dto = {};
     const DTOAttributes =
-      getDTOAttributes(attributes, relations, destination) ?? [];
+      getDTOAttributes(
+        attributes,
+        relations,
+        destination,
+        attributesWithNoId
+      ) ?? [];
     const DTOClass = getDTOClass(DTOName) ?? "";
     const DTOImports =
       getDTOImports(table, attributes, destination, relations) ?? "";
@@ -48,12 +78,13 @@ export const useDTO = (tableStructue, artifactId) => {
     attributes.forEach((attr) => {
       attr.relations.forEach((rel) => {
         const newImport = `import com.${artifactId}.${
-          destination === "output"
-            ? `controllers.responses.${UCC(rel.destinyTable)}`
-            : `repositories.dB.entities`
+          // destination === "output"
+          //   ? `controllers.responses.${UCC(rel.destinyTable)}`
+          //   : `repositories.dB.entities`
+          `controllers.responses.${UCC(rel.destinyTable)}`
         }.${UCC(rel.destinyTable)}${
-          destination === "output" ? `ListDTO` : `Entity`
-          // `ListDTO`
+          // destination === "output" ? `ListDTO` : `Entity`
+          `ListDTO`
         };`;
 
         RelImports = [...RelImports, newImport];
@@ -91,7 +122,12 @@ public class ${UCC(DTOName)} {`;
     return dtoclass;
   };
 
-  const getDTOAttributes = (attributes, relations, destination) => {
+  const getDTOAttributes = (
+    attributes,
+    relations,
+    destination,
+    attributesWithNoId
+  ) => {
     let attrs = [];
     // let imports = [];
     attributes.forEach((attr) => {
@@ -100,7 +136,9 @@ public class ${UCC(DTOName)} {`;
       // console.log(attr.relations);
       // console.log(getRelations(attr));
       // if (!attr.pk) {
-      let relationsData = relations ? getRelations(attr, destination) : [];
+      let relationsData = relations
+        ? getRelations(attr, destination, attributesWithNoId)
+        : [];
       // console.log(relationsData);
       const attrVar =
         relationsData.length === 0
@@ -116,10 +154,10 @@ public class ${UCC(DTOName)} {`;
     return attrs;
   };
 
-  const getRelations = (attr, destination) => {
+  const getRelations = (attr, destination, attributesWithNoId) => {
     // attributes.forEach((attr) => {
-    const object = destination === "output" ? `ListDTO` : `Entity`;
-    // const object = `ListDTO`;,
+    // const object = attributesWithNoId ? `ListDTO` : `Entity`;
+    const object = `ListDTO`;
     let rels = [];
     // let imports = [];
     attr.relations.forEach((rel) => {
@@ -172,17 +210,7 @@ public class ${UCC(DTOName)} {`;
         const bottom = dto.bottom;
         const attributes = dto.attributes.join(`
   `);
-        const file =
-          imports +
-          `
-  ` +
-          className +
-          `
-  ` +
-          attributes +
-          `
-  ` +
-          bottom;
+        const file = JoinNewLine([imports, className, attributes, bottom]);
         DTOsFiles.push({
           type: "file",
           name: `${dtoFromTableName}.java`,
@@ -198,41 +226,41 @@ public class ${UCC(DTOName)} {`;
     return DTOFolders;
   };
 
-  const outputFiles = () => {
-    let DTOsFiles = [];
-    // console.log(inputDTO);
-    Object.keys(outputDTO).forEach((dtoName) => {
-      const dtosFromTable = outputDTO[dtoName];
-      Object.keys(dtosFromTable).forEach((dtoFromTableName) => {
-        const dto = dtosFromTable[dtoFromTableName];
-        // console.log(dto);
-        // console.log(dto.attributes);
-        const imports = dto.imports;
-        const className = dto.className;
-        const bottom = dto.bottom;
-        const attributes = dto.attributes.join(`
-  `);
-        //   console.log(attributes);
-        const file =
-          imports +
-          `
-  ` +
-          className +
-          `
-  ` +
-          attributes +
-          `
-  ` +
-          bottom;
-        DTOsFiles.push({
-          type: "file",
-          name: `${UCC(dtoName)}DTO.java`,
-          content: file,
-        });
-      });
-    });
-    return DTOsFiles;
-  };
+  // const outputFiles = () => {
+  //   let DTOsFiles = [];
+  //   // console.log(inputDTO);
+  //   Object.keys(outputDTO).forEach((dtoName) => {
+  //     const dtosFromTable = outputDTO[dtoName];
+  //     Object.keys(dtosFromTable).forEach((dtoFromTableName) => {
+  //       const dto = dtosFromTable[dtoFromTableName];
+  //       // console.log(dto);
+  //       // console.log(dto.attributes);
+  //       const imports = dto.imports;
+  //       const className = dto.className;
+  //       const bottom = dto.bottom;
+  //       const attributes = dto.attributes.join(`
+  // `);
+  //       //   console.log(attributes);
+  //       const file =
+  //         imports +
+  //         `
+  // ` +
+  //         className +
+  //         `
+  // ` +
+  //         attributes +
+  //         `
+  // ` +
+  //         bottom;
+  //       DTOsFiles.push({
+  //         type: "file",
+  //         name: `${UCC(dtoName)}DTO.java`,
+  //         content: file,
+  //       });
+  //     });
+  //   });
+  //   return DTOsFiles;
+  // };
 
   return {
     inputDTO,
@@ -242,6 +270,6 @@ public class ${UCC(DTOName)} {`;
     addInputDTO,
     addOutputDTO,
     files,
-    outputFiles,
+    // outputFiles,
   };
 };

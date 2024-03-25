@@ -71,32 +71,6 @@ export const useController = (tableStructue, artifactId) => {
     setControllersList(controllers);
   };
 
-  // const setCRUDFControllers = () => {
-  //   tableStructue.forEach((table) => {
-  //     // const pkName = UCC(table.attributes.find((attr) => attr.pk).name);
-  //     // const createController = getAddController(table);
-  //     //   const readController = getListController(table);
-  //     const updateController = getEditController(table);
-  //     // const deleteController = getDeleteController(table);
-  //     const filterController = getFilterController(table);
-
-  //     setControllersList((prevControllersList) => {
-  //       const newControllersList = { ...prevControllersList };
-  //       const newControllers = [
-  //         //   readController,
-  //         // createController,
-  //         updateController,
-  //         // deleteController,
-  //         filterController,
-  //         ...newControllersList[table?.name]["controllers"],
-  //       ];
-  //       newControllersList[table?.name]["controllers"] = newControllers;
-  //       return newControllersList;
-  //     });
-  //   });
-  //   // return controllers;
-  // };
-
   const files = () => {
     let controllersFiles = [];
     Object.keys(controllersList).forEach((controllerName) => {
@@ -252,7 +226,7 @@ public class ${UCC(table.name)}Controller {
   const getFilterController = (table) => {
     return `  @CrossOrigin
     @PostMapping("/${CC(table.name)}Filter")
-        public List<${UCC(table.name)}Entity> ${CC(
+        public List<${UCC(table.name)}ListDTO> ${CC(
       table.name
     )}Filter(@RequestBody ${UCC(table?.name)}FilterDTO ${CC(
       table?.name

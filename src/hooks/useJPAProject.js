@@ -41,31 +41,34 @@ export const useJPAProject = (
   // -------------------------------------------------------------------------------------
 
   const createAddEndpoint = (table) => {
-    // const newService = services.getAddService(table);
-
+    const newService = services.getAddService(table);
     const newController = controllers.getAddController(table);
-
     const isTransactional = Object.keys(table).includes("transactional");
-    console.log(table.name);
+
+    // EXTRAEMOS LOS ATRIBUTOS
+
     let inputAttributes = table.attributes;
-    console.log(inputAttributes);
+
+    // QUITAR ATRIBUTOS QUE SOLO SIRVAN COMO CONEXIÓN DE UNA RELACIÓN ONETOMANY
+
     inputAttributes = inputAttributes.filter((attr) => {
-      console.log(attr.relations.length);
-      console.log(attr.relations?.[0]?.relation);
       return !(
         attr.relations.length === 1 &&
         attr.relations?.[0]?.relation === "OneToMany"
       );
     });
-    console.log(inputAttributes);
+
+    // QUITAR LAS RELACIONES ONETOMANY DE LOS ATRIBUTOS
+
     inputAttributes = inputAttributes.map((attr) => {
       return {
         ...attr,
-        // Eliminar las relaciones OneToMany y si es la única, reliminar todo el atributo
+
         relations: attr.relations.filter((rel) => rel.relation !== "OneToMany"),
       };
     });
-    console.log(inputAttributes);
+
+    //AGREGAR ATRIBUTO UNICO DE TABLA A LA QUE SE AGREGARÁ ESTA ENTIDAD
 
     if (isTransactional) {
       const uniqueAttr = table.transactional.attributes.find(
@@ -79,7 +82,9 @@ export const useJPAProject = (
         uniqueAttr,
       ];
     }
-    const newService = services.getAddService(table, inputAttributes);
+
+    // console.log(table.name);
+    // console.log(inputAttributes);
 
     const newInputDTO = DTO.getDTO(
       inputAttributes,

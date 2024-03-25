@@ -68,7 +68,7 @@ export function sqlVarToJavaVar(sqlVar) {
   if (
     sqlVar.toUpperCase().includes("VAR") ||
     sqlVar.toUpperCase().includes("DATE") ||
-    sqlVar.toUpperCase().includes("TIMESTAMP") ||
+    // sqlVar.toUpperCase().includes("TIMESTAMP") ||
     sqlVar.toUpperCase().includes("JSON")
   ) {
     return "String";
@@ -81,6 +81,8 @@ export function sqlVarToJavaVar(sqlVar) {
     return "Integer";
   } else if (sqlVar.toUpperCase().includes("FLOAT")) {
     return "float";
+  } else if (sqlVar.toUpperCase().includes("TIMESTAMP")) {
+    return "Timestamp";
   } else {
     return sqlVar;
   }
