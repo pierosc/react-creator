@@ -13,16 +13,13 @@ import React, { useState, useRef, useEffect } from "react";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { createRarFile } from "./FileFunctions";
 import { jpaFolderStructure } from "./jpaFolferStructure";
-import { getEstructure } from "./EstructureFunctions";
 import { getInitSql } from "./initSql";
 import Entities from "./pages/Entities";
 import { getEntitiesFiles, getEntitiesList } from "./EntitiesFunctions";
 import Repositories from "./pages/Repositories";
-import { getRepoFiles, getRepositoriesList } from "./RepositoriesFunctions";
 import { MUITheme } from "./syles/MUITheme";
 import { Button, IconButton, Modal, Typography } from "@mui/material";
 import Services from "./pages/Services";
-import DataModel from "./pages/DataModel";
 
 import Controllers from "./pages/Controllers";
 import InitSQL from "./pages/InitSQL";
@@ -34,7 +31,6 @@ import useService from "./hooks/useService/useService";
 import { useController } from "./hooks/useController";
 import { useRepositories } from "./hooks/useRepositories";
 import { useDTO } from "./hooks/useDTO/useDTO";
-import { UCC } from "./StringFunctions";
 import { useJPAProject } from "./hooks/useJPAProject";
 import DTOOutput from "./pages/DTOOutput";
 import { boxStyle } from "./syles/BoxStyle";
@@ -77,7 +73,6 @@ function APP() {
   // const [jpa, setJpa] = useState(jpaFolderStructure);
   let jpa = jpaFolderStructure;
 
-  const textAreaRef = useRef("");
   const [code, setCode] = useState("");
   const [artifactId, setArticaftId] = useState("users");
   const [dbName, setDbName] = useState("dB");
@@ -296,7 +291,7 @@ function APP() {
             controllers={controllers}
             repositories={repositories}
             hooks={hooks}
-            textAreaRef={textAreaRef}
+            handleClose={handleClose}
           />
         </Box>
       </Modal>

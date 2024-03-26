@@ -36,7 +36,7 @@ function Configuration({
   controllers,
   repositories,
   hooks,
-  textAreaRef,
+  handleClose,
 }) {
   let theme = useTheme();
   //   let newMUITheme = MUITheme;
@@ -56,7 +56,6 @@ function Configuration({
   return (
     <div className="grid gap-4 p-4">
       <TabContext value={inputMenu}>
-        {/* <div className="flex"> */}
         <ThemeProvider theme={theme}>
           <TabList onChange={handleChangeInputMenu}>
             <Tab label="Data model" value="0" />
@@ -67,7 +66,6 @@ function Configuration({
 
         <TabPanel value="0" sx={{ padding: "0" }}>
           <DataModel
-            textAreaRef={textAreaRef}
             code={code}
             setCode={setCode}
             artifactId={artifactId}
@@ -84,8 +82,8 @@ function Configuration({
         <TabPanel value="2" sx={{ padding: "0" }}>
           <FolderView />
         </TabPanel>
-        {/* </div> */}
       </TabContext>
+
       <div className="flex gap-4">
         <ThemeProvider theme={theme}>
           <Button
@@ -112,6 +110,7 @@ function Configuration({
               const initSQL = getInitSql(tableStructure);
               setInitSQL(initSQL);
               setFilesCreated(true);
+              handleClose();
             }}
           >
             Get EMPTY Files

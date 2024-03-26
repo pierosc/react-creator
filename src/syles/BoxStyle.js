@@ -9,6 +9,6 @@ export const boxStyle = {
   boxShadow: 24,
   maxWidth: "90%",
   maxHeight: "90vh",
-  overflow: "auto",
+  // overflow: "auto",
   backgroundColor: "rgb(50,50,50)",
 };

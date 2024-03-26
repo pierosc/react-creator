@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Textarea } from "@mui/joy";
 import TextField from "@mui/material/TextField";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
@@ -7,7 +7,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
 function DataModel({
-  textAreaRef,
   code,
   setCode,
   artifactId,
@@ -19,13 +18,13 @@ function DataModel({
 }) {
   let theme = useTheme();
   theme = createTheme(theme, MUITheme);
-
+  const textAreaRef = useRef("");
   return (
     <div className="grid gap-2">
       <ThemeProvider theme={theme}>
         <div className="flex gap-1">
           <TextField
-            label="Artifact ID"
+            label="Artifact"
             variant="outlined"
             size="small"
             defaultValue={artifactId}
@@ -35,6 +34,24 @@ function DataModel({
           />
           <TextField
             label="DB Name"
+            variant="outlined"
+            size="small"
+            defaultValue={dbName}
+            onChange={(e) => {
+              setDbName(e.target.value);
+            }}
+          />
+          <TextField
+            label="Group"
+            variant="outlined"
+            size="small"
+            defaultValue={dbName}
+            onChange={(e) => {
+              setDbName(e.target.value);
+            }}
+          />
+          <TextField
+            label="Package Name"
             variant="outlined"
             size="small"
             defaultValue={dbName}
