@@ -42,6 +42,8 @@ import Configuration from "./pages/Configuration";
 import ServiceDTOInput from "./pages/ServiceDTOInput";
 import useCustomHook from "./hooks/useCustomHook";
 import useUtils from "./hooks/useUtils/useUtils";
+import useException from "./hooks/useException/useException";
+import useApplication from "./hooks/useApplication";
 
 function APP() {
   const [open, setOpen] = React.useState(true);
@@ -86,6 +88,8 @@ function APP() {
   const repositories = useRepositories(tableStructure, artifactId);
   const utils = useUtils(artifactId);
   const DTO = useDTO(artifactId, utils.DTOMap);
+  const exception = useException(artifactId);
+  const application = useApplication(artifactId);
   const hooks = useCustomHook(tableStructure);
 
   const JPA = useJPAProject(
@@ -175,6 +179,16 @@ function APP() {
                   const inputDTOFiles = DTO.files("input");
                   jpa[0].content[0].content = inputDTOFiles;
 
+                  const utilsFiles = utils.getFolderContent();
+                  jpa[3].content = utilsFiles;
+
+                  const exceptionFiles = exception.getFolderContent();
+                  jpa[4].content = exceptionFiles;
+
+                  const applicationFile = application.getFile();
+                  jpa = [...jpa, applicationFile];
+
+                  jpa = [{ type: "folder", name: artifactId, content: jpa }];
                   createRarFile(jpa);
                   jpa = jpaFolderStructure;
                 }}

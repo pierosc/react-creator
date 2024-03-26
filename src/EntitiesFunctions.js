@@ -46,7 +46,6 @@ export const getEntitiesFiles = (entitiesList) => {
 function getColumns(atrs, tableName) {
   let columns = [];
   atrs.forEach((attr) => {
-    // console.log(attr);
     const name = `name = "${attr.name}"`;
     const nullable = `, nullable = ${attr.nullable}`;
 
@@ -71,7 +70,7 @@ function getColumns(atrs, tableName) {
           0) &&
       !attr.pk
         ? ""
-        : `  ${attr.type.toUpperCase().includes("TIMESTAMP") ? temporal : ""}
+        : `   ${attr.type.toUpperCase().includes("TIMESTAMP") ? temporal : ""}
     @Column(${name}${nullable}${length})
     ${singlePrivate}`;
 
@@ -105,15 +104,15 @@ function getColumns(atrs, tableName) {
 function getRelations(relations, attr, tableName) {
   let rels = "";
   //   console.log(relations);
-  relations.forEach((rel) => {
-    // if (rel.relation === "OneToOneO" || rel.relation === "OneToOneD") {
-    //   console.log(rel);
-    // }
 
-    const MTORef = `    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinColumn(referencedColumnName ="${rel.destinyAttr}", name = "${
-      attr.name
-    }")
+  relations.forEach((rel) => {
+    const referencedColumnName = `referencedColumnName ="${rel.destinyAttr}"`;
+    const name = `name = "${attr.name}"`;
+    const nullable = `nullable = ${attr.nullable}`;
+
+    const MTORef = `
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(${referencedColumnName}, ${name}, ${nullable})
     private ${UCC(rel.destinyTable)}Entity ${CC(attr.name)};
 `;
 
@@ -121,10 +120,11 @@ function getRelations(relations, attr, tableName) {
 
     const OTORef = `
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName ="${rel.destinyAttr}", name="${attr.name}")
+    @JoinColumn(${referencedColumnName}, ${name}, ${nullable})
     private ${UCC(rel.destinyTable)}Entity ${CC(rel.destinyTable)};`;
 
-    const OTODRef = `      @OneToOne(mappedBy = "${CC(tableName)}")
+    const OTODRef = `
+    @OneToOne(mappedBy = "${CC(tableName)}")
     private ${UCC(rel.destinyTable)}Entity ${CC(rel.destinyTable)};
 `;
 

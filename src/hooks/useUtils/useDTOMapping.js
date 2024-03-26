@@ -1,18 +1,18 @@
-import { JoinNewLine, UniqueArray } from "../../StringFunctions";
-
+import { JoinNewLine, UCC, UniqueArray } from "../../StringFunctions";
+import { useState } from "react";
 function useDTOMapping(artifactId) {
-  const imports = [
+  const [attributeMap, setAttributeMap] = useState([]);
+  const [imports, setImports] = useState([
     `package com.${artifactId}.utils;`,
     `import java.util.HashMap;`,
     `import java.util.Map;`,
-  ];
+  ]);
 
   const startClass = `public class DTOMapping {
           private static final Map<String, Class<?>> dtoToEntityMapping = new HashMap<>();
           
           static {`;
 
-  const attributeMap = [];
   const endClass = `    }
   
   public static Class<?> getEntityClass(String dtoName) {
@@ -25,20 +25,26 @@ function useDTOMapping(artifactId) {
 
   const getMap = (DTO) => {
     //`dtoToEntityMapping.put("com.users.controllers.responses.Genders.GendersListDTO", GendersEntity.class);`
-    return `dtoToEntityMapping.put("com.${artifactId}.controllers.responses.${DTO.table}.${DTO.name}", ${DTO.table}Entity.class);`;
+    return `dtoToEntityMapping.put("com.${artifactId}.${
+      DTO.source === "output" ? "controllers.responses" : "business.domain"
+    }.${UCC(DTO.table)}.${DTO.name}", ${UCC(DTO.table)}Entity.class);`;
   };
 
   const getImport = (DTO) => {
-    return `import com.${artifactId}.repositories.dB.entities.${DTO.table}Entity;`;
+    return `import com.${artifactId}.repositories.dB.entities.${UCC(
+      DTO.table
+    )}Entity;`;
   };
 
   const addDTOMap = (DTO) => {
-    const newAttrMap = getMap(DTO);
-    attributeMap.push(newAttrMap);
-    const newImport = getImport(DTO);
-    imports.push(newImport);
-    console.log(imports);
-    console.log(attributeMap);
+    setAttributeMap((prevAttrMap) => {
+      const newAttrMap = getMap(DTO);
+      return [...prevAttrMap, newAttrMap];
+    });
+    setImports((prevImport) => {
+      const newImport = getImport(DTO);
+      return [...prevImport, newImport];
+    });
   };
 
   const getFile = () => {

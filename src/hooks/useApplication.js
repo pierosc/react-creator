@@ -1,36 +1,39 @@
-import React from "react";
+import { UCC } from "../StringFunctions";
 
-function useApplication() {
-  const app = `
-package com.users;
+function useApplication(artifactId) {
+  const file = `package com.${artifactId};
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-@SpringBootApplication
-public class UsersApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(UsersApplication.class, args);
-	}
-
-	@Bean
-	public ModelMapper modelMapper() {
-
-		ModelMapper modelMapper = new ModelMapper();
-		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-		modelMapper.getConfiguration().setSkipNullEnabled(true);
-		return modelMapper;
-	}
-
-}
-
-`;
-
-  return {};
+  import org.modelmapper.ModelMapper;
+  import org.modelmapper.convention.MatchingStrategies;
+  import org.springframework.boot.SpringApplication;
+  import org.springframework.boot.autoconfigure.SpringBootApplication;
+  import org.springframework.context.annotation.Bean;
+  
+  @SpringBootApplication
+  public class ${UCC(artifactId)}Application {
+  
+      public static void main(String[] args) {
+          SpringApplication.run(${UCC(artifactId)}Application.class, args);
+      }
+  
+      @Bean
+      public ModelMapper modelMapper() {
+  
+          ModelMapper modelMapper = new ModelMapper();
+          modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+          modelMapper.getConfiguration().setSkipNullEnabled(true);
+          return modelMapper;
+      }
+  
+  }`;
+  const getFile = () => {
+    return {
+      type: "file",
+      name: `${UCC(artifactId)}Application.java`,
+      content: file,
+    };
+  };
+  return { getFile };
 }
 
 export default useApplication;

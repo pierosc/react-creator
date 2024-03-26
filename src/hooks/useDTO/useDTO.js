@@ -17,7 +17,7 @@ export const useDTO = (artifactId, DTOMap) => {
     const DTOName = newIDTO[Object.keys(newIDTO)[0]].className
       .split("class ")[1]
       .split(" {")[0];
-    DTOMap.addDTOMap({ table: table.name, name: DTOName });
+    DTOMap.addDTOMap({ table: table.name, name: DTOName, source: "input" });
     setInputDTO((prevIDTOList) => {
       const newIDTOList = { ...prevIDTOList };
       const newIDTOs = { ...newIDTO, ...newIDTOList?.[UCC(table?.name)] };
@@ -31,7 +31,7 @@ export const useDTO = (artifactId, DTOMap) => {
     const DTOName = newIDTO[Object.keys(newIDTO)[0]].className
       .split("class ")[1]
       .split(" {")[0];
-    DTOMap.addDTOMap({ table: table.name, name: DTOName });
+    DTOMap.addDTOMap({ table: table.name, name: DTOName, source: "output" });
     setOutputDTO((prevIDTOList) => {
       const newIDTOList = { ...prevIDTOList };
       const newIDTOs = { ...newIDTO, ...newIDTOList?.[UCC(table?.name)] };

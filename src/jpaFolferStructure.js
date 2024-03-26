@@ -48,4 +48,14 @@ export const jpaFolderStructure = [
       },
     ],
   },
+  {
+    type: "folder",
+    name: "utils",
+    content: [],
+  },
+  {
+    type: "folder",
+    name: "exception",
+    content: [],
+  },
 ];

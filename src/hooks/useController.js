@@ -107,14 +107,18 @@ export const useController = (tableStructue, artifactId) => {
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import com.${artifactId}.utils.Response;
+import com.${artifactId}.utils.ServiceUtils;
 import com.${artifactId}.business.domain.${UCC(table.name)}.${UCC(
       table.name
     )}FilterDTO;
@@ -154,6 +158,16 @@ public class ${UCC(table.name)}Controller {
     public String create${UCC(table.name)}(@RequestBody ${UCC(
       table.name
     )}AddDTO ${CC(table.name)}) {
+
+      List<String> emptyFields = ServiceUtils.validateEmptyNonNullFields(${CC(
+        table.name
+      )});
+      if (!emptyFields.isEmpty()) {
+        System.out.println("Campos vacíos: " + emptyFields);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            Response.Error("Empty fields", emptyFields));
+      }
+
       return ${CC(table.name)}Service.add${UCC(table.name)}(${CC(
       table.name
     )}).toString();
@@ -192,23 +206,15 @@ public class ${UCC(table.name)}Controller {
   //NEW CONTROLLERS
 
   const getFindByController = (selectedAttributes, table) => {
-    // console.log(selectedAttributes);
-    // console.log(table.attributes);
-    // const inputs = selectedAttributes
-    //   .map((attr) => `${sqlVarToJavaVar(attr.type)} ${CC(attr.name)}`)
-    //   .join(", ");
-    // console.log(inputs);
     const attrsList = selectedAttributes
       .map((attr) => UCC(attr.name))
       .join("And");
 
     const DTOName =
       selectedAttributes.map((attr) => CC(attr.name)).join("And") + "IDTO";
-    // console.log(attrsList);
     const outputs = selectedAttributes
       .map((attr) => `${DTOName}.get${UCC(attr.name)}()`)
       .join(", ");
-    // console.log(outputs);
     const controller = `    @CrossOrigin
     @PostMapping("/${CC(table?.name)}FilterBy${attrsList}")
         public List<${UCC(table?.name)}Entity> ${CC(
@@ -219,13 +225,14 @@ public class ${UCC(table.name)}Controller {
     )}FilterBy${attrsList}(${outputs});
         }`;
 
-    // console.log(controller);
     return controller;
   };
 
   const getFilterController = (table) => {
-    return `  @CrossOrigin
-    @PostMapping("/${CC(table.name)}Filter")
+    const url = `/${CC(table.name)}Filter`;
+
+    return `    @CrossOrigin
+    @PostMapping("${url}")
         public List<${UCC(table.name)}ListDTO> ${CC(
       table.name
     )}Filter(@RequestBody ${UCC(table?.name)}FilterDTO ${CC(
@@ -234,7 +241,7 @@ public class ${UCC(table.name)}Controller {
           return ${CC(table.name)}Service.${CC(table.name)}Filter(${CC(
       table?.name
     )}FilterDTO);
-        }`;
+    }`;
   };
 
   return {
