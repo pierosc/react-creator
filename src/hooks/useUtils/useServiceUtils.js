@@ -1,7 +1,7 @@
-function useServiceUtils(artifactId) {
+function useServiceUtils(metaData) {
   const file = `
   
-package com.${artifactId}.utils;
+package ${metaData.packageName}.utils;
 
 // import java.lang.reflect.Array;
 import java.lang.reflect.Field;

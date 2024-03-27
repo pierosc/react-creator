@@ -1,14 +1,9 @@
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
 import { Button, IconButton, Modal, Typography } from "@mui/material";
-import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
 import React from "react";
 import FolderView from "./FolderView";
 import TableJSONView from "./TableJSONView";
@@ -24,7 +19,6 @@ function Configuration({
   setFilesCreated,
   setInitSQL,
   artifactId,
-  setArticaftId,
   dbName,
   setDbName,
   code,
@@ -35,8 +29,10 @@ function Configuration({
   services,
   controllers,
   repositories,
-  hooks,
+  reactHooks,
   handleClose,
+  setMetaData,
+  metaData,
 }) {
   let theme = useTheme();
   //   let newMUITheme = MUITheme;
@@ -68,12 +64,12 @@ function Configuration({
           <DataModel
             code={code}
             setCode={setCode}
-            artifactId={artifactId}
-            setArticaftId={setArticaftId}
             dbName={dbName}
             setDbName={setDbName}
             oppositeRelations={oppositeRelations}
             setOppositeRelations={setOppositeRelations}
+            setMetaData={setMetaData}
+            metaData={metaData}
           />
         </TabPanel>
         <TabPanel value="1" sx={{ padding: "0" }}>
@@ -105,7 +101,7 @@ function Configuration({
               services.setEmptyStructure();
               controllers.setEmptyStructure();
               repositories.setEmptyStructure();
-              hooks.setEmptyStructure();
+              reactHooks.setEmptyStructure();
 
               const initSQL = getInitSql(tableStructure);
               setInitSQL(initSQL);

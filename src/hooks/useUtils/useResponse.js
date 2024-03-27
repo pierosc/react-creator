@@ -1,5 +1,5 @@
-function useResponse(artifactId) {
-  const file = `package com.${artifactId}.utils;
+function useResponse(metaData) {
+  const file = `package ${metaData.packageName}.utils;
 
     import org.json.JSONObject;
     

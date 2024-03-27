@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CC, UCC, removeString, sqlVarToJavaVar } from "../StringFunctions";
 
-export const useRepositories = (tableStructue, artifactId) => {
+export const useRepositories = (tableStructue, metaData) => {
   const [repositoriesList, setRepositoriesList] = useState([]); //TODOS LOS SERVICIOS
   //   const [repositoryImports, setServiceImports] = useState("");
 
@@ -83,7 +83,7 @@ export const useRepositories = (tableStructue, artifactId) => {
       repositories[table.name] = {};
       repositories[table.name]["imports"] = getRepositoryImports(
         table,
-        artifactId
+        metaData
       );
       repositories[table.name]["classStart"] = getRepositoryClassStart(table);
       repositories[table.name]["repositories"] = uniqueAttr
@@ -110,14 +110,16 @@ export const useRepositories = (tableStructue, artifactId) => {
     });
   };
 
-  const getRepositoryImports = (table, artifactId) => {
-    const repo = `package com.${artifactId}.repositories.dB.repo;
+  const getRepositoryImports = (table, metaData) => {
+    const repo = `package ${metaData.packageName}.repositories.dB.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
-import com.${artifactId}.repositories.dB.entities.${UCC(table.name)}Entity;`;
+import ${metaData.packageName}.repositories.dB.entities.${UCC(
+      table.name
+    )}Entity;`;
     return repo;
   };
 

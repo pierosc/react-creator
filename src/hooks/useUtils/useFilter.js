@@ -1,5 +1,5 @@
-function useFilter(artifactId) {
-  const file = `package com.${artifactId}.utils;
+function useFilter(metaData) {
+  const file = `package ${metaData.packageName}.utils;
 
     import jakarta.persistence.criteria.Predicate;
     import java.lang.reflect.Field;

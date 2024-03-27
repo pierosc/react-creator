@@ -12,7 +12,7 @@ import { getAddService } from "./addService";
 import { getEditService } from "./editService";
 import { getFilterService } from "./filterService";
 
-const useService = (tableStructue, artifactId) => {
+const useService = (tableStructue, metaData) => {
   const [servicesList, setServicesList] = useState([]); //TODOS LOS SERVICIOS
   //   const [serviceImports, setServiceImports] = useState("");
 
@@ -135,8 +135,8 @@ ${serviceImport}`;
               const destinyTable = `${UCC(rel.destinyTable)}`;
               const imports =
                 rel.relation !== "OneToMany"
-                  ? `import com.${artifactId}.repositories.dB.repo.${relRepository};
-import com.${artifactId}.controllers.responses.${destinyTable}.${destinyTable}ListDTO;`
+                  ? `import ${metaData.packageName}.repositories.dB.repo.${relRepository};
+import ${metaData.packageName}.controllers.responses.${destinyTable}.${destinyTable}ListDTO;`
                   : ``;
               return imports;
             })
@@ -145,16 +145,16 @@ import com.${artifactId}.controllers.responses.${destinyTable}.${destinyTable}Li
     );
 
     if (isTransactional) {
-      const transactionalRepo = `import com.${artifactId}.repositories.dB.repo.${UCC(
-        table.transactional.name
-      )}Repository;`;
+      const transactionalRepo = `import ${
+        metaData.packageName
+      }.repositories.dB.repo.${UCC(table.transactional.name)}Repository;`;
       attributesRepositoriesImports = [
         ...attributesRepositoriesImports,
         transactionalRepo,
       ];
     }
 
-    const service = `package com.${artifactId}.business.services;
+    const service = `package ${metaData.packageName}.business.services;
   
 import java.util.ArrayList;
 import java.util.List;
@@ -169,13 +169,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.lang.IllegalStateException;
-import com.${artifactId}.utils.Filter;
-import com.${artifactId}.utils.Response;
-import com.${artifactId}.business.domain.${UCC(table.name)}.${UCC(
+import ${metaData.packageName}.utils.Filter;
+import ${metaData.packageName}.utils.Response;
+import ${metaData.packageName}.business.domain.${UCC(table.name)}.${UCC(
       table.name
     )}FilterDTO;
-import com.${artifactId}.repositories.dB.entities.${UCC(table.name)}Entity;
-import com.${artifactId}.repositories.dB.repo.${UCC(
+import ${metaData.packageName}.repositories.dB.entities.${UCC(
+      table.name
+    )}Entity;
+import ${metaData.packageName}.repositories.dB.repo.${UCC(
       table.name
     )}Repository;${JoinNewLine(attributesRepositoriesImports)}
 `;

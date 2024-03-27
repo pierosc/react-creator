@@ -1,10 +1,10 @@
 import React from "react";
 import CodeEditor from "../components/CodeEditor/CodeEditor";
 
-function ReactHooks({ hooks, table }) {
-  console.log(hooks.customHooksList);
+function ReactHooks({ reactHooks, table }) {
+  console.log(reactHooks.customHooksList);
   console.log(
-    table?.name ? hooks.customHooksList?.[table?.name]["imports"] : ""
+    table?.name ? reactHooks.customHooksList?.[table?.name]["imports"] : ""
   );
 
   return (
@@ -18,7 +18,9 @@ function ReactHooks({ hooks, table }) {
     >
       <CodeEditor
         codeString={
-          table?.name ? hooks.customHooksList?.[table?.name]["imports"] : ""
+          table?.name
+            ? reactHooks.customHooksList?.[table?.name]["imports"]
+            : ""
         }
         language="javascript"
         header={false}
@@ -28,7 +30,7 @@ function ReactHooks({ hooks, table }) {
       <CodeEditor
         codeString={
           table?.name
-            ? hooks.customHooksList?.[table?.name]["hookFunction"]
+            ? reactHooks.customHooksList?.[table?.name]["hookFunction"]
             : ""
         }
         language="javascript"
@@ -36,7 +38,7 @@ function ReactHooks({ hooks, table }) {
         bgColor="rgba(0, 0, 0,0)"
         padding="5px"
       />
-      {hooks.customHooksList?.[table?.name]?.["useStates"]?.map(
+      {reactHooks.customHooksList?.[table?.name]?.["useStates"]?.map(
         (code, index) => (
           <CodeEditor
             key={index}
@@ -50,7 +52,9 @@ function ReactHooks({ hooks, table }) {
       )}
       <CodeEditor
         codeString={
-          table?.name ? hooks.customHooksList[table?.name]["hookReturn"] : ""
+          table?.name
+            ? reactHooks.customHooksList[table?.name]["hookReturn"]
+            : ""
         }
         language="javascript"
         header={false}

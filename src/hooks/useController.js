@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CC, UCC, removeString, sqlVarToJavaVar } from "../StringFunctions";
 
-export const useController = (tableStructue, artifactId) => {
+export const useController = (tableStructue, metaData) => {
   const [controllersList, setControllersList] = useState([]); //TODOS LOS SERVICIOS
   //   const [controllerImports, setServiceImports] = useState("");
 
@@ -102,7 +102,7 @@ export const useController = (tableStructue, artifactId) => {
   };
 
   const getControllerImports = (table) => {
-    const controller = `package com.${artifactId}.controllers;
+    const controller = `package ${metaData.packageName}.controllers;
         
 import java.util.List;
 
@@ -117,13 +117,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import com.${artifactId}.utils.Response;
-import com.${artifactId}.utils.ServiceUtils;
-import com.${artifactId}.business.domain.${UCC(table.name)}.${UCC(
+import ${metaData.packageName}.utils.Response;
+import ${metaData.packageName}.utils.ServiceUtils;
+import ${metaData.packageName}.business.domain.${UCC(table.name)}.${UCC(
       table.name
     )}FilterDTO;
-import com.${artifactId}.business.services.${UCC(table.name)}Service;
-import com.${artifactId}.repositories.dB.entities.${UCC(table.name)}Entity;`;
+import ${metaData.packageName}.business.services.${UCC(table.name)}Service;
+import ${metaData.packageName}.repositories.dB.entities.${UCC(
+      table.name
+    )}Entity;`;
     return controller;
   };
 

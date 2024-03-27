@@ -9,19 +9,7 @@ import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import { Button } from "@mui/material";
 
-import { UCC } from "../StringFunctions";
-
-function Services({
-  services,
-  controllers,
-  repositories,
-  DTO,
-  JPA,
-  table,
-  selectedService,
-  setSelectedService,
-  artifactId,
-}) {
+function Services({ services, JPA, table, setSelectedService }) {
   const [attributes, setAttributes] = useState([]);
   const [selectedCodeEditor, setSelectedCodeEditor] = useState(null);
 

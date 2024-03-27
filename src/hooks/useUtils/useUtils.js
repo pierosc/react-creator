@@ -3,14 +3,14 @@ import useResponse from "./useResponse";
 import useFilter from "./useFilter";
 import useServiceUtils from "./useServiceUtils";
 
-const useUtils = (artifactId) => {
-  const DTOMap = useDTOMapping(artifactId);
+const useUtils = (metaData) => {
+  const DTOMap = useDTOMapping(metaData);
 
-  const Response = useResponse(artifactId);
+  const Response = useResponse(metaData);
 
-  const Filter = useFilter(artifactId);
+  const Filter = useFilter(metaData);
 
-  const ServiceUtils = useServiceUtils(artifactId);
+  const ServiceUtils = useServiceUtils(metaData);
 
   const getFolderContent = () => {
     const DTOMapFile = DTOMap.getFile();

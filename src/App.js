@@ -70,30 +70,32 @@ function APP() {
   let theme = useTheme();
   theme = createTheme(theme, MUITheme);
 
-  // const [jpa, setJpa] = useState(jpaFolderStructure);
   let jpa = jpaFolderStructure;
 
   const [code, setCode] = useState("");
   const [artifactId, setArticaftId] = useState("users");
   const [dbName, setDbName] = useState("dB");
+  const [metaData, setMetaData] = useState({
+    group: "com.users",
+    artifact: "users",
+    name: "users",
+    packageName: "com.users",
+  });
+
+  //OPTIONS
   const [oppositeRelations, setOppositeRelations] = useState(false);
 
-  const services = useService(tableStructure, artifactId);
-  const controllers = useController(tableStructure, artifactId);
-  const repositories = useRepositories(tableStructure, artifactId);
-  const utils = useUtils(artifactId);
-  const DTO = useDTO(artifactId, utils.DTOMap);
-  const exception = useException(artifactId);
-  const application = useApplication(artifactId);
-  const hooks = useCustomHook(tableStructure);
+  //HOOKS
+  const services = useService(tableStructure, metaData);
+  const controllers = useController(tableStructure, metaData);
+  const repositories = useRepositories(tableStructure, metaData);
+  const utils = useUtils(metaData);
+  const DTO = useDTO(metaData, utils.DTOMap);
+  const exception = useException(metaData);
+  const application = useApplication(metaData);
+  const reactHooks = useCustomHook(tableStructure);
 
-  const JPA = useJPAProject(
-    repositories,
-    services,
-    controllers,
-    DTO,
-    artifactId
-  );
+  const JPA = useJPAProject(repositories, services, controllers, DTO, metaData);
   const [selectedService, setSelectedService] = useState({});
 
   return (
@@ -183,7 +185,9 @@ function APP() {
                   const applicationFile = application.getFile();
                   jpa = [...jpa, applicationFile];
 
-                  jpa = [{ type: "folder", name: artifactId, content: jpa }];
+                  jpa = [
+                    { type: "folder", name: metaData.artifact, content: jpa },
+                  ];
                   createRarFile(jpa);
                   jpa = jpaFolderStructure;
                 }}
@@ -237,20 +241,10 @@ function APP() {
             </TabPanel>
             <TabPanel value="2" sx={{ padding: "0" }}>
               <Services
-                // servicesList={servicesList}
                 services={services}
-                controllers={controllers}
-                repositories={repositories}
-                DTO={DTO}
                 JPA={JPA}
-                selectedService={selectedService}
                 setSelectedService={setSelectedService}
-                // setServicesList={setServicesList}
-                // setRepositoriesList={setRepositoriesList}
-                // setControllersList={setControllersList}
-                // setIDTOList={setIDTOList}
                 table={table}
-                artifactId={artifactId}
               />
             </TabPanel>
             <TabPanel value="3" sx={{ padding: "0" }}>
@@ -266,7 +260,7 @@ function APP() {
               <InitSQL initSQL={initSQL} />
             </TabPanel>
             <TabPanel value="7" sx={{ padding: "0" }}>
-              <ReactHooks hooks={hooks} table={table} />
+              <ReactHooks reactHooks={reactHooks} table={table} />
             </TabPanel>
           </TabContext>
         </div>
@@ -279,7 +273,6 @@ function APP() {
             setFilesCreated={setFilesCreated}
             setInitSQL={setInitSQL}
             artifactId={artifactId}
-            setArticaftId={setArticaftId}
             dbName={dbName}
             setDbName={setDbName}
             code={code}
@@ -290,8 +283,10 @@ function APP() {
             services={services}
             controllers={controllers}
             repositories={repositories}
-            hooks={hooks}
+            reactHooks={reactHooks}
             handleClose={handleClose}
+            setMetaData={setMetaData}
+            metaData={metaData}
           />
         </Box>
       </Modal>

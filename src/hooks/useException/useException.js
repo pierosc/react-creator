@@ -1,5 +1,5 @@
-function useException(artifactId) {
-  const file = `package com.${artifactId}.exception;
+function useException(metaData) {
+  const file = `package ${metaData.packageName}.exception;
 
     import org.springframework.http.HttpStatus;
     import org.springframework.http.HttpStatusCode;

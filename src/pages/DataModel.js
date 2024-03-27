@@ -9,12 +9,13 @@ import Switch from "@mui/material/Switch";
 function DataModel({
   code,
   setCode,
-  artifactId,
-  setArticaftId,
+
   dbName,
   setDbName,
   oppositeRelations,
   setOppositeRelations,
+  setMetaData,
+  metaData,
 }) {
   let theme = useTheme();
   theme = createTheme(theme, MUITheme);
@@ -24,42 +25,62 @@ function DataModel({
       <ThemeProvider theme={theme}>
         <div className="flex gap-1">
           <TextField
-            label="Artifact"
-            variant="outlined"
-            size="small"
-            defaultValue={artifactId}
-            onChange={(e) => {
-              setArticaftId(e.target.value);
-            }}
-          />
-          <TextField
-            label="DB Name"
-            variant="outlined"
-            size="small"
-            defaultValue={dbName}
-            onChange={(e) => {
-              setDbName(e.target.value);
-            }}
-          />
-          <TextField
             label="Group"
             variant="outlined"
             size="small"
-            defaultValue={dbName}
+            defaultValue={metaData.group}
             onChange={(e) => {
               setDbName(e.target.value);
+              setMetaData((prevMeta) => {
+                const newMeta = { ...prevMeta };
+                newMeta.group = e.target.value;
+                return newMeta;
+              });
             }}
           />
+          <TextField
+            label="Artifact"
+            variant="outlined"
+            size="small"
+            defaultValue={metaData.artifact}
+            onChange={(e) => {
+              setMetaData((prevMeta) => {
+                const newMeta = { ...prevMeta };
+                newMeta.artifact = e.target.value;
+                return newMeta;
+              });
+            }}
+          />
+          <TextField
+            label="Name"
+            variant="outlined"
+            size="small"
+            defaultValue={metaData.name}
+            onChange={(e) => {
+              setDbName(e.target.value);
+              setMetaData((prevMeta) => {
+                const newMeta = { ...prevMeta };
+                newMeta.name = e.target.value;
+                return newMeta;
+              });
+            }}
+          />
+
           <TextField
             label="Package Name"
             variant="outlined"
             size="small"
-            defaultValue={dbName}
+            defaultValue={metaData.packageName}
             onChange={(e) => {
               setDbName(e.target.value);
+              setMetaData((prevMeta) => {
+                const newMeta = { ...prevMeta };
+                newMeta.packageName = e.target.value;
+                return newMeta;
+              });
             }}
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={
               <Switch
                 defaultChecked={oppositeRelations}
@@ -70,7 +91,7 @@ function DataModel({
             }
             label="Opposite Relations"
             labelPlacement="start"
-          />
+          /> */}
         </div>
       </ThemeProvider>
       <div

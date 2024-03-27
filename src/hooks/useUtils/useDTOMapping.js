@@ -1,9 +1,10 @@
 import { JoinNewLine, UCC, UniqueArray } from "../../StringFunctions";
 import { useState } from "react";
-function useDTOMapping(artifactId) {
+
+function useDTOMapping(metaData) {
   const [attributeMap, setAttributeMap] = useState([]);
   const [imports, setImports] = useState([
-    `package com.${artifactId}.utils;`,
+    `package ${metaData.packageName}.utils;`,
     `import java.util.HashMap;`,
     `import java.util.Map;`,
   ]);
@@ -25,13 +26,13 @@ function useDTOMapping(artifactId) {
 
   const getMap = (DTO) => {
     //`dtoToEntityMapping.put("com.users.controllers.responses.Genders.GendersListDTO", GendersEntity.class);`
-    return `dtoToEntityMapping.put("com.${artifactId}.${
+    return `dtoToEntityMapping.put("${metaData.packageName}.${
       DTO.source === "output" ? "controllers.responses" : "business.domain"
     }.${UCC(DTO.table)}.${DTO.name}", ${UCC(DTO.table)}Entity.class);`;
   };
 
   const getImport = (DTO) => {
-    return `import com.${artifactId}.repositories.dB.entities.${UCC(
+    return `import ${metaData.packageName}.repositories.dB.entities.${UCC(
       DTO.table
     )}Entity;`;
   };

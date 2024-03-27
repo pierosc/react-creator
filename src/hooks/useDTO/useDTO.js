@@ -8,7 +8,7 @@ import {
 } from "../../StringFunctions";
 import { excludeVars } from "./variablesToExclude";
 
-export const useDTO = (artifactId, DTOMap) => {
+export const useDTO = (metaData, DTOMap) => {
   const [inputDTO, setInputDTO] = useState([]);
   const [outputDTO, setOutputDTO] = useState([]);
 
@@ -77,7 +77,7 @@ export const useDTO = (artifactId, DTOMap) => {
     let RelImports = [];
     attributes.forEach((attr) => {
       attr.relations.forEach((rel) => {
-        const newImport = `import com.${artifactId}.${
+        const newImport = `import ${metaData.packageName}.${
           // destination === "output"
           //   ? `controllers.responses.${UCC(rel.destinyTable)}`
           //   : `repositories.dB.entities`
@@ -99,7 +99,7 @@ export const useDTO = (artifactId, DTOMap) => {
     const packageFolder =
       destination === "output" ? `controllers.responses` : `business.domain`;
 
-    const imports = `package com.${artifactId}.${packageFolder}.${UCC(
+    const imports = `package ${metaData.packageName}.${packageFolder}.${UCC(
       table.name
     )};
 import java.util.UUID;

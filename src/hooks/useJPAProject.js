@@ -6,21 +6,21 @@ export const useJPAProject = (
   services,
   controllers,
   DTO,
-  artifactId
+  metaData
 ) => {
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
   const createListEndpoint = (table) => {
     const newService = services.getListAllService(table.name);
-    const newServiceImport = `import com.${artifactId}.controllers.responses.${UCC(
-      table.name
-    )}.${UCC(table.name)}ListDTO;
+    const newServiceImport = `import ${
+      metaData.packageName
+    }.controllers.responses.${UCC(table.name)}.${UCC(table.name)}ListDTO;
 `;
     const newController = controllers.getListController(table);
-    const newControllerImport = `import com.${artifactId}.controllers.responses.${UCC(
-      table.name
-    )}.${UCC(table.name)}ListDTO;
+    const newControllerImport = `import ${
+      metaData.packageName
+    }.controllers.responses.${UCC(table.name)}.${UCC(table.name)}ListDTO;
 `;
     const newOutputDTO = DTO.getDTO(
       table.attributes,
@@ -93,9 +93,9 @@ export const useJPAProject = (
       "input",
       true
     );
-    const newInputDTOImport = `import com.${artifactId}.business.domain.${UCC(
-      table.name
-    )}.${UCC(table.name)}AddDTO;
+    const newInputDTOImport = `import ${
+      metaData.packageName
+    }.business.domain.${UCC(table.name)}.${UCC(table.name)}AddDTO;
 `;
 
     services.addService(table, newService);
@@ -129,9 +129,9 @@ export const useJPAProject = (
       "input",
       true
     );
-    const newInputDTOImport = `import com.${artifactId}.business.domain.${UCC(
-      table.name
-    )}.${UCC(table.name)}EditDTO;
+    const newInputDTOImport = `import ${
+      metaData.packageName
+    }.business.domain.${UCC(table.name)}.${UCC(table.name)}EditDTO;
     `;
 
     services.addService(table, newService);
@@ -146,14 +146,14 @@ export const useJPAProject = (
 
   const createDeleteEndpoint = (table) => {
     const newService = services.getDeleteService(table);
-    const newServiceImport = `import com.${artifactId}.business.domain.${UCC(
-      table.name
-    )}.${UCC(table.name)}DeleteDTO;
+    const newServiceImport = `import ${
+      metaData.packageName
+    }.business.domain.${UCC(table.name)}.${UCC(table.name)}DeleteDTO;
 `;
     const newController = controllers.getDeleteController(table);
-    const newControllerImport = `import com.${artifactId}.business.domain.${UCC(
-      table.name
-    )}.${UCC(table.name)}DeleteDTO;
+    const newControllerImport = `import ${
+      metaData.packageName
+    }.business.domain.${UCC(table.name)}.${UCC(table.name)}DeleteDTO;
 `;
     const uniqueAttr = table.attributes.find((attr) => attr.unique === true);
     // console.log(uniqueAttr);
@@ -184,9 +184,11 @@ export const useJPAProject = (
     const newRepo = repositories.getfindByRepository(attributes, table);
 
     const newController = controllers.getFindByController(attributes, table);
-    const newControllerImport = `import com.${artifactId}.business.domain.${UCC(
-      table.name
-    )}.${attributes.map((attr) => UCC(attr.name)).join("And")}IDTO;
+    const newControllerImport = `import ${
+      metaData.packageName
+    }.business.domain.${UCC(table.name)}.${attributes
+      .map((attr) => UCC(attr.name))
+      .join("And")}IDTO;
     `;
 
     const newIDTOname =

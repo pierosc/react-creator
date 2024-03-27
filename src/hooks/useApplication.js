@@ -1,7 +1,7 @@
 import { UCC } from "../StringFunctions";
 
-function useApplication(artifactId) {
-  const file = `package com.${artifactId};
+function useApplication(metaData) {
+  const file = `package ${metaData.packageName};
 
   import org.modelmapper.ModelMapper;
   import org.modelmapper.convention.MatchingStrategies;
@@ -10,10 +10,10 @@ function useApplication(artifactId) {
   import org.springframework.context.annotation.Bean;
   
   @SpringBootApplication
-  public class ${UCC(artifactId)}Application {
+  public class ${UCC(metaData.name)}Application {
   
       public static void main(String[] args) {
-          SpringApplication.run(${UCC(artifactId)}Application.class, args);
+          SpringApplication.run(${UCC(metaData.name)}Application.class, args);
       }
   
       @Bean
@@ -29,7 +29,7 @@ function useApplication(artifactId) {
   const getFile = () => {
     return {
       type: "file",
-      name: `${UCC(artifactId)}Application.java`,
+      name: `${UCC(metaData.name)}Application.java`,
       content: file,
     };
   };
