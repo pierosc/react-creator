@@ -11,9 +11,7 @@ import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
 import DownloadIcon from "@mui/icons-material/Download";
 import React, { useState, useRef, useEffect } from "react";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { createRarFile } from "./FileFunctions";
 import { jpaFolderStructure } from "./jpaFolferStructure";
-import { getInitSql } from "./initSql";
 import Entities from "./pages/Entities";
 import { getEntitiesFiles, getEntitiesList } from "./EntitiesFunctions";
 import Repositories from "./pages/Repositories";
@@ -40,6 +38,7 @@ import useCustomHook from "./hooks/useCustomHook";
 import useUtils from "./hooks/useUtils/useUtils";
 import useException from "./hooks/useException/useException";
 import useApplication from "./hooks/useApplication";
+import useFile from "./hooks/useFile/useFile";
 
 function APP() {
   const [open, setOpen] = React.useState(true);
@@ -93,7 +92,9 @@ function APP() {
   const DTO = useDTO(metaData, utils.DTOMap);
   const exception = useException(metaData);
   const application = useApplication(metaData);
+
   const reactHooks = useCustomHook(tableStructure);
+  const file = useFile();
 
   const JPA = useJPAProject(repositories, services, controllers, DTO, metaData);
   const [selectedService, setSelectedService] = useState({});
@@ -188,7 +189,7 @@ function APP() {
                   jpa = [
                     { type: "folder", name: metaData.artifact, content: jpa },
                   ];
-                  createRarFile(jpa);
+                  file.createRarFile(jpa);
                   jpa = jpaFolderStructure;
                 }}
               >
