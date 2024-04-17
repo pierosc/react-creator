@@ -1,9 +1,8 @@
 import React from "react";
 import CodeEditor from "../components/CodeEditor/CodeEditor";
-// import { getUpperEntitie } from "../EntitiesFunctions";
 
 function Entities({ entitiesList, table }) {
-  //   console.log(entitiesList);
+  console.log(entitiesList);
   //   console.log(table);
   //   console.log(entitiesList[table.name]);
   return (
@@ -16,7 +15,18 @@ function Entities({ entitiesList, table }) {
       }}
     >
       <CodeEditor
-        codeString={table?.name ? entitiesList?.[table?.name]["top"] : ""}
+        codeString={table?.name ? entitiesList?.[table?.name]["imports"] : ""}
+        language="java"
+        header={false}
+        bgColor="rgba(0, 0, 0,0)"
+        padding="5px"
+        title="imports..."
+        internalMenu
+      />
+      <CodeEditor
+        codeString={
+          table?.name ? entitiesList?.[table?.name]["classStart"] : ""
+        }
         language="java"
         header={false}
         bgColor="rgba(0, 0, 0,0)"
@@ -36,7 +46,7 @@ function Entities({ entitiesList, table }) {
         />
       ))}
       <CodeEditor
-        codeString={table?.name ? entitiesList[table?.name]["bottom"] : ""}
+        codeString={table?.name ? entitiesList[table?.name]["classEnd"] : ""}
         language="java"
         header={false}
         bgColor="rgba(0, 0, 0,0)"

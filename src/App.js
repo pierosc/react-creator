@@ -13,7 +13,6 @@ import React, { useState, useRef, useEffect } from "react";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { jpaFolderStructure } from "./jpaFolferStructure";
 import Entities from "./pages/Entities";
-import { getEntitiesFiles, getEntitiesList } from "./EntitiesFunctions";
 import Repositories from "./pages/Repositories";
 import { MUITheme } from "./syles/MUITheme";
 import { Button, IconButton, Modal, Typography } from "@mui/material";
@@ -39,9 +38,12 @@ import useUtils from "./hooks/useUtils/useUtils";
 import useException from "./hooks/useException/useException";
 import useApplication from "./hooks/useApplication";
 import useFile from "./hooks/useFile/useFile";
+import useEntity from "./hooks/useEntity";
+import InitialConfiguration from "./pages/Configuration/InitialConfiguration";
 
 function APP() {
-  const [open, setOpen] = React.useState(true);
+  const [openInitialConfModal, setOpenInitialConfModal] = useState(true);
+  const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -62,8 +64,6 @@ function APP() {
   const [tableStructure, setTableStructure] = useState([]);
   const [filesCreated, setFilesCreated] = useState(false);
 
-  const [entitiesList, setEntitiesList] = useState({});
-
   const [initSQL, setInitSQL] = useState("");
 
   let theme = useTheme();
@@ -72,8 +72,10 @@ function APP() {
   let jpa = jpaFolderStructure;
 
   const [code, setCode] = useState("");
-  const [artifactId, setArticaftId] = useState("users");
+  // const [artifactId, setArticaftId] = useState("users");
   const [dbName, setDbName] = useState("dB");
+
+  //CONFIGURATION DATA
   const [metaData, setMetaData] = useState({
     group: "com.users",
     artifact: "users",
@@ -85,6 +87,7 @@ function APP() {
   const [oppositeRelations, setOppositeRelations] = useState(false);
 
   //HOOKS
+  const entities = useEntity(tableStructure, metaData);
   const services = useService(tableStructure, metaData);
   const controllers = useController(tableStructure, metaData);
   const repositories = useRepositories(tableStructure, metaData);
@@ -142,6 +145,7 @@ function APP() {
                 variant="outlined"
                 size="large"
                 onClick={() => {
+                  entities.setEntities();
                   tableStructure.forEach((table) => {
                     JPA.createListEndpoint(table);
                     JPA.createAddEndpoint(table);
@@ -159,8 +163,8 @@ function APP() {
                 disabled={!filesCreated}
                 endIcon={<DownloadIcon />}
                 onClick={() => {
-                  const entities = getEntitiesFiles(entitiesList);
-                  jpa[2].content[0].content[0].content = entities;
+                  const entityFiles = entities.files();
+                  jpa[2].content[0].content[0].content = entityFiles;
 
                   const repos = repositories.files();
                   jpa[2].content[0].content[1].content = repos;
@@ -232,7 +236,7 @@ function APP() {
               </div>
             </Box>
             <TabPanel value="0" sx={{ padding: "0" }}>
-              <Entities entitiesList={entitiesList} table={table} />
+              <Entities entitiesList={entities.entitiesList} table={table} />
             </TabPanel>
             <TabPanel value="1" sx={{ padding: "0" }}>
               <Repositories
@@ -270,10 +274,10 @@ function APP() {
         <Box sx={boxStyle}>
           <Configuration
             setTableStructure={setTableStructure}
-            setEntitiesList={setEntitiesList}
+            // setEntitiesList={setEntitiesList}
             setFilesCreated={setFilesCreated}
             setInitSQL={setInitSQL}
-            artifactId={artifactId}
+            // artifactId={artifactId}
             dbName={dbName}
             setDbName={setDbName}
             code={code}
@@ -281,6 +285,33 @@ function APP() {
             tableStructure={tableStructure}
             oppositeRelations={oppositeRelations}
             setOppositeRelations={setOppositeRelations}
+            entities={entities}
+            services={services}
+            controllers={controllers}
+            repositories={repositories}
+            reactHooks={reactHooks}
+            handleClose={handleClose}
+            setMetaData={setMetaData}
+            metaData={metaData}
+          />
+        </Box>
+      </Modal>
+      <Modal open={openInitialConfModal}>
+        <Box sx={boxStyle}>
+          <InitialConfiguration
+            setTableStructure={setTableStructure}
+            // setEntitiesList={setEntitiesList}
+            setFilesCreated={setFilesCreated}
+            setInitSQL={setInitSQL}
+            // artifactId={artifactId}
+            dbName={dbName}
+            setDbName={setDbName}
+            code={code}
+            setCode={setCode}
+            tableStructure={tableStructure}
+            oppositeRelations={oppositeRelations}
+            setOppositeRelations={setOppositeRelations}
+            entities={entities}
             services={services}
             controllers={controllers}
             repositories={repositories}

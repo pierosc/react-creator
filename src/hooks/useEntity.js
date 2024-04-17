@@ -1,42 +1,39 @@
-function useEntity(metaData) {
+import { useState } from "react";
+import {
+  CC,
+  JoinNewLine,
+  UCC,
+  removeString,
+  sqlVarToJavaVar,
+} from "../StringFunctions";
+
+function useEntity(tableStructure, metaData) {
   const [entitiesList, setEntitiesList] = useState([]); //TODAS LAS ENITDADES
 
   const addEntity = (table, newEntity) => {
     setEntitiesList((prevEntityList) => {
       const newEntitiesList = { ...prevEntityList };
       const newEntities = [
-        newEntity,
-        ...newEntitiesList[table?.name]["entities"],
+        ...newEntity,
+        ...newEntitiesList[table?.name]["content"],
       ];
-      newEntitiesList[table?.name]["entities"] = newEntities;
+      newEntitiesList[table?.name]["content"] = newEntities;
       return newEntitiesList;
     });
   };
 
-  const getEntitiesFiles = (entitiesList) => {
-    let entitiesFiles = [];
-    Object.keys(entitiesList).forEach((entitieName) => {
-      const entitie = entitiesList[entitieName];
-      const top = entitie.top;
-      const bottom = entitie.bottom;
-      const content = entitie.content.join(`
-          `);
-      const file =
-        top +
-        `
-      ` +
-        content +
-        `
-      ` +
-        bottom;
-      entitiesFiles.push({
-        type: "file",
-        name: `${UCC(entitieName)}Entity.java`,
-        content: file,
-      });
-    });
-    return entitiesFiles;
-  };
+  // const getEntity = (table) => {
+  //   let entities = {};
+  //   const content = getColumns(table.attributes, table.name) ?? "";
+  //   // console.log(content);
+  //   entities[table.name] = {};
+  //   entities[table.name]["imports"] = getEntityImports();
+  //   entities[table.name]["classStart"] = getEntityClass();
+  //   entities[table.name]["content"] = content;
+  //   // entities[table.name]["top"] = getUpperEntitie(table, artifactId);
+  //   entities[table.name]["bottom"] = "}";
+
+  // };
 
   const getEntityImports = () => {
     return `package ${metaData.packageName}.repositories.dB.entities;
@@ -74,25 +71,171 @@ import jakarta.persistence.GenerationType;`;
 
   const files = () => {
     let servicesFiles = [];
-    Object.keys(servicesList).forEach((serviceName) => {
+    Object.keys(entitiesList).forEach((serviceName) => {
       const service = entitiesList[serviceName];
       const imports = service.imports;
       const classStart = service.classStart;
       const classEnd = service.classEnd;
-      const services = JoinNewLine(service.services);
+      const services = JoinNewLine(service.content);
 
       const file = JoinNewLine([imports, classStart, services, classEnd]);
 
       servicesFiles.push({
         type: "file",
-        name: `${UCC(serviceName)}Service.java`,
+        name: `${UCC(serviceName)}Entity.java`,
         content: file,
       });
     });
     return servicesFiles;
   };
 
-  return { getEntitiesFiles };
+  const setEmptyStructure = () => {
+    let entities = {};
+    tableStructure.forEach((table) => {
+      entities[table.name] = {};
+      entities[table.name]["imports"] = getEntityImports(table, metaData);
+      entities[table.name]["classStart"] = getEntityClass(table);
+      entities[table.name]["content"] = [];
+      entities[table.name]["classEnd"] = "}";
+    });
+    setEntitiesList(entities);
+  };
+
+  const setEntities = () => {
+    tableStructure.forEach((table) => {
+      const entity = getEntity(table);
+      addEntity(table, entity);
+    });
+  };
+
+  function getEntity(table) {
+    const tableName = table.name;
+    const atrs = table.attributes;
+    let columns = [];
+    atrs.forEach((attr) => {
+      const name = `name = "${attr.name}"`;
+      const nullable = `, nullable = ${attr.nullable}`;
+
+      const length =
+        attr.type.toUpperCase().includes("VAR") &&
+        attr.type.includes("(") &&
+        attr.type.includes(")")
+          ? `, length = ${attr.type.split("(")[1].split(")")[0]}`
+          : "";
+      const singlePrivate = `private ${sqlVarToJavaVar(attr.type)} ${CC(
+        attr.name
+      )};`;
+
+      const temporal = `@Temporal(TemporalType.TIMESTAMP)`;
+
+      const column =
+        (attr.relations.filter((rel) => rel.relation === "ManyToOne").length !==
+          0 ||
+          attr.relations.filter((rel) => rel.relation === "OneToOneO")
+            .length !== 0 ||
+          attr.relations.filter((rel) => rel.relation === "OneToOneD")
+            .length !== 0) &&
+        !attr.pk
+          ? ""
+          : `   ${attr.type.toUpperCase().includes("TIMESTAMP") ? temporal : ""}
+      @Column(${name}${nullable}${length})
+      ${singlePrivate}`;
+
+      //ARMANDO LAS PROPIEDADES
+      //--------------------
+
+      const pkLine = `    @Id
+      @GeneratedValue(strategy = GenerationType.${getGenerationType(attr.type)})
+  `;
+
+      //ARMANDO LA ENTIDAD
+      //--------------------
+
+      const hasPk = attr.pk ? pkLine : "";
+
+      // const entity = `${attr.pk ? pkLine : ""}
+      //   ${column}
+
+      //   ${getRelations(attr.relations, attr)}`;
+      // console.log(entity);
+
+      columns = [
+        ...columns,
+        hasPk + column + getRelations(attr.relations, attr, tableName),
+      ];
+    });
+    console.groupEnd();
+    return columns;
+  }
+
+  function getRelations(relations, attr, tableName) {
+    let rels = "";
+    //   console.log(relations);
+
+    relations.forEach((rel) => {
+      const referencedColumnName = `referencedColumnName ="${rel.destinyAttr}"`;
+      const name = `name = "${attr.name}"`;
+      const nullable = `nullable = ${attr.nullable}`;
+
+      const MTORef = `
+      @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+      @JoinColumn(${referencedColumnName}, ${name}, ${nullable})
+      private ${UCC(rel.destinyTable)}Entity ${CC(attr.name)};
+  `;
+
+      //EN LAS RELACIONES OneToOne debe haber un emisor y un receptor
+
+      const OTORef = `
+      @OneToOne(cascade = CascadeType.ALL)
+      @JoinColumn(${referencedColumnName}, ${name}, ${nullable})
+      private ${UCC(rel.destinyTable)}Entity ${CC(rel.destinyTable)};`;
+
+      const OTODRef = `
+      @OneToOne(mappedBy = "${CC(tableName)}")
+      private ${UCC(rel.destinyTable)}Entity ${CC(rel.destinyTable)};
+  `;
+
+      const OTMRef = `
+      @OneToMany(mappedBy = "${CC(
+        rel.destinyAttr
+      )}", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+      private List<${UCC(rel.destinyTable)}Entity> ${
+        CC(rel.destinyTable) + UCC(rel.destinyAttr)
+      };
+  `;
+
+      if (rel.relation === "ManyToOne" && !attr.pk) {
+        rels += MTORef;
+      }
+      if (rel.relation === "OneToMany") {
+        rels += OTMRef;
+      }
+      if (rel.relation === "OneToOneO") {
+        rels += OTORef;
+      }
+      if (rel.relation === "OneToOneD") {
+        rels += OTODRef;
+      }
+    });
+    return rels;
+  }
+
+  function getGenerationType(pkType) {
+    if (pkType.trim().toUpperCase().includes("UUID")) {
+      return "UUID";
+    } else {
+      return "IDENTITY";
+    }
+  }
+
+  return {
+    //  getEntitiesFiles,
+    getEntity,
+    setEntities,
+    setEmptyStructure,
+    entitiesList,
+    files,
+  };
 }
 
 export default useEntity;

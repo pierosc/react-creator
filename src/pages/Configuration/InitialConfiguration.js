@@ -5,14 +5,16 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import React from "react";
-import FolderView from "./FolderView";
-import TableJSONView from "./TableJSONView";
-import { getEstructure } from "../EstructureFunctions";
-import { getInitSql } from "../initSql";
-import { MUITheme } from "../syles/MUITheme";
-import DataModel from "./DataModel";
+import FolderView from "../FolderView";
+import TableJSONView from "../TableJSONView";
+import { getEstructure } from "../../EstructureFunctions";
+import { getInitSql } from "../../initSql";
+import { MUITheme } from "../../syles/MUITheme";
+import DataModel from "../DataModel";
+import MetaDataConfiguration from "./MetaDataConfiguration";
+import DependenciesConfiguration from "./DependenciesConfiguration";
 
-function Configuration({
+function InitialConfiguration({
   setTableStructure,
   // setEntitiesList,
   setFilesCreated,
@@ -45,13 +47,13 @@ function Configuration({
   //   console.log(newMUITheme);
   theme = createTheme(theme, MUITheme);
   const [inputMenu, setInputMenu] = React.useState("0");
-  const handleChangeInputMenu = (event, newValue) => {
+  const handleChangeInputMenu = (newValue) => {
     setInputMenu(newValue);
   };
 
   return (
     <div className="grid gap-4 p-4">
-      <TabContext value={inputMenu}>
+      {/* <TabContext value={inputMenu}>
         <ThemeProvider theme={theme}>
           <TabList onChange={handleChangeInputMenu}>
             <Tab label="Data model" value="0" />
@@ -108,12 +110,25 @@ function Configuration({
               handleClose();
             }}
           >
-            Get EMPTY Files
+            Get EMPTY Filesasd
           </Button>
         </ThemeProvider>
-      </div>
+      </div> */}
+
+      {inputMenu === "0" ? (
+        <MetaDataConfiguration
+          setMetaData={setMetaData}
+          metaData={metaData}
+          setDbName={setDbName}
+          handleChangeInputMenu={handleChangeInputMenu}
+        />
+      ) : (
+        <DependenciesConfiguration
+          handleChangeInputMenu={handleChangeInputMenu}
+        />
+      )}
     </div>
   );
 }
 
-export default Configuration;
+export default InitialConfiguration;

@@ -17,19 +17,19 @@ export const useRepositories = (tableStructue, metaData) => {
     });
   };
 
-  const addRepositoryToAllTables = (newRepository) => {
-    setRepositoriesList((prevRepositoriesList) => {
-      const newRepositoriesList = { ...prevRepositoriesList };
-      tableStructue.forEach((table) => {
-        const newRepositories = [
-          newRepository,
-          ...newRepositoriesList[table?.name]["repositories"],
-        ];
-        newRepositoriesList[table?.name]["repositories"] = newRepositories;
-      });
-      return newRepositoriesList;
-    });
-  };
+  // const addRepositoryToAllTables = (newRepository) => {
+  //   setRepositoriesList((prevRepositoriesList) => {
+  //     const newRepositoriesList = { ...prevRepositoriesList };
+  //     tableStructue.forEach((table) => {
+  //       const newRepositories = [
+  //         newRepository,
+  //         ...newRepositoriesList[table?.name]["repositories"],
+  //       ];
+  //       newRepositoriesList[table?.name]["repositories"] = newRepositories;
+  //     });
+  //     return newRepositoriesList;
+  //   });
+  // };
 
   const deleteRepository = (table, repository) => {
     setRepositoriesList((prevRepositoriesList) => {
@@ -195,7 +195,7 @@ import ${metaData.packageName}.repositories.dB.entities.${UCC(
   };
 
   return {
-    addRepositoryToAllTables,
+    // addRepositoryToAllTables,
     setFilterRepositories,
     addRepository,
     deleteRepository,
