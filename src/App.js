@@ -43,6 +43,7 @@ import InitialConfiguration from "./pages/Configuration/InitialConfiguration";
 
 function APP() {
   const [openInitialConfModal, setOpenInitialConfModal] = useState(true);
+  const CloseInitialConfModal = () => setOpenInitialConfModal(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -316,7 +317,7 @@ function APP() {
             controllers={controllers}
             repositories={repositories}
             reactHooks={reactHooks}
-            handleClose={handleClose}
+            CloseInitialConfModal={CloseInitialConfModal}
             setMetaData={setMetaData}
             metaData={metaData}
           />

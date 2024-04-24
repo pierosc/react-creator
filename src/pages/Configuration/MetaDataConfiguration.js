@@ -23,11 +23,24 @@ function MetaDataConfiguration({
           <label className="text-white">
             * These are the tested configurations
           </label>
-          <img
-            src={require("../../assets/springBootInit.png")}
-            className="border-yellow-400 border-2"
-            //   alt="image descripcion"
-          />
+          <div className="relative group cursor-pointer overflow-hidden rounded-xl">
+            <a
+              href="https://start.spring.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+            >
+              <img
+                src={require("../../assets/springBootInit.png")}
+                alt="Spring Initializr"
+              />
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 ease-in-out">
+                <span className="text-white text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                  Visit start.spring.io
+                </span>
+              </div>
+            </a>
+          </div>
         </div>
 
         <div className="flex flex-col justify-around  gap-16">

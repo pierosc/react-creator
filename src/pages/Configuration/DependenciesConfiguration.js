@@ -94,7 +94,7 @@ function DependenciesConfiguration({ handleChangeInputMenu }) {
           size="large"
           onClick={() => {
             //   setTableStructure(getEstructure(code));
-            handleChangeInputMenu("0");
+            handleChangeInputMenu("2");
           }}
         >
           Continue
