@@ -83,3 +83,22 @@ function useDependencyInjection(configuration) {
 }
 
 export default useDependencyInjection;
+
+// -----Use Autowired fields or Constructor Injection (Dependency Injection)
+
+// In Java, especially when using frameworks like Spring, you have multiple options for dependency injection: using @Autowired annotations or constructor injection. Each method has its benefits and scenarios where it might be preferred:
+
+// @Autowired on Fields or Setters:
+// Simplicity: Adding @Autowired directly on fields or setter methods can make the code straightforward and easy to read, as it clearly marks where dependencies are being injected.
+// Convenience: It requires less boilerplate than constructor injection, especially when there are many dependencies or when dependencies might be optional.
+// Flexibility: It allows for the setting of optional dependencies, as fields can be left uninitialized if a bean is not available.
+// Constructor Injection:
+// Immutability: By using constructor injection, you can declare all injected dependencies final. This approach supports immutability of your beans, which can lead to safer, easier-to-test code.
+// Safety: Dependencies injected through the constructor are guaranteed to be present before the bean is used. This prevents NullPointerExceptions related to dependency injection.
+// Ease of Testing: Constructor injection makes it easier to write tests because you can instantiate objects with their dependencies explicitly, without needing a Spring context.
+// Clarity: It makes dependencies more explicit in the class's API, and you don't need reflection for dependency injection, which is required for field injection.
+// Best Practices and Recommendations:
+// Constructor Injection is generally favored in modern Spring applications for the reasons listed under its benefits. It promotes immutability and simplifies testing.
+// Use @Autowired on constructors if you have a framework that supports it (like Spring does), which makes it cleaner and you can avoid using explicit autowiring in the constructor.
+// Reserve field injection with @Autowired for scenarios where you absolutely need it, such as with optional dependencies or certain legacy code constraints.
+// In conclusion, while @Autowired can be easier and faster for simpler applications or during rapid development phases, constructor injection is generally safer and more maintainable, making it the preferred method in most professional and scalable applications.
