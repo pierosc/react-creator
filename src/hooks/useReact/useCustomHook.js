@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { CC, UCC } from "../StringFunctions";
+import { CC, UCC } from "../../StringFunctions";
+import useFetchTemplate from "./useFetchTemplate";
 
 const useCustomHook = (tableStructure) => {
   const [customHooksList, setCustomHooksList] = useState([]); //TODOS LOS CUSTOM HOOKS
-
+  const fetch = useFetchTemplate();
   // const varType = (attr) => `[]`;
 
   const state = (attr) =>
@@ -39,6 +40,7 @@ const useCustomHook = (tableStructure) => {
       hooks[table.name]["imports"] = imports;
       hooks[table.name]["hookFunction"] = hookFunction(table);
       hooks[table.name]["useStates"] = getUseStates(table);
+      hooks[table.name]["fetch"] = fetch.getFetchFunctionsFromTable(table);
       hooks[table.name]["hookReturn"] = hookReturn;
     });
     setCustomHooksList(hooks);

@@ -50,6 +50,18 @@ function ReactHooks({ reactHooks, table }) {
           />
         )
       )}
+      {reactHooks.customHooksList?.[table?.name]?.["fetch"]?.map(
+        (code, index) => (
+          <CodeEditor
+            key={index}
+            codeString={code}
+            language="javascript"
+            header={false}
+            bgColor="rgb(40, 44, 52)"
+            padding="5px"
+          />
+        )
+      )}
       <CodeEditor
         codeString={
           table?.name

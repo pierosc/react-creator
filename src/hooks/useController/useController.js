@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CC, UCC, removeString, sqlVarToJavaVar } from "../StringFunctions";
+import { CC, UCC, removeString, sqlVarToJavaVar } from "../../StringFunctions";
 
 export const useController = (tableStructue, metaData) => {
   const [controllersList, setControllersList] = useState([]); //TODOS LOS SERVICIOS

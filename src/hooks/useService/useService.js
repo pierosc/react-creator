@@ -11,9 +11,11 @@ import { getDeleteService } from "./deleteService";
 import { getAddService } from "./addService";
 import { getEditService } from "./editService";
 import { getFilterService } from "./filterService";
+import useDependencyInjection from "./useDependencyInjection";
 
 const useService = (tableStructue, metaData) => {
   const [servicesList, setServicesList] = useState([]); //TODOS LOS SERVICIOS
+  const depInjection = useDependencyInjection(false); // true use Autowired fields, false use Constructor Injection
   //   const [serviceImports, setServiceImports] = useState("");
 
   const addService = (table, newService) => {
@@ -189,39 +191,12 @@ import ${metaData.packageName}.repositories.dB.repo.${UCC(
   // Descripción:
   // *************************************************************************
 
-  const getRepo = (tableName) => `  @Autowired
-  private ${UCC(tableName)}Repository ${CC(tableName)}Repository;`;
-
   const getServiceClass = (table) => {
-    const isTransactional = Object.keys(table).includes("transactional");
-
-    let attributesRepositories = UniqueArray(
-      table.attributes.map((attr) =>
-        !attr.pk
-          ? attr.relations.map((rel) => {
-              return rel.relation !== "OneToMany"
-                ? getRepo(rel.destinyTable)
-                : "";
-            })
-          : []
-      )
-    );
-
-    if (isTransactional) {
-      const transactionalRepo = getRepo(table.transactional.name);
-      attributesRepositories = [...attributesRepositories, transactionalRepo];
-    }
-
     const service = `@Service
 public class ${UCC(table.name)}Service {
-
-  @Autowired
-  private ModelMapper modelMapper;
-  
-  @Autowired
-  private ${UCC(table.name)}Repository ${CC(table.name)}Repository;
-    ${JoinNewLine(attributesRepositories)}
+ ${depInjection.getDependencyInjection(table)}
 `;
+
     return service;
   };
 

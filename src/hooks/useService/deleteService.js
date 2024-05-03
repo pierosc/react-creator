@@ -22,7 +22,9 @@ export const getDeleteService = (table) => {
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const del = `    public JSONObject ${serviceName}(${input}) {
+  const del = `    
+  @Transactional
+  public JSONObject ${serviceName}(${input}) {
       try {
 
         List<${UCC(table.name)}Entity> filteredList = ${repositoryInstance}
@@ -47,7 +49,9 @@ export const getDeleteService = (table) => {
       }
     }
 `;
-  const deleteServiceUniqueAttr = `    public JSONObject ${serviceName}(${input}) {
+  const deleteServiceUniqueAttr = `    
+  @Transactional
+  public JSONObject ${serviceName}(${input}) {
     try {
 
       ${entityClass} entityToDelete = ${repositoryInstance}.findBy${UCC(

@@ -171,6 +171,7 @@ ${inputEntityClass} ${inputEntityInstance} = modelMapper.map(${inputInstance}, $
   // -------------------------------------------------------------------------------------
 
   const add = `
+  @Transactional
   public JSONObject ${serviceName}(${input}) {
     try {
       ${existenceValidationCall}

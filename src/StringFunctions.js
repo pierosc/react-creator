@@ -94,7 +94,12 @@ export function UniqueArray(array) {
   return Array.from(new Set(array.map(JSON.stringify)), JSON.parse);
 }
 
-export function JoinNewLine(array) {
-  return array.join(`
+export function JoinNewLine(array, separator) {
+  if (separator) {
+    return array.join(`${separator}
 `);
+  } else {
+    return array.join(`
+`);
+  }
 }

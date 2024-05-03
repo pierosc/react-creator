@@ -1,24 +1,35 @@
 import { JoinNewLine, UCC, UniqueArray } from "../../StringFunctions";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function useDTOMapping(metaData) {
   const [attributeMap, setAttributeMap] = useState([]);
 
-  // const [imports, setImports] = useState([
-  //   `package ${metaData.packageName}.utils;`,
-  //   `import java.util.HashMap;`,
-  //   `import java.util.Map;`,
-  // ]);
-
-  let imports = [
+  const [imports, setImports] = useState([
     `package ${metaData.packageName}.utils;`,
     `import java.util.HashMap;`,
     `import java.util.Map;`,
-  ];
+  ]);
 
-  const addImport = (e) => {
-    imports = [...imports, e];
-  };
+  useEffect(() => {
+    // quitar la primera
+    // agregar a la primera
+    setImports((prevImport) => {
+      const newImport = prevImport;
+      newImport.shift();
+
+      return [`package ${metaData.packageName}.utils;`, ...newImport];
+    });
+  }, [metaData]);
+
+  // let imports = [
+  //   `package ${metaData.packageName}.utils;`,
+  //   `import java.util.HashMap;`,
+  //   `import java.util.Map;`,
+  // ];
+
+  // const addImport = (e) => {
+  //   imports = [...imports, e];
+  // };
 
   const startClass = `public class DTOMapping {
           private static final Map<String, Class<?>> dtoToEntityMapping = new HashMap<>();
@@ -53,11 +64,11 @@ function useDTOMapping(metaData) {
       const newAttrMap = getMap(DTO);
       return [...prevAttrMap, newAttrMap];
     });
-    // setImports((prevImport) => {
-    //   const newImport = getImport(DTO);
-    //   return [...prevImport, newImport];
-    // });
-    addImport(getImport(DTO));
+    setImports((prevImport) => {
+      const newImport = getImport(DTO);
+      return [...prevImport, newImport];
+    });
+    // addImport(getImport(DTO));
   };
 
   const getFile = () => {

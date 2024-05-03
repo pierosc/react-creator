@@ -9,7 +9,9 @@ export const getFilterService = (table) => {
   const serviceName = `${CC(table?.name)}Filter`;
   const repository = `${CC(table?.name)}Repository`;
 
-  const service = `  public ${output} ${serviceName}(${input}) {
+  const service = `  
+  @Transactional
+  public ${output} ${serviceName}(${input}) {
   List<${entityClass}> filteredList = ${repository}
           .findAll(Filter.buildSpecification(${inputInstance}));
     

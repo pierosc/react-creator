@@ -89,7 +89,9 @@ ${entityClass} entityToEdit = filteredList.get(0);
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const edit = `  public JSONObject ${serviceName}(${input}) {
+  const edit = `  
+  @Transactional
+  public JSONObject ${serviceName}(${input}) {
       try {
           ${entityToEdit}
           ${attributesEntitiesSetter}

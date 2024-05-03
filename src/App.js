@@ -25,7 +25,7 @@ import FolderView from "./pages/FolderView";
 import DTOInput from "./pages/DTOInput";
 import ReactHooks from "./pages/ReactHooks";
 import useService from "./hooks/useService/useService";
-import { useController } from "./hooks/useController";
+import { useController } from "./hooks/useController/useController";
 import { useRepositories } from "./hooks/useRepositories";
 import { useDTO } from "./hooks/useDTO/useDTO";
 import { useJPAProject } from "./hooks/useJPAProject";
@@ -33,7 +33,7 @@ import DTOOutput from "./pages/DTOOutput";
 import { boxStyle } from "./syles/BoxStyle";
 import Configuration from "./pages/Configuration";
 import ServiceDTOInput from "./pages/ServiceDTOInput";
-import useCustomHook from "./hooks/useCustomHook";
+import useCustomHook from "./hooks/useReact/useCustomHook";
 import useUtils from "./hooks/useUtils/useUtils";
 import useException from "./hooks/useException/useException";
 import useApplication from "./hooks/useApplication";
@@ -199,6 +199,15 @@ function APP() {
                 }}
               >
                 Download Project
+              </Button>
+              <Button
+                variant="outlined"
+                size="large"
+                disabled={!filesCreated}
+                endIcon={<DownloadIcon />}
+                onClick={() => {}}
+              >
+                How to Use
               </Button>
             </div>
             <IconButton onClick={handleOpen}>
