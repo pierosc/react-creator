@@ -153,6 +153,7 @@ function APP() {
                     JPA.createEditEndpoint(table);
                     JPA.createDeleteEndpoint(table);
                     JPA.createFilterEndpoint(table);
+                    JPA.createFilterExcelEndpoint(table);
                   });
                 }}
               >

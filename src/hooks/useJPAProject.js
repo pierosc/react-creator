@@ -227,12 +227,28 @@ export const useJPAProject = (
     DTO.addInputDTO(table, newInputDTO);
   };
 
+  const createFilterExcelEndpoint = (table) => {
+    const newService = services.getFilterExcelService(table);
+    const newController = controllers.getFilterExcelController(table);
+    // const newRepository = repositories.getFilterRepository(table);
+    // const newInputDTO = DTO.getDTO(
+    //   table.attributes,
+    //   table,
+    //   UCC(table.name) + "FilterDTO"
+    // );
+    services.addService(table, newService);
+    controllers.addController(table, newController);
+    // repositories.addRepository(table, newRepository);
+    // DTO.addInputDTO(table, newInputDTO);
+  };
+
   return {
     createListEndpoint,
     createAddEndpoint,
     createEditEndpoint,
     createDeleteEndpoint,
     createFilterEndpoint,
+    createFilterExcelEndpoint,
     createFindByEndpoint,
   };
 };

@@ -76,3 +76,13 @@ function InitialConfiguration({
 }
 
 export default InitialConfiguration;
+
+// How to start app
+// recommendations:
+// 	delete the test folder
+// copy application.properties
+// docker file
+// go to
+// http://localhost:8080/doc/swagger-ui/index.html
+
+// advanced configurations

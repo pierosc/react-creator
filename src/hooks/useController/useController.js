@@ -5,6 +5,7 @@ import {
   getDeleteController2,
   getDeleteTemplate,
   getEditTemplate,
+  getFilterExcelTemplate,
   getFilterTemplate,
   getListTemplate,
 } from "./deleteController";
@@ -218,6 +219,25 @@ public class ${UCC(table.name)}Controller {
           },
         },
       },
+      filterExcel: {
+        url: `/${CC(table.name)}FilterExcel`,
+        name: `${CC(table.name)}FilterExcel`,
+        fileName: `${UCC(table.name)}Excel`,
+        input: {
+          class: `${UCC(table.name)}FilterDTO`,
+          instance: `${CC(table.name)}FilterDTO`,
+          all: `@RequestBody ${UCC(table.name)}FilterDTO ${CC(
+            table.name
+          )}FilterDTO`,
+        },
+        output: {
+          service: {
+            class: `${UCC(table.name)}Service`,
+            instance: `${CC(table.name)}Service`,
+            method: `${CC(table.name)}FilterExcel`,
+          },
+        },
+      },
       add: {
         url: Object.keys(table).includes("transactional")
           ? `/add${UCC(table.name)}To${UCC(table.transactional.name)}`
@@ -289,6 +309,11 @@ public class ${UCC(table.name)}Controller {
     return getFilterTemplate(controller);
   };
 
+  const getFilterExcelController = (table) => {
+    const controller = controllerConfiguration(table).filterExcel;
+    return getFilterExcelTemplate(controller);
+  };
+
   return {
     addController,
     deleteController,
@@ -305,5 +330,6 @@ public class ${UCC(table.name)}Controller {
     getDeleteController,
     getFindByController,
     getFilterController,
+    getFilterExcelController,
   };
 };

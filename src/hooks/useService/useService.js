@@ -12,6 +12,7 @@ import { getAddService } from "./addService";
 import { getEditService } from "./editService";
 import { getFilterService } from "./filterService";
 import useDependencyInjection from "./useDependencyInjection";
+import { getFilterExcelService } from "./filterExcelService";
 
 const useService = (tableStructue, metaData) => {
   const [servicesList, setServicesList] = useState([]); //TODOS LOS SERVICIOS
@@ -293,6 +294,7 @@ public class ${UCC(table.name)}Service {
     getDeleteService,
     getFindByService,
     getFilterService,
+    getFilterExcelService,
   };
 };
 
