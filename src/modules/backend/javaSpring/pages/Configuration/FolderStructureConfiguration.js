@@ -1,13 +1,15 @@
 import React from "react";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
-import { MUITheme } from "../../syles/MUITheme";
+// import { MUITheme } from "../../syles/MUITheme";
 import { Button } from "@mui/material";
 import { TreeView } from "@mui/x-tree-view";
 import { TreeItem } from "@mui/x-tree-view";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import EditIcon from "@mui/icons-material/Edit";
-import { getInitSql } from "../../initSql";
+import { MUITheme } from "../../../../../syles/MUITheme";
+import { getInitSql } from "../../../../../initSql";
+// import { getInitSql } from "../../initSql";
 
 function FolderStructureConfiguration({
   entities,

@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Textarea } from "@mui/joy";
 import TextField from "@mui/material/TextField";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
-import { MUITheme } from "../syles/MUITheme";
+import { MUITheme } from "../../../../syles/MUITheme";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 

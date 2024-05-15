@@ -7,9 +7,9 @@ import TabPanel from "@mui/lab/TabPanel";
 import React from "react";
 import FolderView from "./FolderView";
 import TableJSONView from "./TableJSONView";
-import { getEstructure } from "../EstructureFunctions";
-import { getInitSql } from "../initSql";
-import { MUITheme } from "../syles/MUITheme";
+import { getEstructure } from "../../../../EstructureFunctions";
+import { getInitSql } from "../../../../initSql";
+import { MUITheme } from "../../../../syles/MUITheme";
 import DataModel from "./DataModel";
 
 function Configuration({

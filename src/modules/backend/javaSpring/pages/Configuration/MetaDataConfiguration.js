@@ -1,9 +1,10 @@
 import React from "react";
-import DataModel from "../DataModel";
+// import DataModel from "../../modules/backend/javaSpring/pages/DataModel";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
 import { Button, IconButton, Modal, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { MUITheme } from "../../syles/MUITheme";
+import { MUITheme } from "../../../../../syles/MUITheme";
+// import { MUITheme } from "../../syles/MUITheme";
 
 function MetaDataConfiguration({
   setMetaData,
@@ -31,7 +32,7 @@ function MetaDataConfiguration({
               className="block"
             >
               <img
-                src={require("../../assets/springBootInit.png")}
+                src={require("../../../../../assets/springBootInit.png")}
                 alt="Spring Initializr"
               />
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 ease-in-out">

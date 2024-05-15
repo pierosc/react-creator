@@ -115,8 +115,11 @@ export const useController = (tableStructue, metaData) => {
         
 import java.util.List;
 
+import java.io.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -127,6 +130,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import ${metaData.packageName}.utils.Response;
+import ${metaData.packageName}.utils.ExcelUtils;
 import ${metaData.packageName}.utils.ServiceUtils;
 import ${metaData.packageName}.business.domain.${UCC(table.name)}.${UCC(
       table.name
@@ -217,6 +221,7 @@ public class ${UCC(table.name)}Controller {
             instance: `${CC(table.name)}Service`,
             method: `${CC(table.name)}Filter`,
           },
+          type: `List<${UCC(table.name)}ListDTO>`,
         },
       },
       filterExcel: {

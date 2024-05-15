@@ -1,8 +1,10 @@
 import React from "react";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
 import { Button, IconButton, Modal, Typography } from "@mui/material";
-import { MUITheme } from "../../syles/MUITheme";
-import CodeEditor from "../../components/CodeEditor/CodeEditor";
+// import { MUITheme } from "../../syles/MUITheme";
+// import CodeEditor from "../../components/CodeEditor/CodeEditor";
+import { MUITheme } from "../../../../../syles/MUITheme";
+import CodeEditor from "../../../../../components/CodeEditor/CodeEditor";
 
 function DependenciesConfiguration({ handleChangeInputMenu }) {
   let theme = useTheme();

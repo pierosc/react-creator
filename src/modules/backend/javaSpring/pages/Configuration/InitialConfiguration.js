@@ -1,9 +1,9 @@
 import React from "react";
 // import FolderView from "../FolderView";
 // import TableJSONView from "../TableJSONView";
-import { getEstructure } from "../../EstructureFunctions";
-import { getInitSql } from "../../initSql";
-import { MUITheme } from "../../syles/MUITheme";
+// import { getEstructure } from "../../EstructureFunctions";
+// import { getInitSql } from "../../initSql";
+// import { MUITheme } from "../../syles/MUITheme";
 // import DataModel from "../DataModel";
 import MetaDataConfiguration from "./MetaDataConfiguration";
 import DependenciesConfiguration from "./DependenciesConfiguration";

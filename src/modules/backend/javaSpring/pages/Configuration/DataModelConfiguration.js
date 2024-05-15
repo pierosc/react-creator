@@ -2,8 +2,10 @@ import React, { useRef } from "react";
 import { Textarea } from "@mui/joy";
 import { Button } from "@mui/material";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
-import { MUITheme } from "../../syles/MUITheme";
-import { getEstructure } from "../../EstructureFunctions";
+// import { MUITheme } from "../../syles/MUITheme";
+// import { getEstructure } from "../../EstructureFunctions";
+import { MUITheme } from "../../../../../syles/MUITheme";
+import { getEstructure } from "../../../../../EstructureFunctions";
 
 function DataModelConfiguration({
   code,

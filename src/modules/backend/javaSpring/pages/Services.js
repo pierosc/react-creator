@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import CodeEditor from "../components/CodeEditor/CodeEditor";
+import CodeEditor from "../../../../components/CodeEditor/CodeEditor";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";

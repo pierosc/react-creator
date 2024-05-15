@@ -1,7 +1,8 @@
 import React from "react";
-import CodeEditor from "../components/CodeEditor/CodeEditor";
+import CodeEditor from "../../../../components/CodeEditor/CodeEditor";
 
-function TableJSONView({ tableStructure }) {
+function InitSQL({ initSQL }) {
+  //   console.log(initSQL);
   return (
     <div
       className=" p-4 grid gap-2"
@@ -12,10 +13,9 @@ function TableJSONView({ tableStructure }) {
       }}
     >
       <CodeEditor
-        codeString={JSON.stringify(tableStructure, null, "\t")}
-        language="JSON"
-        title="Table JSON Structure"
-        fontSize="0.8em"
+        codeString={initSQL}
+        language="SQL"
+        title="init.sql"
         // header={false}
         // bgColor="rgba(0, 0, 0,0)"
         // padding="5px"
@@ -24,4 +24,4 @@ function TableJSONView({ tableStructure }) {
   );
 }
 
-export default TableJSONView;
+export default InitSQL;

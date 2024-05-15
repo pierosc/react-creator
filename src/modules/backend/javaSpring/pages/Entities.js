@@ -1,36 +1,40 @@
 import React from "react";
-import CodeEditor from "../components/CodeEditor/CodeEditor";
+import CodeEditor from "../../../../components/CodeEditor/CodeEditor";
 
-function Repositories({ repositoriesList, table }) {
-  // console.log(repositoriesList);
+function Entities({ entitiesList, table }) {
+  console.log(entitiesList);
+  //   console.log(table);
+  //   console.log(entitiesList[table.name]);
   return (
     <div
       className=" p-4 grid gap-2"
       style={{
         backgroundColor: "rgb(58 64 77)",
-        maxHeight: "65vh",
+        maxHeight: "69vh",
         overflow: "auto",
       }}
     >
       <CodeEditor
-        codeString={
-          table?.name ? repositoriesList?.[table?.name]["imports"] : ""
-        }
+        codeString={table?.name ? entitiesList?.[table?.name]["imports"] : ""}
         language="java"
         header={false}
         bgColor="rgba(0, 0, 0,0)"
         padding="5px"
+        title="imports..."
+        internalMenu
       />
       <CodeEditor
         codeString={
-          table?.name ? repositoriesList?.[table?.name]["classStart"] : ""
+          table?.name ? entitiesList?.[table?.name]["classStart"] : ""
         }
         language="java"
         header={false}
         bgColor="rgba(0, 0, 0,0)"
         padding="5px"
+        title="imports..."
+        internalMenu
       />
-      {repositoriesList?.[table?.name]?.["repositories"]?.map((code, index) => (
+      {entitiesList?.[table?.name]?.["content"]?.map((code, index) => (
         <CodeEditor
           key={index}
           codeString={code}
@@ -38,12 +42,11 @@ function Repositories({ repositoriesList, table }) {
           header={false}
           bgColor="rgb(40, 44, 52)"
           padding="5px"
+          internalMenu
         />
       ))}
       <CodeEditor
-        codeString={
-          table?.name ? repositoriesList[table?.name]["classEnd"] : ""
-        }
+        codeString={table?.name ? entitiesList[table?.name]["classEnd"] : ""}
         language="java"
         header={false}
         bgColor="rgba(0, 0, 0,0)"
@@ -53,4 +56,4 @@ function Repositories({ repositoriesList, table }) {
   );
 }
 
-export default Repositories;
+export default Entities;

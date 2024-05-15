@@ -22,7 +22,7 @@ public class ExcelUtils {
 
     public static ResponseEntity<Resource> easyExcelDownloader(String filename, ByteArrayOutputStream archivo) {
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\\"" + filename + "\\"");
         ByteArrayResource resource = new ByteArrayResource(archivo.toByteArray());
         return ResponseEntity.ok()
                 .headers(headers)
@@ -104,7 +104,7 @@ public class ExcelUtils {
         for (int k = 0; k < headers.size(); k++) {
 
             String nestedKey = headers.get(k);
-            String[] keys = nestedKey.split("\\.");
+            String[] keys = nestedKey.split("\\\\.");
 
             JSONObject currentObj = obj;
 
@@ -144,7 +144,7 @@ public class ExcelUtils {
 
     private static Object getValueByNestedKey(JSONObject jsonObject, String nestedKey, int rowQty) {
 
-        String[] keys = nestedKey.split("\\.");
+        String[] keys = nestedKey.split("\\\\.");
         JSONObject currentObj = jsonObject;
 
         for (int i = 0; i < keys.length; i++) {
