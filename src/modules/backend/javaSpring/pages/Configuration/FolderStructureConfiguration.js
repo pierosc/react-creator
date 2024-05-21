@@ -1,15 +1,11 @@
 import React from "react";
-import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
-// import { MUITheme } from "../../syles/MUITheme";
 import { Button } from "@mui/material";
 import { TreeView } from "@mui/x-tree-view";
 import { TreeItem } from "@mui/x-tree-view";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import EditIcon from "@mui/icons-material/Edit";
-import { MUITheme } from "../../../../../syles/MUITheme";
 import { getInitSql } from "../../../../../initSql";
-// import { getInitSql } from "../../initSql";
 
 function FolderStructureConfiguration({
   entities,
@@ -23,8 +19,6 @@ function FolderStructureConfiguration({
   CloseInitialConfModal,
   handleChangeInputMenu,
 }) {
-  let theme = useTheme();
-  theme = createTheme(theme, MUITheme);
   return (
     <div
       className="flex flex-col gap-2 justify-between"
@@ -109,38 +103,36 @@ function FolderStructureConfiguration({
           </div>
         </div>
       </div>
-      <ThemeProvider theme={theme}>
-        <div className="flex gap-4 justify-between">
-          <Button
-            variant="contained"
-            size="large"
-            onClick={() => {
-              //   setTableStructure(getEstructure(code));
-              handleChangeInputMenu("2");
-            }}
-          >
-            Back
-          </Button>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={() => {
-              entities.setEmptyStructure();
-              services.setEmptyStructure();
-              controllers.setEmptyStructure();
-              repositories.setEmptyStructure();
-              reactHooks.setEmptyStructure();
+      <div className="flex gap-4 justify-between">
+        <Button
+          variant="contained"
+          size="large"
+          onClick={() => {
+            //   setTableStructure(getEstructure(code));
+            handleChangeInputMenu("2");
+          }}
+        >
+          Back
+        </Button>
+        <Button
+          variant="contained"
+          size="large"
+          onClick={() => {
+            entities.setEmptyStructure();
+            services.setEmptyStructure();
+            controllers.setEmptyStructure();
+            repositories.setEmptyStructure();
+            reactHooks.setEmptyStructure();
 
-              const initSQL = getInitSql(tableStructure);
-              setInitSQL(initSQL);
-              setFilesCreated(true);
-              CloseInitialConfModal();
-            }}
-          >
-            CREATE PROJECT
-          </Button>
-        </div>
-      </ThemeProvider>
+            const initSQL = getInitSql(tableStructure);
+            setInitSQL(initSQL);
+            setFilesCreated(true);
+            CloseInitialConfModal();
+          }}
+        >
+          CREATE PROJECT
+        </Button>
+      </div>
     </div>
   );
 }
@@ -148,7 +140,6 @@ function FolderStructureConfiguration({
 export default FolderStructureConfiguration;
 
 function File(props) {
-  //   console.log(props);
   return (
     <div className="flex justify-between">
       <div className="flex">

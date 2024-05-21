@@ -10,9 +10,7 @@ import FormControl from "@mui/material/FormControl";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Button, IconButton, Modal, Typography } from "@mui/material";
-import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useState, useRef, useEffect } from "react";
-import { MUITheme } from "../../../syles/MUITheme";
 import { jpaFolderStructure } from "../../../jpaFolferStructure";
 import useEntity from "../../../hooks/useEntity";
 import useService from "../../../hooks/useService/useService";
@@ -65,13 +63,9 @@ function JavaSpring() {
 
   const [initSQL, setInitSQL] = useState("");
 
-  let theme = useTheme();
-  theme = createTheme(theme, MUITheme);
-
   let jpa = jpaFolderStructure;
 
   const [code, setCode] = useState("");
-  // const [artifactId, setArticaftId] = useState("users");
   const [dbName, setDbName] = useState("dB");
 
   //CONFIGURATION DATA
@@ -111,15 +105,13 @@ function JavaSpring() {
           {`Servicio: ${selectedService?.service ?? ""}`}{" "}
         </label>
         <TabContext value={inputMenu}>
-          <ThemeProvider theme={theme}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList onChange={handleChangeInputMenu}>
-                <Tab label="INPUT DTO's" value="0" />
-                <Tab label="OUTPUT DTO's" value="1" />
-                <Tab label="CONTROLLER" value="2" />
-              </TabList>
-            </Box>
-          </ThemeProvider>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <TabList onChange={handleChangeInputMenu}>
+              <Tab label="INPUT DTO's" value="0" />
+              <Tab label="OUTPUT DTO's" value="1" />
+              <Tab label="CONTROLLER" value="2" />
+            </TabList>
+          </Box>
 
           <TabPanel value="0" sx={{ padding: "0" }}>
             <ServiceDTOInput
@@ -136,149 +128,147 @@ function JavaSpring() {
           </TabPanel>
         </TabContext>
       </div>
-      <ThemeProvider theme={theme}>
-        <div className="col-span-2 grid gap-2">
-          <div className="flex gap-2 justify-between">
-            <div>
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={() => {
-                  entities.setEntities();
-                  tableStructure.forEach((table) => {
-                    JPA.createListEndpoint(table);
-                    JPA.createAddEndpoint(table);
-                    JPA.createEditEndpoint(table);
-                    JPA.createDeleteEndpoint(table);
-                    JPA.createFilterEndpoint(table);
-                    JPA.createFilterExcelEndpoint(table);
-                  });
-                }}
-              >
-                Add CRUDF Service
-              </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                disabled={!filesCreated}
-                endIcon={<DownloadIcon />}
-                onClick={() => {
-                  const entityFiles = entities.files();
-                  jpa[2].content[0].content[0].content = entityFiles;
+      <div className="col-span-2 grid gap-2">
+        <div className="flex gap-2 justify-between">
+          <div>
+            <Button
+              variant="outlined"
+              size="large"
+              onClick={() => {
+                entities.setEntities();
+                tableStructure.forEach((table) => {
+                  JPA.createListEndpoint(table);
+                  JPA.createAddEndpoint(table);
+                  JPA.createEditEndpoint(table);
+                  JPA.createDeleteEndpoint(table);
+                  JPA.createFilterEndpoint(table);
+                  JPA.createFilterExcelEndpoint(table);
+                });
+              }}
+            >
+              Add CRUDF Service
+            </Button>
+            <Button
+              variant="outlined"
+              size="large"
+              disabled={!filesCreated}
+              endIcon={<DownloadIcon />}
+              onClick={() => {
+                const entityFiles = entities.files();
+                jpa[2].content[0].content[0].content = entityFiles;
 
-                  const repos = repositories.files();
-                  jpa[2].content[0].content[1].content = repos;
+                const repos = repositories.files();
+                jpa[2].content[0].content[1].content = repos;
 
-                  const servicesFiles = services.files();
-                  jpa[0].content[1].content = servicesFiles;
+                const servicesFiles = services.files();
+                jpa[0].content[1].content = servicesFiles;
 
-                  const controllersFiles = controllers.files();
-                  jpa[1].content = [...jpa[1].content, ...controllersFiles];
+                const controllersFiles = controllers.files();
+                jpa[1].content = [...jpa[1].content, ...controllersFiles];
 
-                  const outputDTOFiles = DTO.files("output");
-                  jpa[1].content[0].content = outputDTOFiles;
+                const outputDTOFiles = DTO.files("output");
+                jpa[1].content[0].content = outputDTOFiles;
 
-                  const inputDTOFiles = DTO.files("input");
-                  jpa[0].content[0].content = inputDTOFiles;
+                const inputDTOFiles = DTO.files("input");
+                jpa[0].content[0].content = inputDTOFiles;
 
-                  const utilsFiles = utils.getFolderContent();
-                  jpa[3].content = utilsFiles;
+                const utilsFiles = utils.getFolderContent();
+                jpa[3].content = utilsFiles;
 
-                  const exceptionFiles = exception.getFolderContent();
-                  jpa[4].content = exceptionFiles;
+                const exceptionFiles = exception.getFolderContent();
+                jpa[4].content = exceptionFiles;
 
-                  const applicationFile = application.getFile();
-                  jpa = [...jpa, applicationFile];
+                const applicationFile = application.getFile();
+                jpa = [...jpa, applicationFile];
 
-                  jpa = [
-                    { type: "folder", name: metaData.artifact, content: jpa },
-                  ];
-                  file.createRarFile(jpa);
-                  jpa = jpaFolderStructure;
-                }}
-              >
-                Download Project
-              </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                disabled={!filesCreated}
-                endIcon={<DownloadIcon />}
-                onClick={() => {}}
-              >
-                How to Use
-              </Button>
-            </div>
-            <IconButton onClick={handleOpen}>
-              <SettingsIcon sx={{ color: "white" }} fontSize="small" />
-            </IconButton>
+                jpa = [
+                  { type: "folder", name: metaData.artifact, content: jpa },
+                ];
+                file.createRarFile(jpa);
+                jpa = jpaFolderStructure;
+              }}
+            >
+              Download Project
+            </Button>
+            <Button
+              variant="outlined"
+              size="large"
+              disabled={!filesCreated}
+              endIcon={<DownloadIcon />}
+              onClick={() => {}}
+            >
+              How to Use
+            </Button>
           </div>
-          <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <div className="flex gap-2">
-                <FormControl>
-                  <InputLabel>Tables</InputLabel>
-                  <Select
-                    label="Tables"
-                    defaultValue=""
-                    value={table.name}
-                    disabled={!filesCreated}
-                    onChange={handleChangeTable}
-                  >
-                    {tableStructure.map((table, i) => (
-                      <MenuItem value={table.name} key={i}>
-                        {table.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <TabList onChange={handleChange}>
-                  <Tab label="Entities" value="0" />
-                  <Tab label="Repositories" value="1" />
-                  <Tab label="Services" value="2" />
-                  <Tab label="Controllers" value="3" />
-                  <Tab label="IN-DTO's" value="4" />
-                  <Tab label="OUT-DTO's" value="5" />
-                  <Tab label="init sql" value="6" />
-                  <Tab label="react hooks" value="7" />
-                </TabList>
-              </div>
-            </Box>
-            <TabPanel value="0" sx={{ padding: "0" }}>
-              <Entities entitiesList={entities.entitiesList} table={table} />
-            </TabPanel>
-            <TabPanel value="1" sx={{ padding: "0" }}>
-              <Repositories
-                repositoriesList={repositories.repositoriesList}
-                table={table}
-              />
-            </TabPanel>
-            <TabPanel value="2" sx={{ padding: "0" }}>
-              <Services
-                services={services}
-                JPA={JPA}
-                setSelectedService={setSelectedService}
-                table={table}
-              />
-            </TabPanel>
-            <TabPanel value="3" sx={{ padding: "0" }}>
-              <Controllers controllers={controllers} table={table} />
-            </TabPanel>
-            <TabPanel value="4" sx={{ padding: "0" }}>
-              <DTOInput DTO={DTO} table={table} />
-            </TabPanel>
-            <TabPanel value="5" sx={{ padding: "0" }}>
-              <DTOOutput DTO={DTO} table={table} />
-            </TabPanel>
-            <TabPanel value="6" sx={{ padding: "0" }}>
-              <InitSQL initSQL={initSQL} />
-            </TabPanel>
-            <TabPanel value="7" sx={{ padding: "0" }}>
-              {/* <ReactHooks reactHooks={reactHooks} table={table} /> */}
-            </TabPanel>
-          </TabContext>
+          <IconButton onClick={handleOpen}>
+            <SettingsIcon sx={{ color: "white" }} fontSize="small" />
+          </IconButton>
         </div>
-      </ThemeProvider>
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <div className="flex gap-2">
+              <FormControl>
+                <InputLabel>Tables</InputLabel>
+                <Select
+                  label="Tables"
+                  defaultValue=""
+                  value={table.name}
+                  disabled={!filesCreated}
+                  onChange={handleChangeTable}
+                >
+                  {tableStructure.map((table, i) => (
+                    <MenuItem value={table.name} key={i}>
+                      {table.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <TabList onChange={handleChange}>
+                <Tab label="Entities" value="0" />
+                <Tab label="Repositories" value="1" />
+                <Tab label="Services" value="2" />
+                <Tab label="Controllers" value="3" />
+                <Tab label="IN-DTO's" value="4" />
+                <Tab label="OUT-DTO's" value="5" />
+                <Tab label="init sql" value="6" />
+                <Tab label="react hooks" value="7" />
+              </TabList>
+            </div>
+          </Box>
+          <TabPanel value="0" sx={{ padding: "0" }}>
+            <Entities entitiesList={entities.entitiesList} table={table} />
+          </TabPanel>
+          <TabPanel value="1" sx={{ padding: "0" }}>
+            <Repositories
+              repositoriesList={repositories.repositoriesList}
+              table={table}
+            />
+          </TabPanel>
+          <TabPanel value="2" sx={{ padding: "0" }}>
+            <Services
+              services={services}
+              JPA={JPA}
+              setSelectedService={setSelectedService}
+              table={table}
+            />
+          </TabPanel>
+          <TabPanel value="3" sx={{ padding: "0" }}>
+            <Controllers controllers={controllers} table={table} />
+          </TabPanel>
+          <TabPanel value="4" sx={{ padding: "0" }}>
+            <DTOInput DTO={DTO} table={table} />
+          </TabPanel>
+          <TabPanel value="5" sx={{ padding: "0" }}>
+            <DTOOutput DTO={DTO} table={table} />
+          </TabPanel>
+          <TabPanel value="6" sx={{ padding: "0" }}>
+            <InitSQL initSQL={initSQL} />
+          </TabPanel>
+          <TabPanel value="7" sx={{ padding: "0" }}>
+            {/* <ReactHooks reactHooks={reactHooks} table={table} /> */}
+          </TabPanel>
+        </TabContext>
+      </div>
       <Modal open={open} onClose={handleClose}>
         <Box sx={boxStyle}>
           <Configuration

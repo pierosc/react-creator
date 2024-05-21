@@ -1,10 +1,6 @@
 import React from "react";
-// import DataModel from "../../modules/backend/javaSpring/pages/DataModel";
-import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
-import { Button, IconButton, Modal, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { MUITheme } from "../../../../../syles/MUITheme";
-// import { MUITheme } from "../../syles/MUITheme";
 
 function MetaDataConfiguration({
   setMetaData,
@@ -12,10 +8,8 @@ function MetaDataConfiguration({
   setDbName,
   handleChangeInputMenu,
 }) {
-  let theme = useTheme();
-  theme = createTheme(theme, MUITheme);
   return (
-    <ThemeProvider theme={theme}>
+    <div style={{ height: "800px" }}>
       <label className="text-white text-center font-semibold text-lg">
         METADATA CONFIGURATION
       </label>
@@ -130,7 +124,7 @@ function MetaDataConfiguration({
           Continue
         </Button>
       </div>
-    </ThemeProvider>
+    </div>
   );
 }
 

@@ -18,7 +18,7 @@ function useFetchTemplate() {
 
   const replaceDataOnTemplate = (data, template = optionB) => {
     let replacedTemplate = template;
-    console.log(data);
+    // console.log(data);
     replacedTemplate = replacedTemplate.replace(
       "|functionName|",
       data.functionName
@@ -26,7 +26,7 @@ function useFetchTemplate() {
     replacedTemplate = replacedTemplate.replace("|url|", data.url);
     replacedTemplate = replacedTemplate.replace("|body|", data.body);
     replacedTemplate = replacedTemplate.replace("|setData|", data.setData);
-    console.log(replacedTemplate);
+    // console.log(replacedTemplate);
     return replacedTemplate;
   };
 

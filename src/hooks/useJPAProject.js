@@ -75,15 +75,23 @@ export const useJPAProject = (
         (attr) => attr.unique
       );
       // console.log(uniqueAttr);
-      inputAttributes = [
-        ...inputAttributes.filter(
+      if (uniqueAttr !== undefined) {
+        inputAttributes = [
+          ...inputAttributes.filter(
+            (attr) => attr.name !== table.transactional.linkAttr
+          ),
+          uniqueAttr,
+        ];
+      } else {
+        console.warn("No unique attribute on transactional table");
+        inputAttributes = inputAttributes.filter(
           (attr) => attr.name !== table.transactional.linkAttr
-        ),
-        uniqueAttr,
-      ];
+        );
+      }
     }
 
-    // console.log(table.name);
+    // console.log("|||||||||||||||||||||||||||||||||||||||");
+    // console.log(isTransactional);
     // console.log(inputAttributes);
 
     const newInputDTO = DTO.getDTO(

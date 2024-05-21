@@ -1,7 +1,3 @@
-// import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
-
-// export let theme = useTheme();
-
 const primaryColor = "rgba(32,209,28)"; //GOLDEN
 const primaryColorDisabled = "rgba(32,209,28,0.5)";
 const primaryColorDarker = "rgba(32,209,28)";

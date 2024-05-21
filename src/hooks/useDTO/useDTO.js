@@ -43,9 +43,12 @@ export const useDTO = (metaData, DTOMap) => {
     attributesWithNoId = true
   ) => {
     // console.log("----------");
-    // console.groupCollapsed(table.name);
-    // console.log(attributes);
+    // console.log(table);
+    // console.log(table.name);
+    // console.log(destination);
+    // console.log(initialAttributes);
     const attributes = excludeVars(initialAttributes);
+    // console.log("----------");
     let dto = {};
     const DTOAttributes =
       getDTOAttributes(
