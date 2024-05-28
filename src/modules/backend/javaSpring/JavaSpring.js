@@ -10,7 +10,7 @@ import FormControl from "@mui/material/FormControl";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Button, IconButton, Modal, Typography } from "@mui/material";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { jpaFolderStructure } from "../../../jpaFolferStructure";
 import useEntity from "../../../hooks/useEntity";
 import useService from "../../../hooks/useService/useService";
@@ -36,9 +36,17 @@ import InitSQL from "./pages/InitSQL";
 import Configuration from "./pages/Configuration";
 import InitialConfiguration from "./pages/Configuration/InitialConfiguration";
 import { boxStyle } from "../../../syles/BoxStyle";
+import { useLocalStorage } from "../../../hooks/useStorage";
+import DatabaseContext from "../../../context/DatabaseProvider";
 
 function JavaSpring() {
-  const [openInitialConfModal, setOpenInitialConfModal] = useState(true);
+  const [springProjects, setSpringProjects] = useLocalStorage(
+    "springProjects",
+    []
+  );
+  const { database } = useContext(DatabaseContext);
+  const [project, setProject] = useState({});
+  const [openInitialConfModal, setOpenInitialConfModal] = useState(false);
   const CloseInitialConfModal = () => setOpenInitialConfModal(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -100,7 +108,24 @@ function JavaSpring() {
       className="grid grid-cols-3 gap-4 p-12 items-start"
       style={{ backgroundColor: "rgba(6,8,25)" }}
     >
-      <div className="grid gap-4">
+      <div className="grid gap-4 ">
+        <div className="flex gap-4 bg-slate-800 p-4">
+          <FormControl fullWidth>
+            <InputLabel>PROJECT</InputLabel>
+            <Select value={project} label="PROJECT" onChange={handleChange}>
+              {database.dataBases.map((db) => (
+                <MenuItem value={db}>{db.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Button
+            onClick={() => {
+              setOpenInitialConfModal(true);
+            }}
+          >
+            CREATE BACKEND
+          </Button>
+        </div>
         <label className="text-white">
           {`Servicio: ${selectedService?.service ?? ""}`}{" "}
         </label>
@@ -130,9 +155,9 @@ function JavaSpring() {
       </div>
       <div className="col-span-2 grid gap-2">
         <div className="flex gap-2 justify-between">
-          <div>
+          <div className="flex gap-2">
             <Button
-              variant="outlined"
+              // variant="outlined"
               size="large"
               onClick={() => {
                 entities.setEntities();
@@ -295,7 +320,7 @@ function JavaSpring() {
           />
         </Box>
       </Modal>
-      <Modal open={openInitialConfModal}>
+      <Modal open={openInitialConfModal} onClose={CloseInitialConfModal}>
         <Box sx={boxStyle}>
           <InitialConfiguration
             setTableStructure={setTableStructure}

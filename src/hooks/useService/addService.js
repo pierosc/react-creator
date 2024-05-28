@@ -178,7 +178,7 @@ ${inputEntityClass} ${inputEntityInstance} = modelMapper.map(${inputInstance}, $
       ${attributesDTOSetter}
       ${DTOtoEntityMapper}
       ${attributesEntitiesSetter}
-      ${isTransactional ? SetDestinyEntityID : ""}
+      ${isTransactional && uniqueTransAttr ? SetDestinyEntityID : ""}
       ${temporalAttribute ? setCreateTime : ""}
       ${saveMappedEntity}
       

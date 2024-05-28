@@ -1,10 +1,10 @@
-import { scopeBetween } from "./StringFunctions";
+// import { scopeBetween } from "./StringFunctions";
 
 export function getRelations(code) {
   const relations = code.split("Ref");
 }
 
-export function getEstructure(code) {
+export function getDBDiagramStructure(code) {
   const relations = code.split("Ref:");
   const tables = relations
     .shift()

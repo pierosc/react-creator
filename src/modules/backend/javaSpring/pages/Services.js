@@ -50,7 +50,7 @@ function Services({ services, JPA, table, setSelectedService }) {
               onChange={handleChange}
               input={<OutlinedInput label="Tag" />}
               renderValue={(selected) => {
-                // console.log(selected);
+                console.log(selected);
                 // console.log(selected.map((value) => value.name).join(", "));
                 return selected.map((value) => value.name).join(", ");
               }}

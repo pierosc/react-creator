@@ -1,9 +1,22 @@
-const primaryColor = "rgba(32,209,28)"; //GOLDEN
-const primaryColorDisabled = "rgba(32,209,28,0.5)";
-const primaryColorDarker = "rgba(32,209,28)";
+export const primaryColor = "rgba(32,209,28)"; //GOLDEN
+export const primaryColorDisabled = "rgba(32,209,28,0.5)";
+export const primaryColorDarker = "rgba(32,209,28)";
 
 export const MUITheme = {
   components: {
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          color: primaryColorDisabled,
+          "&:before": {
+            borderTop: `thin solid ${primaryColorDisabled}`,
+          },
+          "&:after": {
+            borderTop: `thin solid ${primaryColorDisabled}`,
+          },
+        },
+      },
+    },
     MuiTabs: {
       styleOverrides: {
         indicator: {

@@ -18,32 +18,49 @@ function useDependencyInjection(configuration) {
     `${UCC(dependency)} ${CC(dependency)}`;
 
   const getAttributesRepositoryDependency = (table) => {
-    // console.log(table);
+    // console.log(table);9
     const isTransactional = Object.keys(table).includes("transactional");
-
+    console.log(table.attributes);
     let attributesRepositories = UniqueArray(
       table.attributes.map((attr) =>
         !attr.pk
           ? attr.relations.map((rel) => {
               return rel.relation !== "OneToMany"
                 ? `${rel.destinyTable}Repository`
-                : "";
+                : null;
             })
           : []
       )
     );
-    // console.log(attributesRepositories);
+    let attributesRepositories2 = [];
+    table.attributes.forEach((attr) => {
+      if (attr.pk) {
+        attr.relations.forEach((rel) => {
+          if (rel.relation !== "OneToMany") {
+            attributesRepositories2 = [
+              ...attributesRepositories2,
+              `${rel.destinyTable}Repository`,
+            ];
+          }
+        });
+      }
+    });
+    console.log(attributesRepositories);
+    console.log(attributesRepositories2);
     if (isTransactional) {
       const transactionalRepo = `${table.transactional.name}Repository`;
-      attributesRepositories = [...attributesRepositories, transactionalRepo];
+      attributesRepositories2 = [...attributesRepositories2, transactionalRepo];
     }
-    // console.log(attributesRepositories);
-    return attributesRepositories;
+    console.log(attributesRepositories);
+    return attributesRepositories2;
   };
 
   const getDependencyInjection = (table) => {
     const dependencyArr = getAttributesRepositoryDependency(table);
-    // console.log(dependencyArr);
+    console.log("-----------------");
+    console.log(table.name);
+    console.log(dependencyArr);
+    console.log("-----------------");
     let depArr = [
       "modelMapper",
       `${UCC(table.name)}Repository`,
