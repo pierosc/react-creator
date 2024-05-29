@@ -45,6 +45,7 @@ function JavaSpring() {
     []
   );
   const { database } = useContext(DatabaseContext);
+  // const [databaseSelected, setDatabaseSelected] = useState({});
   const [project, setProject] = useState({});
   const [openInitialConfModal, setOpenInitialConfModal] = useState(false);
   const CloseInitialConfModal = () => setOpenInitialConfModal(false);
@@ -88,7 +89,7 @@ function JavaSpring() {
   const [oppositeRelations, setOppositeRelations] = useState(false);
 
   //HOOKS
-  const entities = useEntity(tableStructure, metaData);
+  const entities = useEntity(database.selected.json, metaData);
   const services = useService(tableStructure, metaData);
   const controllers = useController(tableStructure, metaData);
   const repositories = useRepositories(tableStructure, metaData);
@@ -102,6 +103,10 @@ function JavaSpring() {
 
   const JPA = useJPAProject(repositories, services, controllers, DTO, metaData);
   const [selectedService, setSelectedService] = useState({});
+
+  useEffect(() => {
+    database.setSelected(database.dataBases.find((db) => db === project.db));
+  }, [project]);
 
   return (
     <div

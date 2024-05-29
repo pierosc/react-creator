@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useLocalStorage } from "../../../hooks/useStorage";
 import { getDBDiagramStructure } from "./DBDiagram";
 
@@ -8,6 +9,7 @@ function useDatabase() {
     setDataBases([...dataBases, db]);
   };
 
+  const [selected, setSelected] = useState({});
   // const databaseStructure = {
   //   name: "",
   //   type: "postgres",
@@ -24,7 +26,7 @@ function useDatabase() {
   //   ],
   // };
 
-  return { add, getDBDiagramStructure, dataBases };
+  return { add, getDBDiagramStructure, dataBases, selected, setSelected };
 }
 
 export default useDatabase;

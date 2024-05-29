@@ -1,6 +1,11 @@
-import React from "react";
-import { Button } from "@mui/material";
+import React, { useContext, useState } from "react";
+import { Button, Divider } from "@mui/material";
 import TextField from "@mui/material/TextField";
+import DatabaseContext from "../../../../../context/DatabaseProvider";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
 
 function MetaDataConfiguration({
   setMetaData,
@@ -8,6 +13,12 @@ function MetaDataConfiguration({
   setDbName,
   handleChangeInputMenu,
 }) {
+  const { database } = useContext(DatabaseContext);
+  const [databaseSelected, setDatabaseSelected] = useState({});
+
+  const handleChange = (event) => {
+    setDatabaseSelected(event.target.value);
+  };
   return (
     <div style={{ height: "800px" }}>
       <label className="text-white text-center font-semibold text-lg">
@@ -38,10 +49,10 @@ function MetaDataConfiguration({
           </div>
         </div>
 
-        <div className="flex flex-col justify-around  gap-16">
-          <label className="text-white text-center border-b-2 border-yellow-400 p-4">
+        <div className="flex flex-col justify-around  gap-8">
+          <Divider variant="middle" sx={{ paddingBottom: "14px" }}>
             Project Metadata
-          </label>
+          </Divider>
           <TextField
             label="Group"
             variant="outlined"
@@ -98,6 +109,22 @@ function MetaDataConfiguration({
               });
             }}
           />
+          <Divider variant="middle" sx={{ paddingBottom: "14px" }}>
+            DATABASE
+          </Divider>
+          <FormControl fullWidth>
+            <InputLabel>DATABASE</InputLabel>
+            <Select
+              value={databaseSelected}
+              size="small"
+              label="PROJECT"
+              onChange={handleChange}
+            >
+              {database.dataBases.map((db) => (
+                <MenuItem value={db}>{db.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           {/* <FormControlLabel
             control={
                 <Switch

@@ -30,9 +30,6 @@ function FolderStructureConfiguration({
         </label>
         <div className="grid">
           <label className="text-white">* Choose your folder structure</label>
-          {/* <label className="text-white">
-            * Don't forget to delete all the comments of your Data Model
-          </label> */}
         </div>
         <div className="flex gap-6 justify-around items-center">
           <div className="transition duration-300 transform hover:shadow-2xl hover:scale-105 bg-slate-400 rounded-lg">
