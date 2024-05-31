@@ -104,9 +104,9 @@ function JavaSpring() {
   const JPA = useJPAProject(repositories, services, controllers, DTO, metaData);
   const [selectedService, setSelectedService] = useState({});
 
-  useEffect(() => {
-    database.setSelected(database.dataBases.find((db) => db === project.db));
-  }, [project]);
+  // useEffect(() => {
+  //   database.setSelected(database.dataBases.find((db) => db === project.db));
+  // }, [project]);
 
   return (
     <div
