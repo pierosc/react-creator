@@ -28,6 +28,7 @@ function AddDatabase() {
   const [password, setPassword] = useState("yachayhuasi2023");
   const [address, setAddress] = useState("172.17.32.97:5432/yachayhuasi_db");
   const [environment, setEnvironment] = useState("desarrollo");
+  const [url, setUrl] = useState("");
   //--on Hold
   const [engine, setEngine] = useState("PostgreSQL");
   const [syntax, setSyntax] = useState("DbDiagram");
@@ -165,13 +166,28 @@ function AddDatabase() {
                 />
               </div>
               <Divider variant="middle">DATA MODEL</Divider>
-              <div className="grid">
-                <label className="text-white">
-                  * Copy and paste your model from DB diagram
-                </label>
-                <label className="text-white">
-                  * Don't forget to delete all the comments of your Data Model
-                </label>
+              <div className="flex justify-between items-start gap-4">
+                <div className="grid">
+                  <label className="text-white">
+                    * Copy and paste your model from DB diagram
+                  </label>
+                  <label className="text-white">
+                    * Don't forget to delete all the comments of your Data Model
+                  </label>
+                </div>
+                <TextField
+                  label="DbDiagram URL"
+                  size="small"
+                  defaultValue={url}
+                  onChange={(e) => {
+                    setUrl(e?.target?.value);
+                  }}
+                  sx={{
+                    backgroundColor: "rgb(40, 44, 52)",
+                    color: "white",
+                    border: "none",
+                  }}
+                />
               </div>
               <div
                 style={{
@@ -210,6 +226,7 @@ function AddDatabase() {
                     syntax: syntax,
                     json: database.getDBDiagramStructure(code),
                     plainText: code,
+                    url: url,
                     environment: [
                       {
                         name: environment,
