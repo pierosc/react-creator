@@ -1,10 +1,10 @@
-import { useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useLocalStorage } from "../../../../hooks/useStorage";
 import DatabaseContext from "../../../../context/DatabaseProvider";
 import useEntity from "../../../../hooks/useEntity";
 
 function useSpringProject() {
-  const { database } = useContext(DatabaseContext);
+  const { db } = useContext(DatabaseContext);
   const [springProjects, setSpringProjects] = useLocalStorage(
     "springProjects",
     []
@@ -13,6 +13,18 @@ function useSpringProject() {
   const add = (pj) => {
     setSpringProjects([...springProjects, pj]);
   };
+
+  const [selected, setSelected] = useState({});
+
+  const select = (pjName) => {
+    setSelected(springProjects.find((v) => v.name === pjName));
+  };
+
+  useEffect(() => {
+    console.group("NEW SPRING PROJECT SELECTED");
+    console.log(selected);
+    console.groupEnd();
+  }, [selected]);
 
   //base seleccionada
 
@@ -26,20 +38,23 @@ function useSpringProject() {
   //   const exception = useException(metaData);
   //   const application = useApplication(metaData);
 
-  const springProject = {
-    name: "",
-    entity: [],
-    repository: [],
-    service: [],
-    controller: [],
-    dto: [],
-    db: "",
-    metaData: {},
-  };
+  // const springProject = {
+  //   name: "",
+  //   entity: [],
+  //   repository: [],
+  //   service: [],
+  //   controller: [],
+  //   dto: [],
+  //   db: "",
+  //   metaData: {},
+  // };
 
   return {
     add,
     springProjects,
+    select,
+    selected,
+    setSelected,
   };
 }
 

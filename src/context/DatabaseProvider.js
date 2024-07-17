@@ -3,11 +3,11 @@ import useDatabase from "../modules/database/CustomHooks/useDatabase";
 const DatabaseContext = createContext();
 
 function DatabaseProvider({ children }) {
-  const database = useDatabase();
+  const db = useDatabase();
   return (
     <DatabaseContext.Provider
       value={{
-        database,
+        db,
       }}
     >
       {children}

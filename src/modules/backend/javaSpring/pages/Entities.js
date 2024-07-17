@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import CodeEditor from "../../../../components/CodeEditor/CodeEditor";
+import DatabaseContext from "../../../../context/DatabaseProvider";
 
 function Entities({ entitiesList, table }) {
-  console.log(entitiesList);
-  //   console.log(table);
-  //   console.log(entitiesList[table.name]);
+  const { db } = useContext(DatabaseContext);
+  // const table = db.selected.json ?? {};
+  console.log(table);
   return (
     <div
       className=" p-4 grid gap-2"

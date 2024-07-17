@@ -6,19 +6,23 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import ImageDisplay from "../../../../../components/ImageDisplay/ImageDisplay";
+import springImage from "../../../../../assets/springBootInit.png";
 
 function MetaDataConfiguration({
   setMetaData,
   metaData,
   setDbName,
   handleChangeInputMenu,
+  spring,
+  setSpring,
 }) {
-  const { database } = useContext(DatabaseContext);
-  const [databaseSelected, setDatabaseSelected] = useState({});
+  const { db } = useContext(DatabaseContext);
 
   const handleChange = (event) => {
-    setDatabaseSelected(event.target.value);
+    db.setSelected(db.dataBases.find((t) => t.name === event.target.value));
   };
+
   return (
     <div style={{ height: "800px" }}>
       <label className="text-white text-center font-semibold text-lg">
@@ -29,24 +33,12 @@ function MetaDataConfiguration({
           <label className="text-white">
             * These are the tested configurations
           </label>
-          <div className="relative group cursor-pointer overflow-hidden rounded-xl">
-            <a
-              href="https://start.spring.io/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block"
-            >
-              <img
-                src={require("../../../../../assets/springBootInit.png")}
-                alt="Spring Initializr"
-              />
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 ease-in-out">
-                <span className="text-white text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
-                  Visit start.spring.io
-                </span>
-              </div>
-            </a>
-          </div>
+          <ImageDisplay
+            href="https://start.spring.io/"
+            imgSrc={springImage}
+            imgAlt="Spring Initializr"
+            text="Visit start.spring.io"
+          />
         </div>
 
         <div className="flex flex-col justify-around  gap-8">
@@ -115,13 +107,13 @@ function MetaDataConfiguration({
           <FormControl fullWidth>
             <InputLabel>DATABASE</InputLabel>
             <Select
-              value={databaseSelected}
+              value={db?.selected?.name ?? ""}
               size="small"
               label="PROJECT"
               onChange={handleChange}
             >
-              {database.dataBases.map((db) => (
-                <MenuItem value={db}>{db.name}</MenuItem>
+              {db.dataBases.map((db) => (
+                <MenuItem value={db.name}>{db.name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -145,7 +137,13 @@ function MetaDataConfiguration({
           size="large"
           onClick={() => {
             //   setTableStructure(getEstructure(code));
-            handleChangeInputMenu("1");
+            setSpring({
+              ...spring,
+              metaData: metaData,
+              name: metaData.name,
+              db: db?.selected?.name,
+            });
+            handleChangeInputMenu("3");
           }}
         >
           Continue

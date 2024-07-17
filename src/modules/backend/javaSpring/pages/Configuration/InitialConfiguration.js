@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // import FolderView from "../FolderView";
 // import TableJSONView from "../TableJSONView";
 // import { getEstructure } from "../../EstructureFunctions";
@@ -37,6 +37,17 @@ function InitialConfiguration({
     setInputMenu(newValue);
   };
 
+  const [spring, setSpring] = useState({
+    name: "",
+    entity: [],
+    repository: [],
+    service: [],
+    controller: [],
+    dto: [],
+    db: "",
+    metaData: {},
+  });
+
   return (
     <div className="grid gap-4 p-4">
       {inputMenu === "0" ? (
@@ -45,6 +56,8 @@ function InitialConfiguration({
           metaData={metaData}
           setDbName={setDbName}
           handleChangeInputMenu={handleChangeInputMenu}
+          spring={spring}
+          setSpring={setSpring}
         />
       ) : inputMenu === "1" ? (
         <DependenciesConfiguration
@@ -69,6 +82,8 @@ function InitialConfiguration({
           tableStructure={tableStructure}
           CloseInitialConfModal={CloseInitialConfModal}
           handleChangeInputMenu={handleChangeInputMenu}
+          spring={spring}
+          setSpring={setSpring}
         />
       )}
     </div>

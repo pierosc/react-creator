@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import DatabaseContext from "../../context/DatabaseProvider";
 
 function AddDatabase() {
-  const { database } = useContext(DatabaseContext);
+  const { db } = useContext(DatabaseContext);
 
   const [open, setOpen] = useState(false);
   const [code, setCode] = useState(`
@@ -23,15 +23,21 @@ function AddDatabase() {
     document_number varchar(15) [unique, note: 'buscar max longitud']
     document_url varchar(255)
   }`);
+
   const [name, setName] = useState("UserDB");
   const [username, setUsername] = useState("yachayhuasi");
   const [password, setPassword] = useState("yachayhuasi2023");
   const [address, setAddress] = useState("172.17.32.97:5432/yachayhuasi_db");
-  const [environment, setEnvironment] = useState("desarrollo");
+  const environment = "desarrollo";
+  // const [environment, setEnvironment] = useState("desarrollo");
   const [url, setUrl] = useState("");
+
   //--on Hold
-  const [engine, setEngine] = useState("PostgreSQL");
-  const [syntax, setSyntax] = useState("DbDiagram");
+  const engine = "PostgreSQL";
+  // const [engine, setEngine] = useState("PostgreSQL");
+  const syntax = "DbDiagram";
+  // const [syntax, setSyntax] = useState("DbDiagram");
+
   //--DOCKER
   const [imageName, setImageName] = useState("postgres_User_Img");
   const [containerName, setContainerName] = useState("User_db");
@@ -220,11 +226,11 @@ function AddDatabase() {
                 variant="contained"
                 size="large"
                 onClick={() => {
-                  database.add({
+                  db.add({
                     name: name,
                     engine: engine,
                     syntax: syntax,
-                    json: database.getDBDiagramStructure(code),
+                    json: db.getDBDiagramStructure(code),
                     plainText: code,
                     url: url,
                     environment: [

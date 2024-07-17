@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocalStorage } from "../../../hooks/useStorage";
 import { getDBDiagramStructure } from "./DBDiagram";
 
@@ -10,6 +10,20 @@ function useDatabase() {
   };
 
   const [selected, setSelected] = useState({});
+
+  useEffect(() => {
+    console.group("NEW DATABASE SELECTED");
+    console.log(selected);
+    console.groupEnd();
+  }, [selected]);
+
+  const select = (dbName) => {
+    setSelected(dataBases.find((v) => v.name === dbName));
+  };
+
+  const findByName = (dbName) => {
+    return dataBases.find((v) => v.name === dbName);
+  };
   // const databaseStructure = {
   //   name: "",
   //   type: "postgres",
@@ -26,7 +40,15 @@ function useDatabase() {
   //   ],
   // };
 
-  return { add, getDBDiagramStructure, dataBases, selected, setSelected };
+  return {
+    add,
+    getDBDiagramStructure,
+    dataBases,
+    findByName,
+    select,
+    selected,
+    setSelected,
+  };
 }
 
 export default useDatabase;

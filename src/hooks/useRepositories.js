@@ -92,8 +92,47 @@ export const useRepositories = (tableStructue, metaData) => {
       repositories[table.name]["classEnd"] = "}";
     });
     setRepositoriesList(repositories);
+    return repositories;
+  };
+  //
+
+  const getEmptyStructure = (tableStructure, metaData) => {
+    let repositories = {};
+    tableStructure.forEach((table) => {
+      //   const imports = getServiceImports(table);
+      const uniqueAttr = table.attributes.find((attr) => attr.unique);
+      // console.log(table.attributes);
+
+      repositories[table.name] = {};
+      repositories[table.name]["imports"] = getRepositoryImports(
+        table,
+        metaData
+      );
+      repositories[table.name]["classStart"] = getRepositoryClassStart(table);
+      repositories[table.name]["repositories"] = uniqueAttr
+        ? [getfindByRepository([uniqueAttr], table, true)]
+        : [];
+      repositories[table.name]["classEnd"] = "}";
+    });
+    // setRepositoriesList(repositories);
+    return repositories;
   };
 
+  const getImports = (table, metaData) => {
+    const repo = [
+      "package ${metaData.packageName}.repositories.dB.repo;",
+      "import org.springframework.data.jpa.repository.JpaRepository;",
+      "import java.util.UUID;",
+      "import java.util.List;",
+      "import org.springframework.data.jpa.domain.Specification;",
+      `import ${metaData.packageName}.repositories.dB.entities.${UCC(
+        table.name
+      )}Entity;`,
+    ];
+    return repo;
+  };
+
+  //
   const setFilterRepositories = () => {
     tableStructue.forEach((table) => {
       const filter = getFilterRepository(table);
@@ -202,6 +241,7 @@ import ${metaData.packageName}.repositories.dB.entities.${UCC(
     addImport,
     deleteImport,
     setEmptyStructure,
+    getEmptyStructure,
     files,
     repositoriesList,
     //REPOSITORIES

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button } from "@mui/material";
 import { TreeView } from "@mui/x-tree-view";
 import { TreeItem } from "@mui/x-tree-view";
@@ -6,6 +6,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import EditIcon from "@mui/icons-material/Edit";
 import { getInitSql } from "../../../../../initSql";
+import SpringContext from "../../../../../context/SpringProvider";
+import DatabaseContext from "../../../../../context/DatabaseProvider";
 
 function FolderStructureConfiguration({
   entities,
@@ -18,7 +20,12 @@ function FolderStructureConfiguration({
   tableStructure,
   CloseInitialConfModal,
   handleChangeInputMenu,
+  spring,
+  // setSpring,
 }) {
+  const { springProject } = useContext(SpringContext);
+  const { db } = useContext(DatabaseContext);
+
   return (
     <div
       className="flex flex-col gap-2 justify-between"
@@ -121,10 +128,22 @@ function FolderStructureConfiguration({
             repositories.setEmptyStructure();
             reactHooks.setEmptyStructure();
 
-            const initSQL = getInitSql(tableStructure);
-            setInitSQL(initSQL);
+            // const initSQL = getInitSql(tableStructure);
+            // setInitSQL(initSQL);
             setFilesCreated(true);
+            const repoStructure = repositories.getEmptyStructure(
+              db.findByName(spring.db).json,
+              spring.metaData
+            );
+            console.log(repoStructure);
+
+            db.findByName(spring.db).json.forEach((e) => {
+              // REPOSITORIES
+              const repoImports = repositories.getImports(e, spring.metaData);
+            });
+
             CloseInitialConfModal();
+            springProject.add({ ...spring, repository: repoStructure });
           }}
         >
           CREATE PROJECT

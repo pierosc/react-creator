@@ -38,15 +38,11 @@ import InitialConfiguration from "./pages/Configuration/InitialConfiguration";
 import { boxStyle } from "../../../syles/BoxStyle";
 import { useLocalStorage } from "../../../hooks/useStorage";
 import DatabaseContext from "../../../context/DatabaseProvider";
+import SpringContext from "../../../context/SpringProvider";
 
 function JavaSpring() {
-  const [springProjects, setSpringProjects] = useLocalStorage(
-    "springProjects",
-    []
-  );
-  const { database } = useContext(DatabaseContext);
-  // const [databaseSelected, setDatabaseSelected] = useState({});
-  const [project, setProject] = useState({});
+  const { db } = useContext(DatabaseContext);
+
   const [openInitialConfModal, setOpenInitialConfModal] = useState(false);
   const CloseInitialConfModal = () => setOpenInitialConfModal(false);
   const [open, setOpen] = React.useState(false);
@@ -64,7 +60,7 @@ function JavaSpring() {
   const [table, setTable] = React.useState({});
 
   const handleChangeTable = (event) => {
-    setTable(tableStructure.find((t) => t.name === event.target.value));
+    setTable(db?.selected?.json.find((t) => t.name === event.target.value));
   };
 
   const [tableStructure, setTableStructure] = useState([]);
@@ -89,7 +85,7 @@ function JavaSpring() {
   const [oppositeRelations, setOppositeRelations] = useState(false);
 
   //HOOKS
-  const entities = useEntity(database.selected.json, metaData);
+  const entities = useEntity(db?.selected?.json, metaData);
   const services = useService(tableStructure, metaData);
   const controllers = useController(tableStructure, metaData);
   const repositories = useRepositories(tableStructure, metaData);
@@ -104,10 +100,8 @@ function JavaSpring() {
   const JPA = useJPAProject(repositories, services, controllers, DTO, metaData);
   const [selectedService, setSelectedService] = useState({});
 
-  // useEffect(() => {
-  //   database.setSelected(database.dataBases.find((db) => db === project.db));
-  // }, [project]);
-
+  const { springProject } = useContext(SpringContext);
+  console.log(db?.selected?.json);
   return (
     <div
       className="grid grid-cols-3 gap-4 p-12 items-start"
@@ -117,9 +111,26 @@ function JavaSpring() {
         <div className="flex gap-4 bg-slate-800 p-4">
           <FormControl fullWidth>
             <InputLabel>PROJECT</InputLabel>
-            <Select value={project} label="PROJECT" onChange={handleChange}>
-              {database.dataBases.map((db) => (
-                <MenuItem value={db}>{db.name}</MenuItem>
+            <Select
+              defaultValue=""
+              value={springProject.selected.name}
+              label="PROJECT"
+              onChange={(v) => {
+                const projectToSelect = springProject.springProjects.find(
+                  (t) => t.name === v.target.value
+                );
+                springProject.setSelected(projectToSelect);
+                const dbToSelect = db.findByName(projectToSelect.db);
+                // console.log(dbToSelect);
+                db.setSelected(dbToSelect);
+                // console.log(dbToSelect.json[0].name);
+                setTable(dbToSelect.json[0].name);
+              }}
+            >
+              {springProject.springProjects.map((pj, index) => (
+                <MenuItem value={pj.name} key={index}>
+                  {pj.name}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -243,10 +254,10 @@ function JavaSpring() {
                   label="Tables"
                   defaultValue=""
                   value={table.name}
-                  disabled={!filesCreated}
+                  // disabled={!filesCreated}
                   onChange={handleChangeTable}
                 >
-                  {tableStructure.map((table, i) => (
+                  {db?.selected?.json?.map((table, i) => (
                     <MenuItem value={table.name} key={i}>
                       {table.name}
                     </MenuItem>
