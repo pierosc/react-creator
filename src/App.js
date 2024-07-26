@@ -12,6 +12,7 @@ import kafkaLogo from "./assets/kafka.svg";
 import Databases from "./modules/database/Databases";
 import { DatabaseProvider } from "./context/DatabaseProvider";
 import { SpringProvider } from "./context/SpringProvider";
+import ReactModule from "./modules/frontend/react/ReactModule";
 
 function APP() {
   let theme = useTheme();
@@ -59,7 +60,7 @@ function APP() {
             </TabPanel>
 
             <TabPanel value="2" sx={{ padding: "0" }}>
-              {/* <JavaSpring /> */}
+              <ReactModule />
             </TabPanel>
             <TabPanel value="3" sx={{ padding: "0" }}>
               <Kafka />

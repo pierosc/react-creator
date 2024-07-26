@@ -28,8 +28,10 @@ function Databases() {
             label="PROJECT"
             onChange={handleChange}
           >
-            {db.dataBases.map((db) => (
-              <MenuItem value={db.name}>{db.name}</MenuItem>
+            {db.dataBases.map((db, index) => (
+              <MenuItem key={index} value={db.name}>
+                {db.name}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>

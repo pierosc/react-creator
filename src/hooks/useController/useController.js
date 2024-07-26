@@ -79,6 +79,19 @@ export const useController = (tableStructue, metaData) => {
     });
     setControllersList(controllers);
   };
+  const getEmptyStructure = (tableStructue) => {
+    let controllers = {};
+    tableStructue.forEach((table) => {
+      //   const imports = getServiceImports(table);
+      controllers[table.name] = {};
+      controllers[table.name]["imports"] = getControllerImports(table);
+      controllers[table.name]["classStart"] = getControllerClass(table);
+      controllers[table.name]["controllers"] = [];
+      controllers[table.name]["classEnd"] = "}";
+    });
+    // setControllersList(controllers);
+    return controllers;
+  };
 
   const files = () => {
     let controllersFiles = [];
@@ -325,6 +338,7 @@ public class ${UCC(table.name)}Controller {
     addImport,
     deleteImport,
     setEmptyStructure,
+    getEmptyStructure,
     // setCRUDFControllers,
     controllersList,
     files,

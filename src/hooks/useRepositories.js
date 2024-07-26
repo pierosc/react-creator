@@ -1,8 +1,25 @@
 import { useState } from "react";
 import { CC, UCC, removeString, sqlVarToJavaVar } from "../StringFunctions";
+import { useLocalStorage } from "./useStorage";
 
 export const useRepositories = (tableStructue, metaData) => {
-  const [repositoriesList, setRepositoriesList] = useState([]); //TODOS LOS SERVICIOS
+  console.group("useRepositories inputs");
+  console.log(tableStructue);
+  console.log(metaData);
+  console.groupEnd();
+
+  const [repositoriesList, setRepositoriesList] = useState([]); // REPOSITORIES FROM THE SELECTED SPRING PROJECT
+  const [springRepositories, setSpringRepositories] = useLocalStorage(
+    "springRepositories",
+    []
+  );
+
+  const addRepositoriesToSpringProject = () => {
+    setSpringRepositories([
+      ...springRepositories,
+      { springProject: "", repositories: repositoriesList },
+    ]);
+  };
   //   const [repositoryImports, setServiceImports] = useState("");
 
   const addRepository = (table, newRepository) => {

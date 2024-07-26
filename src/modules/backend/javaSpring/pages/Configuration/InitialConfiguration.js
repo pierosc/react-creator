@@ -7,27 +7,14 @@ import React, { useState } from "react";
 // import DataModel from "../DataModel";
 import MetaDataConfiguration from "./MetaDataConfiguration";
 import DependenciesConfiguration from "./DependenciesConfiguration";
-import DataModelConfiguration from "./DataModelConfiguration";
+// import DataModelConfiguration from "./DataModelConfiguration";
 import FolderStructureConfiguration from "./FolderStructureConfiguration";
 
 function InitialConfiguration({
-  setTableStructure,
-  // setEntitiesList,
-  setFilesCreated,
-  setInitSQL,
-  // artifactId,
-  dbName,
-  setDbName,
-  code,
-  setCode,
-  tableStructure,
-  oppositeRelations,
-  setOppositeRelations,
   entities,
   services,
   controllers,
   repositories,
-  reactHooks,
   CloseInitialConfModal,
   setMetaData,
   metaData,
@@ -54,7 +41,6 @@ function InitialConfiguration({
         <MetaDataConfiguration
           setMetaData={setMetaData}
           metaData={metaData}
-          setDbName={setDbName}
           handleChangeInputMenu={handleChangeInputMenu}
           spring={spring}
           setSpring={setSpring}
@@ -63,23 +49,20 @@ function InitialConfiguration({
         <DependenciesConfiguration
           handleChangeInputMenu={handleChangeInputMenu}
         />
-      ) : inputMenu === "2" ? (
-        <DataModelConfiguration
-          code={code}
-          setCode={setCode}
-          setTableStructure={setTableStructure}
-          handleChangeInputMenu={handleChangeInputMenu}
-        />
       ) : (
+        //  : inputMenu === "2" ? (
+        //   <DataModelConfiguration
+        //     code={code}
+        //     setCode={setCode}
+        //     setTableStructure={setTableStructure}
+        //     handleChangeInputMenu={handleChangeInputMenu}
+        //   />
+        // )
         <FolderStructureConfiguration
           entities={entities}
           services={services}
           controllers={controllers}
           repositories={repositories}
-          reactHooks={reactHooks}
-          setFilesCreated={setFilesCreated}
-          setInitSQL={setInitSQL}
-          tableStructure={tableStructure}
           CloseInitialConfModal={CloseInitialConfModal}
           handleChangeInputMenu={handleChangeInputMenu}
           spring={spring}

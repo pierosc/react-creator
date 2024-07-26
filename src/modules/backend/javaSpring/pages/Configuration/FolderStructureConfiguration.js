@@ -14,14 +14,10 @@ function FolderStructureConfiguration({
   services,
   controllers,
   repositories,
-  reactHooks,
-  setFilesCreated,
-  setInitSQL,
-  tableStructure,
+  // reactHooks,
   CloseInitialConfModal,
   handleChangeInputMenu,
   spring,
-  // setSpring,
 }) {
   const { springProject } = useContext(SpringContext);
   const { db } = useContext(DatabaseContext);
@@ -126,24 +122,60 @@ function FolderStructureConfiguration({
             services.setEmptyStructure();
             controllers.setEmptyStructure();
             repositories.setEmptyStructure();
-            reactHooks.setEmptyStructure();
+            // reactHooks.setEmptyStructure();
 
             // const initSQL = getInitSql(tableStructure);
             // setInitSQL(initSQL);
-            setFilesCreated(true);
+
+            // ---------------------------------------------------------------------
+            // SETTING EMPTY STRUCTURE FOR SERVICE, CONTROLLER, REPOSITORY, ENTITIES
             const repoStructure = repositories.getEmptyStructure(
-              db.findByName(spring.db).json,
+              db.findByName(spring.db).json, // DATABASE STRUCTURE
               spring.metaData
             );
-            console.log(repoStructure);
+            const entitiesStructure = entities.getEmptyStructure(
+              db.findByName(spring.db).json, // DATABASE STRUCTURE
+              spring.metaData
+            );
+            const servicesStructure = services.getEmptyStructure(
+              db.findByName(spring.db).json, // DATABASE STRUCTURE
+              spring.metaData
+            );
+            const controllersStructure = controllers.getEmptyStructure(
+              db.findByName(spring.db).json, // DATABASE STRUCTURE
+              spring.metaData
+            );
 
-            db.findByName(spring.db).json.forEach((e) => {
-              // REPOSITORIES
-              const repoImports = repositories.getImports(e, spring.metaData);
+            console.group("SETTING EMPTY STRUCTURES");
+            console.group("EMPTY ENTITIES STRUCTURE");
+            console.log(entitiesStructure);
+            console.groupEnd();
+            console.group("EMPTY REPOSITORY STRUCTURE");
+            console.log(repoStructure);
+            console.groupEnd();
+            console.group("EMPTY SERVICES STRUCTURE");
+            console.log(servicesStructure);
+            console.groupEnd();
+            console.group("EMPTY CONTROLLERS STRUCTURE");
+            console.log(controllersStructure);
+            console.groupEnd();
+            console.groupEnd();
+
+            springProject.add({
+              ...spring,
+              entity: entitiesStructure,
+              repository: repoStructure,
+              service: servicesStructure,
+              controller: controllersStructure,
             });
+            // ---------------------------------------------------------------------
+
+            // db.findByName(spring.db).json.forEach((e) => {
+            //   // REPOSITORIES
+            //   const repoImports = repositories.getImports(e, spring.metaData);
+            // });
 
             CloseInitialConfModal();
-            springProject.add({ ...spring, repository: repoStructure });
           }}
         >
           CREATE PROJECT

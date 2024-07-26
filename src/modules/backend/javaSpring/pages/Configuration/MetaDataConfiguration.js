@@ -12,7 +12,6 @@ import springImage from "../../../../../assets/springBootInit.png";
 function MetaDataConfiguration({
   setMetaData,
   metaData,
-  setDbName,
   handleChangeInputMenu,
   spring,
   setSpring,
@@ -51,7 +50,6 @@ function MetaDataConfiguration({
             size="small"
             defaultValue={metaData.group}
             onChange={(e) => {
-              setDbName(e.target.value);
               setMetaData((prevMeta) => {
                 const newMeta = { ...prevMeta };
                 newMeta.group = e.target.value;
@@ -78,7 +76,6 @@ function MetaDataConfiguration({
             size="small"
             defaultValue={metaData.name}
             onChange={(e) => {
-              setDbName(e.target.value);
               setMetaData((prevMeta) => {
                 const newMeta = { ...prevMeta };
                 newMeta.name = e.target.value;
@@ -93,7 +90,6 @@ function MetaDataConfiguration({
             size="small"
             defaultValue={metaData.packageName}
             onChange={(e) => {
-              setDbName(e.target.value);
               setMetaData((prevMeta) => {
                 const newMeta = { ...prevMeta };
                 newMeta.packageName = e.target.value;

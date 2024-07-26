@@ -7,8 +7,6 @@ function DataModel({
 
   dbName,
   setDbName,
-  oppositeRelations,
-  setOppositeRelations,
   setMetaData,
   metaData,
 }) {

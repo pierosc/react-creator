@@ -101,6 +101,19 @@ import jakarta.persistence.GenerationType;`;
     setEntitiesList(entities);
   };
 
+  const getEmptyStructure = (tableStructure, metaData) => {
+    let entities = {};
+    tableStructure.forEach((table) => {
+      entities[table.name] = {};
+      entities[table.name]["imports"] = getEntityImports(table, metaData);
+      entities[table.name]["classStart"] = getEntityClass(table);
+      entities[table.name]["content"] = [];
+      entities[table.name]["classEnd"] = "}";
+    });
+    // setEntitiesList(entities);
+    return entities;
+  };
+
   const setEntities = () => {
     tableStructure.forEach((table) => {
       const entity = getEntity(table);
@@ -233,6 +246,7 @@ import jakarta.persistence.GenerationType;`;
     getEntity,
     setEntities,
     setEmptyStructure,
+    getEmptyStructure,
     entitiesList,
     files,
   };

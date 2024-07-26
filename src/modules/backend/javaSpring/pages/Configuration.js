@@ -11,26 +11,24 @@ import { getInitSql } from "../../../../initSql";
 import DataModel from "./DataModel";
 
 function Configuration({
-  setTableStructure,
+  // setTableStructure,
   // setEntitiesList,
-  setFilesCreated,
-  setInitSQL,
+  // setFilesCreated,
+  // setInitSQL,
   // artifactId,
-  dbName,
-  setDbName,
-  code,
-  setCode,
-  tableStructure,
-  oppositeRelations,
-  setOppositeRelations,
+  // dbName,
+  // setDbName,
+  // code,
+  // setCode,
+  // tableStructure,
   entities,
   services,
   controllers,
   repositories,
   reactHooks,
   handleClose,
-  setMetaData,
-  metaData,
+  // setMetaData,
+  // metaData,
 }) {
   const [inputMenu, setInputMenu] = React.useState("0");
   const handleChangeInputMenu = (event, newValue) => {
@@ -47,19 +45,17 @@ function Configuration({
         </TabList>
 
         <TabPanel value="0" sx={{ padding: "0" }}>
-          <DataModel
+          {/* <DataModel
             code={code}
             setCode={setCode}
             dbName={dbName}
             setDbName={setDbName}
-            oppositeRelations={oppositeRelations}
-            setOppositeRelations={setOppositeRelations}
             setMetaData={setMetaData}
             metaData={metaData}
-          />
+          /> */}
         </TabPanel>
         <TabPanel value="1" sx={{ padding: "0" }}>
-          <TableJSONView tableStructure={tableStructure} />
+          {/* <TableJSONView tableStructure={tableStructure} /> */}
         </TabPanel>
         <TabPanel value="2" sx={{ padding: "0" }}>
           <FolderView />
@@ -67,7 +63,7 @@ function Configuration({
       </TabContext>
 
       <div className="flex gap-4">
-        <Button
+        {/* <Button
           variant="outlined"
           size="large"
           onClick={() => {
@@ -75,11 +71,11 @@ function Configuration({
           }}
         >
           Get Structure
-        </Button>
+        </Button> */}
         <Button
           variant="outlined"
           size="large"
-          disabled={tableStructure.length === 0}
+          // disabled={tableStructure.length === 0}
           onClick={() => {
             entities.setEmptyStructure();
             services.setEmptyStructure();
@@ -87,9 +83,7 @@ function Configuration({
             repositories.setEmptyStructure();
             reactHooks.setEmptyStructure();
 
-            const initSQL = getInitSql(tableStructure);
-            setInitSQL(initSQL);
-            setFilesCreated(true);
+            // setFilesCreated(true);
             handleClose();
           }}
         >

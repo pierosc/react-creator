@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import CodeEditor from "../../../../components/CodeEditor/CodeEditor";
+import SpringContext from "../../../../context/SpringProvider";
 
-function Controllers({ controllers, table }) {
-  console.log(controllers.controllersList);
+function Controllers({ table }) {
+  const { springProject } = useContext(SpringContext);
+  const controllersList = springProject?.selected?.controller ?? {};
+
+  console.group("Controllers view inputs");
+  console.log(table);
+  console.groupEnd();
+
   return (
     <div
       className=" p-4 grid gap-2"
@@ -14,9 +21,7 @@ function Controllers({ controllers, table }) {
     >
       <CodeEditor
         codeString={
-          table?.name
-            ? controllers.controllersList?.[table?.name]["imports"]
-            : ""
+          table?.name ? controllersList?.[table?.name]["imports"] : ""
         }
         language="java"
         header={false}
@@ -25,33 +30,25 @@ function Controllers({ controllers, table }) {
       />
       <CodeEditor
         codeString={
-          table?.name
-            ? controllers.controllersList?.[table?.name]["classStart"]
-            : ""
+          table?.name ? controllersList?.[table?.name]["classStart"] : ""
         }
         language="java"
         header={false}
         bgColor="rgba(0, 0, 0,0)"
         padding="5px"
       />
-      {controllers.controllersList?.[table?.name]?.["controllers"]?.map(
-        (code, index) => (
-          <CodeEditor
-            key={index}
-            codeString={code}
-            language="java"
-            header={false}
-            bgColor="rgb(40, 44, 52)"
-            padding="5px"
-          />
-        )
-      )}
+      {controllersList?.[table?.name]?.["controllers"]?.map((code, index) => (
+        <CodeEditor
+          key={index}
+          codeString={code}
+          language="java"
+          header={false}
+          bgColor="rgb(40, 44, 52)"
+          padding="5px"
+        />
+      ))}
       <CodeEditor
-        codeString={
-          table?.name
-            ? controllers.controllersList[table?.name]["classEnd"]
-            : ""
-        }
+        codeString={table?.name ? controllersList[table?.name]["classEnd"] : ""}
         language="java"
         header={false}
         bgColor="rgba(0, 0, 0,0)"

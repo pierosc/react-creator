@@ -10,7 +10,7 @@ import FormControl from "@mui/material/FormControl";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Button, IconButton, Modal, Typography } from "@mui/material";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { jpaFolderStructure } from "../../../jpaFolferStructure";
 import useEntity from "../../../hooks/useEntity";
 import useService from "../../../hooks/useService/useService";
@@ -20,20 +20,15 @@ import useUtils from "../../../hooks/useUtils/useUtils";
 import { useDTO } from "../../../hooks/useDTO/useDTO";
 import useException from "../../../hooks/useException/useException";
 import useApplication from "../../../hooks/useApplication";
-import useCustomHook from "../../../hooks/useReact/useCustomHook";
 import useFile from "../../../hooks/useFile/useFile";
 import { useJPAProject } from "../../../hooks/useJPAProject";
 import ServiceDTOInput from "./pages/ServiceDTOInput";
-import TableJSONView from "./pages/TableJSONView";
-import FolderView from "./pages/FolderView";
 import Entities from "./pages/Entities";
 import Repositories from "./pages/Repositories";
 import Services from "./pages/Services";
 import Controllers from "./pages/Controllers";
 import DTOInput from "./pages/DTOInput";
 import DTOOutput from "./pages/DTOOutput";
-import InitSQL from "./pages/InitSQL";
-import Configuration from "./pages/Configuration";
 import InitialConfiguration from "./pages/Configuration/InitialConfiguration";
 import { boxStyle } from "../../../syles/BoxStyle";
 import { useLocalStorage } from "../../../hooks/useStorage";
@@ -43,12 +38,15 @@ import SpringContext from "../../../context/SpringProvider";
 function JavaSpring() {
   const { db } = useContext(DatabaseContext);
 
+  // MODAL CONTROLS --------------------------------
   const [openInitialConfModal, setOpenInitialConfModal] = useState(false);
   const CloseInitialConfModal = () => setOpenInitialConfModal(false);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
+  // const [open, setOpen] = React.useState(false);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
+
+  // MENU CONTROLS --------------------------------
   const [value, setValue] = React.useState("1");
   const [inputMenu, setInputMenu] = React.useState("0");
   const handleChange = (event, newValue) => {
@@ -57,21 +55,16 @@ function JavaSpring() {
   const handleChangeInputMenu = (event, newValue) => {
     setInputMenu(newValue);
   };
+
+  // SELECTION CONTROLS --------------------------------
   const [table, setTable] = React.useState({});
 
   const handleChangeTable = (event) => {
     setTable(db?.selected?.json.find((t) => t.name === event.target.value));
   };
-
-  const [tableStructure, setTableStructure] = useState([]);
-  const [filesCreated, setFilesCreated] = useState(false);
-
-  const [initSQL, setInitSQL] = useState("");
+  //----------------------------------------------------------------
 
   let jpa = jpaFolderStructure;
-
-  const [code, setCode] = useState("");
-  const [dbName, setDbName] = useState("dB");
 
   //CONFIGURATION DATA
   const [metaData, setMetaData] = useState({
@@ -81,27 +74,23 @@ function JavaSpring() {
     packageName: "com.users",
   });
 
-  //OPTIONS
-  const [oppositeRelations, setOppositeRelations] = useState(false);
-
   //HOOKS
   const entities = useEntity(db?.selected?.json, metaData);
-  const services = useService(tableStructure, metaData);
-  const controllers = useController(tableStructure, metaData);
-  const repositories = useRepositories(tableStructure, metaData);
+  const services = useService(db?.selected?.json, metaData);
+  const controllers = useController(db?.selected?.json, metaData);
+  const repositories = useRepositories(db?.selected?.json, metaData);
   const utils = useUtils(metaData);
   const DTO = useDTO(metaData, utils.DTOMap);
   const exception = useException(metaData);
   const application = useApplication(metaData);
 
-  const reactHooks = useCustomHook(tableStructure);
   const file = useFile();
 
   const JPA = useJPAProject(repositories, services, controllers, DTO, metaData);
   const [selectedService, setSelectedService] = useState({});
 
   const { springProject } = useContext(SpringContext);
-  console.log(db?.selected?.json);
+
   return (
     <div
       className="grid grid-cols-3 gap-4 p-12 items-start"
@@ -162,10 +151,10 @@ function JavaSpring() {
             />
           </TabPanel>
           <TabPanel value="1" sx={{ padding: "0" }}>
-            <TableJSONView tableStructure={tableStructure} />
+            {/* <TableJSONView tableStructure={tableStructure} /> */}
           </TabPanel>
           <TabPanel value="2" sx={{ padding: "0" }}>
-            <FolderView />
+            {/* <FolderView /> */}
           </TabPanel>
         </TabContext>
       </div>
@@ -173,11 +162,10 @@ function JavaSpring() {
         <div className="flex gap-2 justify-between">
           <div className="flex gap-2">
             <Button
-              // variant="outlined"
               size="large"
               onClick={() => {
                 entities.setEntities();
-                tableStructure.forEach((table) => {
+                db?.selected?.json.forEach((table) => {
                   JPA.createListEndpoint(table);
                   JPA.createAddEndpoint(table);
                   JPA.createEditEndpoint(table);
@@ -192,7 +180,6 @@ function JavaSpring() {
             <Button
               variant="outlined"
               size="large"
-              disabled={!filesCreated}
               endIcon={<DownloadIcon />}
               onClick={() => {
                 const entityFiles = entities.files();
@@ -234,16 +221,13 @@ function JavaSpring() {
             <Button
               variant="outlined"
               size="large"
-              disabled={!filesCreated}
+              // disabled={!filesCreated}
               endIcon={<DownloadIcon />}
               onClick={() => {}}
             >
               How to Use
             </Button>
           </div>
-          <IconButton onClick={handleOpen}>
-            <SettingsIcon sx={{ color: "white" }} fontSize="small" />
-          </IconButton>
         </div>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -254,7 +238,6 @@ function JavaSpring() {
                   label="Tables"
                   defaultValue=""
                   value={table.name}
-                  // disabled={!filesCreated}
                   onChange={handleChangeTable}
                 >
                   {db?.selected?.json?.map((table, i) => (
@@ -271,30 +254,24 @@ function JavaSpring() {
                 <Tab label="Controllers" value="3" />
                 <Tab label="IN-DTO's" value="4" />
                 <Tab label="OUT-DTO's" value="5" />
-                <Tab label="init sql" value="6" />
-                <Tab label="react hooks" value="7" />
               </TabList>
             </div>
           </Box>
           <TabPanel value="0" sx={{ padding: "0" }}>
-            <Entities entitiesList={entities.entitiesList} table={table} />
+            <Entities table={table} />
           </TabPanel>
           <TabPanel value="1" sx={{ padding: "0" }}>
-            <Repositories
-              repositoriesList={repositories.repositoriesList}
-              table={table}
-            />
+            <Repositories table={table} />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: "0" }}>
             <Services
-              services={services}
               JPA={JPA}
               setSelectedService={setSelectedService}
               table={table}
             />
           </TabPanel>
           <TabPanel value="3" sx={{ padding: "0" }}>
-            <Controllers controllers={controllers} table={table} />
+            <Controllers table={table} />
           </TabPanel>
           <TabPanel value="4" sx={{ padding: "0" }}>
             <DTOInput DTO={DTO} table={table} />
@@ -302,60 +279,16 @@ function JavaSpring() {
           <TabPanel value="5" sx={{ padding: "0" }}>
             <DTOOutput DTO={DTO} table={table} />
           </TabPanel>
-          <TabPanel value="6" sx={{ padding: "0" }}>
-            <InitSQL initSQL={initSQL} />
-          </TabPanel>
-          <TabPanel value="7" sx={{ padding: "0" }}>
-            {/* <ReactHooks reactHooks={reactHooks} table={table} /> */}
-          </TabPanel>
         </TabContext>
       </div>
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={boxStyle}>
-          <Configuration
-            setTableStructure={setTableStructure}
-            // setEntitiesList={setEntitiesList}
-            setFilesCreated={setFilesCreated}
-            setInitSQL={setInitSQL}
-            // artifactId={artifactId}
-            dbName={dbName}
-            setDbName={setDbName}
-            code={code}
-            setCode={setCode}
-            tableStructure={tableStructure}
-            oppositeRelations={oppositeRelations}
-            setOppositeRelations={setOppositeRelations}
-            entities={entities}
-            services={services}
-            controllers={controllers}
-            repositories={repositories}
-            reactHooks={reactHooks}
-            handleClose={handleClose}
-            setMetaData={setMetaData}
-            metaData={metaData}
-          />
-        </Box>
-      </Modal>
+
       <Modal open={openInitialConfModal} onClose={CloseInitialConfModal}>
         <Box sx={boxStyle}>
           <InitialConfiguration
-            setTableStructure={setTableStructure}
-            // setEntitiesList={setEntitiesList}
-            setFilesCreated={setFilesCreated}
-            setInitSQL={setInitSQL}
-            // artifactId={artifactId}
-            dbName={dbName}
-            setDbName={setDbName}
-            code={code}
-            setCode={setCode}
-            tableStructure={tableStructure}
-            oppositeRelations={oppositeRelations}
-            setOppositeRelations={setOppositeRelations}
             entities={entities}
             services={services}
             controllers={controllers}
             repositories={repositories}
-            reactHooks={reactHooks}
             CloseInitialConfModal={CloseInitialConfModal}
             setMetaData={setMetaData}
             metaData={metaData}

@@ -1,11 +1,16 @@
 import React, { useContext } from "react";
 import CodeEditor from "../../../../components/CodeEditor/CodeEditor";
 import DatabaseContext from "../../../../context/DatabaseProvider";
+import SpringContext from "../../../../context/SpringProvider";
 
-function Entities({ entitiesList, table }) {
-  const { db } = useContext(DatabaseContext);
-  // const table = db.selected.json ?? {};
+function Entities({ table }) {
+  const { springProject } = useContext(SpringContext);
+  const entitiesList = springProject?.selected?.entity ?? {};
+
+  console.group("Entities view inputs");
   console.log(table);
+  console.groupEnd();
+
   return (
     <div
       className=" p-4 grid gap-2"

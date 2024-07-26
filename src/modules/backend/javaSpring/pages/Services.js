@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import CodeEditor from "../../../../components/CodeEditor/CodeEditor";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -8,8 +8,18 @@ import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import { Button } from "@mui/material";
+import SpringContext from "../../../../context/SpringProvider";
 
-function Services({ services, JPA, table, setSelectedService }) {
+function Services({ JPA, table, setSelectedService }) {
+  const { springProject } = useContext(SpringContext);
+  const servicesList = springProject?.selected?.service ?? {};
+
+  console.group("Services view inputs");
+  console.log(JPA);
+  console.log(table);
+  console.log(setSelectedService);
+  console.groupEnd();
+
   const [attributes, setAttributes] = useState([]);
   const [selectedCodeEditor, setSelectedCodeEditor] = useState(null);
 
@@ -26,10 +36,6 @@ function Services({ services, JPA, table, setSelectedService }) {
   useEffect(() => {
     setAttributes([]);
   }, [table]);
-
-  // useEffect(() => {
-  //   console.log(selectedService);
-  // }, [selectedService]);
 
   return (
     <div className="flex flex-col  gap-1">
@@ -85,9 +91,7 @@ function Services({ services, JPA, table, setSelectedService }) {
         }}
       >
         <CodeEditor
-          codeString={
-            table?.name ? services.servicesList?.[table?.name]["imports"] : ""
-          }
+          codeString={table?.name ? servicesList?.[table?.name]["imports"] : ""}
           language="java"
           header={false}
           bgColor="rgba(0, 0, 0,0)"
@@ -97,9 +101,7 @@ function Services({ services, JPA, table, setSelectedService }) {
         />
         <CodeEditor
           codeString={
-            table?.name
-              ? services.servicesList?.[table?.name]["classStart"]
-              : ""
+            table?.name ? servicesList?.[table?.name]["classStart"] : ""
           }
           language="java"
           header={false}
@@ -108,42 +110,38 @@ function Services({ services, JPA, table, setSelectedService }) {
           title="imports..."
           internalMenu
         />
-        {services.servicesList?.[table?.name]?.["services"]?.map(
-          (code, index) => (
-            <CodeEditor
-              key={index}
-              codeString={code}
-              language="java"
-              header={false}
-              bgColor="rgb(40, 44, 52)"
-              padding="5px"
-              internalMenu
-              otherCodeEditorSelected={selectedCodeEditor != index}
-              onClick={(code, isSelected) => {
-                setSelectedCodeEditor(index);
-                // console.log(code);
-                const service = isSelected
-                  ? {
-                      service: code.trim().split(" ")[2].split("(")[0],
-                      inputDTO:
-                        code.trim().split(" ")[2].split("(")[1] !== ")"
-                          ? code.trim().split(" ")[2].split("(")[1]
-                          : "",
-                      outputDTO: code.trim().split(" ")[1].includes("DTO")
-                        ? code.trim().split(" ")[1]
+        {servicesList?.[table?.name]?.["services"]?.map((code, index) => (
+          <CodeEditor
+            key={index}
+            codeString={code}
+            language="java"
+            header={false}
+            bgColor="rgb(40, 44, 52)"
+            padding="5px"
+            internalMenu
+            otherCodeEditorSelected={selectedCodeEditor != index}
+            onClick={(code, isSelected) => {
+              setSelectedCodeEditor(index);
+              // console.log(code);
+              const service = isSelected
+                ? {
+                    service: code.trim().split(" ")[2].split("(")[0],
+                    inputDTO:
+                      code.trim().split(" ")[2].split("(")[1] !== ")"
+                        ? code.trim().split(" ")[2].split("(")[1]
                         : "",
-                    }
-                  : {};
-                // console.log(service);
-                setSelectedService(service);
-              }}
-            />
-          )
-        )}
+                    outputDTO: code.trim().split(" ")[1].includes("DTO")
+                      ? code.trim().split(" ")[1]
+                      : "",
+                  }
+                : {};
+              // console.log(service);
+              setSelectedService(service);
+            }}
+          />
+        ))}
         <CodeEditor
-          codeString={
-            table?.name ? services.servicesList[table?.name]["classEnd"] : ""
-          }
+          codeString={table?.name ? servicesList[table?.name]["classEnd"] : ""}
           language="java"
           header={false}
           bgColor="rgba(0, 0, 0,0)"

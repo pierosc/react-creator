@@ -20,7 +20,7 @@ function useDependencyInjection(configuration) {
   const getAttributesRepositoryDependency = (table) => {
     // console.log(table);9
     const isTransactional = Object.keys(table).includes("transactional");
-    console.log(table.attributes);
+    // console.log(table.attributes);
     let attributesRepositories = UniqueArray(
       table.attributes.map((attr) =>
         !attr.pk
@@ -57,10 +57,10 @@ function useDependencyInjection(configuration) {
 
   const getDependencyInjection = (table) => {
     const dependencyArr = getAttributesRepositoryDependency(table);
-    console.log("-----------------");
-    console.log(table.name);
-    console.log(dependencyArr);
-    console.log("-----------------");
+    // console.log("-----------------");
+    // console.log(table.name);
+    // console.log(dependencyArr);
+    // console.log("-----------------");
     let depArr = [
       "modelMapper",
       `${UCC(table.name)}Repository`,

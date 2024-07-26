@@ -20,6 +20,13 @@ function useSpringProject() {
     setSelected(springProjects.find((v) => v.name === pjName));
   };
 
+  const changeAttrToSelected = (attrs) => {
+    const PJNoSelected = springProjects.filter(
+      (pj) => pj.name !== selected.name
+    );
+    setSpringProjects([...PJNoSelected, { ...selected, attrs }]);
+  };
+
   useEffect(() => {
     console.group("NEW SPRING PROJECT SELECTED");
     console.log(selected);
@@ -52,9 +59,11 @@ function useSpringProject() {
   return {
     add,
     springProjects,
+    setSpringProjects,
     select,
     selected,
     setSelected,
+    changeAttrToSelected,
   };
 }
 

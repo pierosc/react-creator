@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   CC,
   UCC,
@@ -13,22 +13,33 @@ import { getEditService } from "./editService";
 import { getFilterService } from "./filterService";
 import useDependencyInjection from "./useDependencyInjection";
 import { getFilterExcelService } from "./filterExcelService";
+import SpringContext from "../../context/SpringProvider";
 
 const useService = (tableStructue, metaData) => {
+  const { springProject } = useContext(SpringContext);
   const [servicesList, setServicesList] = useState([]); //TODOS LOS SERVICIOS
   const depInjection = useDependencyInjection(false); // true use Autowired fields, false use Constructor Injection
-  //   const [serviceImports, setServiceImports] = useState("");
 
   const addService = (table, newService) => {
-    setServicesList((prevServicesList) => {
-      const newServicesList = { ...prevServicesList };
-      const newServices = [
-        newService,
-        ...newServicesList[table?.name]["services"],
-      ];
-      newServicesList[table?.name]["services"] = newServices;
-      return newServicesList;
+    springProject.changeAttrToSelected({
+      service: {
+        ...springProject.selected,
+        [table]: {
+          ...springProject.selected[table],
+          services: [...springProject.selected[table].services, newService],
+        },
+      },
     });
+
+    // setServicesList((prevServicesList) => {
+    //   const newServicesList = { ...prevServicesList };
+    //   const newServices = [
+    //     newService,
+    //     ...newServicesList[table?.name]["services"],
+    //   ];
+    //   newServicesList[table?.name]["services"] = newServices;
+    //   return newServicesList;
+    // });
   };
 
   const deleteService = (table, service) => {
@@ -97,6 +108,20 @@ ${serviceImport}`;
       services[table.name]["classEnd"] = "}";
     });
     setServicesList(services);
+  };
+
+  const getEmptyStructure = (tableStructue) => {
+    let services = {};
+    tableStructue.forEach((table) => {
+      //   const imports = getServiceImports(table);
+      services[table.name] = {};
+      services[table.name]["imports"] = getServiceImports(table);
+      services[table.name]["classStart"] = getServiceClass(table);
+      services[table.name]["services"] = [];
+      services[table.name]["classEnd"] = "}";
+    });
+    return services;
+    // setServicesList(services);
   };
 
   const files = () => {
@@ -289,6 +314,7 @@ public class ${UCC(table.name)}Service {
     addImport,
     deleteImport,
     setEmptyStructure,
+    getEmptyStructure,
     // setCRUDFServices,
     // getServicesFileStructure,
     servicesList,

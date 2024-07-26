@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import CodeEditor from "../../../../components/CodeEditor/CodeEditor";
+import SpringContext from "../../../../context/SpringProvider";
 
-function Repositories({ repositoriesList, table }) {
-  // console.log(repositoriesList);
+function Repositories({ table }) {
+  const { springProject } = useContext(SpringContext);
+  const repositoriesList = springProject?.selected?.repository ?? {};
+
+  console.group("repositories view inputs");
+  console.log(table);
+  console.groupEnd();
+
   return (
     <div
       className=" p-4 grid gap-2"
@@ -14,7 +21,7 @@ function Repositories({ repositoriesList, table }) {
     >
       <CodeEditor
         codeString={
-          table?.name ? repositoriesList?.[table?.name]["imports"] : ""
+          table?.name ? repositoriesList?.[table?.name]["imports"] ?? "" : ""
         }
         language="java"
         header={false}
@@ -23,7 +30,7 @@ function Repositories({ repositoriesList, table }) {
       />
       <CodeEditor
         codeString={
-          table?.name ? repositoriesList?.[table?.name]["classStart"] : ""
+          table?.name ? repositoriesList?.[table?.name]["classStart"] ?? "" : ""
         }
         language="java"
         header={false}
@@ -42,7 +49,7 @@ function Repositories({ repositoriesList, table }) {
       ))}
       <CodeEditor
         codeString={
-          table?.name ? repositoriesList[table?.name]["classEnd"] : ""
+          table?.name ? repositoriesList[table?.name]["classEnd"] ?? "" : ""
         }
         language="java"
         header={false}
