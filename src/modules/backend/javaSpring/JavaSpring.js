@@ -164,14 +164,17 @@ function JavaSpring() {
             <Button
               size="large"
               onClick={() => {
-                entities.setEntities();
+                // entities.setEntities();
                 db?.selected?.json.forEach((table) => {
-                  JPA.createListEndpoint(table);
-                  JPA.createAddEndpoint(table);
-                  JPA.createEditEndpoint(table);
-                  JPA.createDeleteEndpoint(table);
-                  JPA.createFilterEndpoint(table);
-                  JPA.createFilterExcelEndpoint(table);
+                  JPA.createListEndpoint(springProject.selected.name, table);
+                  JPA.createAddEndpoint(springProject.selected.name, table);
+                  JPA.createEditEndpoint(springProject.selected.name, table);
+                  JPA.createDeleteEndpoint(springProject.selected.name, table);
+                  JPA.createFilterEndpoint(springProject.selected.name, table);
+                  JPA.createFilterExcelEndpoint(
+                    springProject.selected.name,
+                    table
+                  );
                 });
               }}
             >

@@ -20,7 +20,7 @@ const useService = (tableStructue, metaData) => {
   const [servicesList, setServicesList] = useState([]); //TODOS LOS SERVICIOS
   const depInjection = useDependencyInjection(false); // true use Autowired fields, false use Constructor Injection
 
-  const addService = (table, newService) => {
+  const addService2 = (table, newService) => {
     springProject.changeAttrToSelected({
       service: {
         ...springProject.selected,
@@ -40,6 +40,48 @@ const useService = (tableStructue, metaData) => {
     //   newServicesList[table?.name]["services"] = newServices;
     //   return newServicesList;
     // });
+  };
+
+  const addService = (projectName, table, newService) => {
+    const attrFromProject = "service";
+    const attrFromTable = "services";
+
+    const otherProjects = springProject.springProjects.filter(
+      (pj) => pj.name !== projectName
+    );
+    let modifiedProject = springProject.springProjects.find(
+      (pj) => pj.name === projectName
+    );
+
+    modifiedProject = {
+      ...modifiedProject,
+      [attrFromProject]: {
+        ...modifiedProject[attrFromProject],
+        [table.name]: {
+          ...modifiedProject[attrFromProject][table.name],
+          [attrFromTable]: [
+            ...modifiedProject[attrFromProject][table.name][attrFromTable],
+            newService,
+          ],
+        },
+      },
+    };
+    console.groupCollapsed(table.name);
+    console.log(newService);
+    // console.log(springProject.springProjects);
+    // console.log(attrFromProject);
+    // console.log(table);
+    // console.log(modifiedProject[attrFromProject]);
+    console.log(modifiedProject[attrFromProject][table.name]);
+    console.group(attrFromTable);
+    console.log(modifiedProject[attrFromProject][table.name][attrFromTable]);
+    console.groupEnd();
+    console.log(modifiedProject);
+
+    console.groupEnd();
+    springProject.setSpringProjects(() => {
+      return [...otherProjects, modifiedProject];
+    });
   };
 
   const deleteService = (table, service) => {

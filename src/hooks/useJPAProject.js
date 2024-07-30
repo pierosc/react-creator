@@ -1,4 +1,3 @@
-import React from "react";
 import { UCC } from "../StringFunctions";
 
 export const useJPAProject = (
@@ -11,7 +10,8 @@ export const useJPAProject = (
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const createListEndpoint = (table) => {
+  const createListEndpoint = (project, table) => {
+    console.log(project);
     const newService = services.getListAllService(table.name);
     const newServiceImport = `import ${
       metaData.packageName
@@ -30,17 +30,17 @@ export const useJPAProject = (
       true
     );
 
-    services.addService(table, newService);
-    services.addImport(table, newServiceImport);
-    controllers.addController(table, newController);
-    controllers.addImport(table, newControllerImport);
-    DTO.addOutputDTO(table, newOutputDTO);
+    services.addService(project, table, newService);
+    // services.addImport(table, newServiceImport);
+    // controllers.addController(table, newController);
+    // controllers.addImport(table, newControllerImport);
+    // DTO.addOutputDTO(table, newOutputDTO);
   };
 
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const createAddEndpoint = (table) => {
+  const createAddEndpoint = (project, table) => {
     const newService = services.getAddService(table);
     const newController = controllers.getAddController(table);
     const isTransactional = Object.keys(table).includes("transactional");
@@ -106,17 +106,17 @@ export const useJPAProject = (
     }.business.domain.${UCC(table.name)}.${UCC(table.name)}AddDTO;
 `;
 
-    services.addService(table, newService);
-    services.addImport(table, newInputDTOImport);
-    controllers.addController(table, newController);
-    controllers.addImport(table, newInputDTOImport);
-    DTO.addInputDTO(table, newInputDTO);
+    services.addService(project, table, newService);
+    // services.addImport(table, newInputDTOImport);
+    // controllers.addController(table, newController);
+    // controllers.addImport(table, newInputDTOImport);
+    // DTO.addInputDTO(table, newInputDTO);
   };
 
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const createEditEndpoint = (table) => {
+  const createEditEndpoint = (project, table) => {
     const newService = services.getEditService(table);
 
     const newController = controllers.getEditController(table);
@@ -142,17 +142,17 @@ export const useJPAProject = (
     }.business.domain.${UCC(table.name)}.${UCC(table.name)}EditDTO;
     `;
 
-    services.addService(table, newService);
-    services.addImport(table, newInputDTOImport);
-    controllers.addController(table, newController);
-    controllers.addImport(table, newInputDTOImport);
-    DTO.addInputDTO(table, newInputDTO);
+    services.addService(project, table, newService);
+    // services.addImport(table, newInputDTOImport);
+    // controllers.addController(table, newController);
+    // controllers.addImport(table, newInputDTOImport);
+    // DTO.addInputDTO(table, newInputDTO);
   };
 
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const createDeleteEndpoint = (table) => {
+  const createDeleteEndpoint = (project, table) => {
     const newService = services.getDeleteService(table);
     const newServiceImport = `import ${
       metaData.packageName
@@ -176,17 +176,17 @@ export const useJPAProject = (
 
     // console.log(newInputDTO);
     // console.log("------------------------");
-    services.addService(table, newService);
-    services.addImport(table, newServiceImport);
-    controllers.addController(table, newController);
-    controllers.addImport(table, newControllerImport);
-    DTO.addInputDTO(table, newInputDTO);
+    services.addService(project, table, newService);
+    // services.addImport(table, newServiceImport);
+    // controllers.addController(table, newController);
+    // controllers.addImport(table, newControllerImport);
+    // DTO.addInputDTO(table, newInputDTO);
   };
 
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const createFindByEndpoint = (attributes, table) => {
+  const createFindByEndpoint = (project, attributes, table) => {
     const newService = services.getFindByService(attributes, table);
 
     const newRepo = repositories.getfindByRepository(attributes, table);
@@ -205,12 +205,12 @@ export const useJPAProject = (
     const newIDTO = DTO.getDTO(attributes, table, newIDTOname);
     //checks if newServices already exists
 
-    services.addService(table, newService);
-    repositories.addRepository(table, newRepo);
-    controllers.addController(table, newController);
-    controllers.addImport(table, newControllerImport);
+    services.addService(project, table, newService);
+    // repositories.addRepository(table, newRepo);
+    // controllers.addController(table, newController);
+    // controllers.addImport(table, newControllerImport);
 
-    DTO.addInputDTO(table, newIDTO);
+    // DTO.addInputDTO(table, newIDTO);
   };
 
   // -------------------------------------------------------------------------------------
@@ -220,7 +220,7 @@ export const useJPAProject = (
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const createFilterEndpoint = (table) => {
+  const createFilterEndpoint = (project, table) => {
     const newService = services.getFilterService(table);
     const newController = controllers.getFilterController(table);
     const newRepository = repositories.getFilterRepository(table);
@@ -229,13 +229,13 @@ export const useJPAProject = (
       table,
       UCC(table.name) + "FilterDTO"
     );
-    services.addService(table, newService);
-    controllers.addController(table, newController);
-    repositories.addRepository(table, newRepository);
-    DTO.addInputDTO(table, newInputDTO);
+    services.addService(project, table, newService);
+    // controllers.addController(table, newController);
+    // repositories.addRepository(table, newRepository);
+    // DTO.addInputDTO(table, newInputDTO);
   };
 
-  const createFilterExcelEndpoint = (table) => {
+  const createFilterExcelEndpoint = (project, table) => {
     const newService = services.getFilterExcelService(table);
     const newController = controllers.getFilterExcelController(table);
     // const newRepository = repositories.getFilterRepository(table);
@@ -244,10 +244,8 @@ export const useJPAProject = (
     //   table,
     //   UCC(table.name) + "FilterDTO"
     // );
-    services.addService(table, newService);
-    controllers.addController(table, newController);
-    // repositories.addRepository(table, newRepository);
-    // DTO.addInputDTO(table, newInputDTO);
+    services.addService(project, table, newService);
+    // controllers.addController(table, newController);
   };
 
   return {
