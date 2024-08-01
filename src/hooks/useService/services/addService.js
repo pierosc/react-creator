@@ -1,5 +1,5 @@
-import { CC, UCC, UniqueArray, JoinNewLine } from "../../StringFunctions";
-import { createVarsToExclude } from "../../constants/varsToExclude";
+import { CC, UCC, UniqueArray, JoinNewLine } from "../../../StringFunctions";
+import { createVarsToExclude } from "../../../constants/varsToExclude";
 
 export const getAddService = (table) => {
   const repositoryInstance = `${CC(table.name)}Repository`;

@@ -1,4 +1,4 @@
-import { JoinNewLine } from "../../StringFunctions";
+import { JoinNewLine } from "../../../StringFunctions";
 
 function useFilterController() {
   const inputDTO = {

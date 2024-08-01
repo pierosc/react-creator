@@ -7,40 +7,20 @@ import {
   removeString,
   sqlVarToJavaVar,
 } from "../../StringFunctions";
-import { getDeleteService } from "./deleteService";
-import { getAddService } from "./addService";
-import { getEditService } from "./editService";
-import { getFilterService } from "./filterService";
+// SERVICES
+import { getDeleteService } from "./services/deleteService";
+import { getAddService } from "./services/addService";
+import { getEditService } from "./services/editService";
+import { getFilterService } from "./services/filterService";
+import { getFilterExcelService } from "./services/filterExcelService";
+
 import useDependencyInjection from "./useDependencyInjection";
-import { getFilterExcelService } from "./filterExcelService";
 import SpringContext from "../../context/SpringProvider";
 
 const useService = (tableStructue, metaData) => {
   const { springProject } = useContext(SpringContext);
   const [servicesList, setServicesList] = useState([]); //TODOS LOS SERVICIOS
   const depInjection = useDependencyInjection(false); // true use Autowired fields, false use Constructor Injection
-
-  const addService2 = (table, newService) => {
-    springProject.changeAttrToSelected({
-      service: {
-        ...springProject.selected,
-        [table]: {
-          ...springProject.selected[table],
-          services: [...springProject.selected[table].services, newService],
-        },
-      },
-    });
-
-    // setServicesList((prevServicesList) => {
-    //   const newServicesList = { ...prevServicesList };
-    //   const newServices = [
-    //     newService,
-    //     ...newServicesList[table?.name]["services"],
-    //   ];
-    //   newServicesList[table?.name]["services"] = newServices;
-    //   return newServicesList;
-    // });
-  };
 
   const addService = (projectName, table, newService) => {
     const attrFromProject = "service";
@@ -66,19 +46,7 @@ const useService = (tableStructue, metaData) => {
         },
       },
     };
-    console.groupCollapsed(table.name);
-    console.log(newService);
-    // console.log(springProject.springProjects);
-    // console.log(attrFromProject);
-    // console.log(table);
-    // console.log(modifiedProject[attrFromProject]);
-    console.log(modifiedProject[attrFromProject][table.name]);
-    console.group(attrFromTable);
-    console.log(modifiedProject[attrFromProject][table.name][attrFromTable]);
-    console.groupEnd();
-    console.log(modifiedProject);
 
-    console.groupEnd();
     springProject.setSpringProjects(() => {
       return [...otherProjects, modifiedProject];
     });

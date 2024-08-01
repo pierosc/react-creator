@@ -1,5 +1,5 @@
-import { CC, UCC, UniqueArray, JoinNewLine } from "../../StringFunctions";
-import { updateVarsToExclude } from "../../constants/varsToExclude";
+import { CC, UCC, UniqueArray, JoinNewLine } from "../../../StringFunctions";
+import { updateVarsToExclude } from "../../../constants/varsToExclude";
 
 export const getEditService = (table) => {
   const serviceName = ` edit${UCC(table.name)}`;

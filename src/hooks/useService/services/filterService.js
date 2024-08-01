@@ -1,4 +1,4 @@
-import { CC, UCC, UniqueArray, JoinNewLine } from "../../StringFunctions";
+import { CC, UCC, UniqueArray, JoinNewLine } from "../../../StringFunctions";
 
 export const getFilterService = (table) => {
   const input = `${UCC(table?.name)}FilterDTO ${CC(table?.name)}FilterDTO`;

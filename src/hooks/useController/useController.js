@@ -8,7 +8,7 @@ import {
   getFilterExcelTemplate,
   getFilterTemplate,
   getListTemplate,
-} from "./deleteController";
+} from "./controllers/deleteController";
 
 export const useController = (tableStructue, metaData) => {
   const [controllersList, setControllersList] = useState([]); //TODOS LOS SERVICIOS
