@@ -6,7 +6,7 @@ import {
   JoinNewLine,
   removeString,
   sqlVarToJavaVar,
-} from "../../StringFunctions";
+} from "../../../../../StringFunctions";
 // SERVICES
 import { getDeleteService } from "./services/deleteService";
 import { getAddService } from "./services/addService";
@@ -15,7 +15,7 @@ import { getFilterService } from "./services/filterService";
 import { getFilterExcelService } from "./services/filterExcelService";
 
 import useDependencyInjection from "./useDependencyInjection";
-import SpringContext from "../../context/SpringProvider";
+import SpringContext from "../../../../../context/SpringProvider";
 
 const useService = (tableStructue, metaData) => {
   const { springProject } = useContext(SpringContext);

@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { CC, UCC, removeString, sqlVarToJavaVar } from "../../StringFunctions";
+import {
+  CC,
+  UCC,
+  removeString,
+  sqlVarToJavaVar,
+} from "../../../../../StringFunctions";
 import {
   getAddTemplate,
   getDeleteController2,

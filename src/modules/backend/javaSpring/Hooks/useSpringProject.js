@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { useLocalStorage } from "../../../../hooks/useStorage";
 import DatabaseContext from "../../../../context/DatabaseProvider";
-import useEntity from "../../../../hooks/useEntity";
+import useEntity from "./useEntity";
 
 function useSpringProject() {
   const { db } = useContext(DatabaseContext);
@@ -18,7 +18,6 @@ function useSpringProject() {
     projectName,
     attrFromProject,
     table,
-
     attrFromTable,
     newElement
   ) => {

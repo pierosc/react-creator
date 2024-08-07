@@ -1,4 +1,4 @@
-import { UCC } from "../StringFunctions";
+import { UCC } from "../../../../StringFunctions";
 
 export const useJPAProject = (
   repositories,

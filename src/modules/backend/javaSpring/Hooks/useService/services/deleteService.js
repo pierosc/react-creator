@@ -1,4 +1,4 @@
-import { CC, UCC } from "../../../StringFunctions";
+import { CC, UCC } from "../../.././../../../StringFunctions";
 
 export const getDeleteService = (table) => {
   const input = `${UCC(table.name)}DeleteDTO ${CC(table.name)}DeleteDTO`;

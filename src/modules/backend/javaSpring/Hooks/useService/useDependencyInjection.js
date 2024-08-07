@@ -1,4 +1,9 @@
-import { UCC, CC, JoinNewLine, UniqueArray } from "../../StringFunctions";
+import {
+  UCC,
+  CC,
+  JoinNewLine,
+  UniqueArray,
+} from "../../../../../StringFunctions";
 
 function useDependencyInjection(configuration) {
   const getAutoWiredFieldInjection = (dependency) => {

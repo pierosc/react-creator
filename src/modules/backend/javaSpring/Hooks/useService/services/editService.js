@@ -1,4 +1,9 @@
-import { CC, UCC, UniqueArray, JoinNewLine } from "../../../StringFunctions";
+import {
+  CC,
+  UCC,
+  UniqueArray,
+  JoinNewLine,
+} from "../../../../../../StringFunctions";
 import { updateVarsToExclude } from "../../../constants/varsToExclude";
 
 export const getEditService = (table) => {

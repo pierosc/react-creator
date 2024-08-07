@@ -1,6 +1,11 @@
 import { useState } from "react";
-import { CC, UCC, removeString, sqlVarToJavaVar } from "../StringFunctions";
-import { useLocalStorage } from "./useStorage";
+import {
+  CC,
+  UCC,
+  removeString,
+  sqlVarToJavaVar,
+} from "../../../../StringFunctions";
+import { useLocalStorage } from "./../../../../hooks/useStorage";
 
 export const useRepositories = (tableStructue, metaData) => {
   console.group("useRepositories inputs");

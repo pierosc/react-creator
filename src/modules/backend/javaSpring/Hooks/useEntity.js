@@ -5,7 +5,7 @@ import {
   UCC,
   removeString,
   sqlVarToJavaVar,
-} from "../StringFunctions";
+} from "../../../../StringFunctions";
 
 function useEntity(tableStructure, metaData) {
   const [entitiesList, setEntitiesList] = useState([]); //TODAS LAS ENITDADES

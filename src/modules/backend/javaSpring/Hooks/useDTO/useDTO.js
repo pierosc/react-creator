@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { CC, JoinNewLine, UCC, sqlVarToJavaVar } from "../../StringFunctions";
+import {
+  CC,
+  JoinNewLine,
+  UCC,
+  sqlVarToJavaVar,
+} from "../../../../../StringFunctions";
 import { excludeVars } from "./variablesToExclude";
 
 export const useDTO = (metaData, DTOMap) => {
