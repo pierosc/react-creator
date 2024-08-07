@@ -1,13 +1,6 @@
 import React, { useState } from "react";
-// import FolderView from "../FolderView";
-// import TableJSONView from "../TableJSONView";
-// import { getEstructure } from "../../EstructureFunctions";
-// import { getInitSql } from "../../initSql";
-// import { MUITheme } from "../../syles/MUITheme";
-// import DataModel from "../DataModel";
 import MetaDataConfiguration from "./MetaDataConfiguration";
 import DependenciesConfiguration from "./DependenciesConfiguration";
-// import DataModelConfiguration from "./DataModelConfiguration";
 import FolderStructureConfiguration from "./FolderStructureConfiguration";
 
 function InitialConfiguration({
@@ -50,14 +43,6 @@ function InitialConfiguration({
           handleChangeInputMenu={handleChangeInputMenu}
         />
       ) : (
-        //  : inputMenu === "2" ? (
-        //   <DataModelConfiguration
-        //     code={code}
-        //     setCode={setCode}
-        //     setTableStructure={setTableStructure}
-        //     handleChangeInputMenu={handleChangeInputMenu}
-        //   />
-        // )
         <FolderStructureConfiguration
           entities={entities}
           services={services}

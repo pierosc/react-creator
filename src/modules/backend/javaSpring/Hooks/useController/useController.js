@@ -1,10 +1,6 @@
-import { useState } from "react";
-import {
-  CC,
-  UCC,
-  removeString,
-  sqlVarToJavaVar,
-} from "../../../../../StringFunctions";
+import { useState, useContext } from "react";
+import { CC, UCC, removeString } from "../../../../../StringFunctions";
+
 import {
   getAddTemplate,
   getDeleteController2,
@@ -14,21 +10,36 @@ import {
   getFilterTemplate,
   getListTemplate,
 } from "./controllers/deleteController";
+import SpringContext from "../../../../../context/SpringProvider";
 
 export const useController = (tableStructue, metaData) => {
+  const { springProject } = useContext(SpringContext);
   const [controllersList, setControllersList] = useState([]); //TODOS LOS SERVICIOS
   //   const [controllerImports, setServiceImports] = useState("");
 
-  const addController = (table, newController) => {
-    setControllersList((prevControllersList) => {
-      const newControllersList = { ...prevControllersList };
-      const newControllers = [
-        newController,
-        ...newControllersList[table?.name]["controllers"],
-      ];
-      newControllersList[table?.name]["controllers"] = newControllers;
-      return newControllersList;
-    });
+  // const addController = (table, newController) => {
+  //   setControllersList((prevControllersList) => {
+  //     const newControllersList = { ...prevControllersList };
+  //     const newControllers = [
+  //       newController,
+  //       ...newControllersList[table?.name]["controllers"],
+  //     ];
+  //     newControllersList[table?.name]["controllers"] = newControllers;
+  //     return newControllersList;
+  //   });
+  // };
+
+  const addController = (projectName, table, newController) => {
+    const attrFromProject = "controller";
+    const attrFromTable = "controllers";
+
+    springProject.addElementToTable(
+      projectName,
+      attrFromProject,
+      table,
+      attrFromTable,
+      newController
+    );
   };
 
   const deleteController = (table, controller) => {
@@ -44,18 +55,31 @@ export const useController = (tableStructue, metaData) => {
     });
   };
 
-  const addImport = (table, controllerImport) => {
-    setControllersList((prevServiceImports) => {
-      const newServiceImports = { ...prevServiceImports };
-      const newImports =
-        newServiceImports[table?.name]["imports"] +
-        `
-  ${controllerImport}`;
+  const addImport = (projectName, table, newControllerImport) => {
+    const attrFromProject = "controller";
+    const attrFromTable = "imports";
 
-      newServiceImports[table?.name]["imports"] = newImports;
-      return newServiceImports;
-    });
+    springProject.addElementToTable(
+      projectName,
+      attrFromProject,
+      table,
+      attrFromTable,
+      newControllerImport
+    );
   };
+
+  // const addImport = (table, controllerImport) => {
+  //   setControllersList((prevServiceImports) => {
+  //     const newServiceImports = { ...prevServiceImports };
+  //     const newImports =
+  //       newServiceImports[table?.name]["imports"] +
+  //       `
+  // ${controllerImport}`;
+
+  //     newServiceImports[table?.name]["imports"] = newImports;
+  //     return newServiceImports;
+  //   });
+  // };
 
   const deleteImport = (table, controllerImport) => {
     setControllersList((prevServiceImports) => {
