@@ -14,6 +14,40 @@ function useSpringProject() {
     setSpringProjects([...springProjects, pj]);
   };
 
+  const addElementToTable = (
+    projectName,
+    attrFromProject,
+    table,
+
+    attrFromTable,
+    newElement
+  ) => {
+    setSpringProjects((prevProjects) => {
+      const otherProjects = prevProjects.filter(
+        (pj) => pj.name !== projectName
+      );
+      let modifiedProject = prevProjects.find((pj) => pj.name === projectName);
+
+      let modifiedProject2 = {
+        ...modifiedProject,
+        [attrFromProject]: {
+          ...modifiedProject[attrFromProject],
+          [table.name]: {
+            ...modifiedProject[attrFromProject][table.name],
+            [attrFromTable]: [
+              ...modifiedProject[attrFromProject][table.name][attrFromTable],
+              newElement,
+            ],
+          },
+        },
+      };
+
+      // console.log(modifiedProject2[attrFromProject][table.name][attrFromTable]);
+      // console.groupEnd();
+      return [...otherProjects, modifiedProject2];
+    });
+  };
+
   const [selected, setSelected] = useState({});
 
   const select = (pjName) => {
@@ -58,6 +92,7 @@ function useSpringProject() {
 
   return {
     add,
+    addElementToTable,
     springProjects,
     setSpringProjects,
     select,

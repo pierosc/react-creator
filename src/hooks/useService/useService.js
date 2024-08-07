@@ -26,30 +26,13 @@ const useService = (tableStructue, metaData) => {
     const attrFromProject = "service";
     const attrFromTable = "services";
 
-    const otherProjects = springProject.springProjects.filter(
-      (pj) => pj.name !== projectName
+    springProject.addElementToTable(
+      projectName,
+      attrFromProject,
+      table,
+      attrFromTable,
+      newService
     );
-    let modifiedProject = springProject.springProjects.find(
-      (pj) => pj.name === projectName
-    );
-
-    modifiedProject = {
-      ...modifiedProject,
-      [attrFromProject]: {
-        ...modifiedProject[attrFromProject],
-        [table.name]: {
-          ...modifiedProject[attrFromProject][table.name],
-          [attrFromTable]: [
-            ...modifiedProject[attrFromProject][table.name][attrFromTable],
-            newService,
-          ],
-        },
-      },
-    };
-
-    springProject.setSpringProjects(() => {
-      return [...otherProjects, modifiedProject];
-    });
   };
 
   const deleteService = (table, service) => {
@@ -65,17 +48,17 @@ const useService = (tableStructue, metaData) => {
     });
   };
 
-  const addImport = (table, serviceImport) => {
-    setServicesList((prevServiceImports) => {
-      const newServiceImports = { ...prevServiceImports };
-      const newImports =
-        newServiceImports[table?.name]["imports"] +
-        `
-${serviceImport}`;
+  const addImport = (projectName, table, newServiceImport) => {
+    const attrFromProject = "service";
+    const attrFromTable = "imports";
 
-      newServiceImports[table?.name]["imports"] = newImports;
-      return newServiceImports;
-    });
+    springProject.addElementToTable(
+      projectName,
+      attrFromProject,
+      table,
+      attrFromTable,
+      newServiceImport
+    );
   };
 
   const deleteImport = (table, serviceImport) => {

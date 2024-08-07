@@ -4,7 +4,7 @@ import {
 } from "../../constants/varsToExclude";
 
 export const excludeVars = (attrs) => {
-  console.log(attrs);
+  // console.log(attrs);
   let finalAttributes = [];
   attrs.forEach((attr) => {
     if (

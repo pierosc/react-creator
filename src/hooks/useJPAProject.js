@@ -31,7 +31,7 @@ export const useJPAProject = (
     );
 
     services.addService(project, table, newService);
-    // services.addImport(table, newServiceImport);
+    services.addImport(project, table, newServiceImport);
     // controllers.addController(table, newController);
     // controllers.addImport(table, newControllerImport);
     // DTO.addOutputDTO(table, newOutputDTO);
@@ -107,7 +107,7 @@ export const useJPAProject = (
 `;
 
     services.addService(project, table, newService);
-    // services.addImport(table, newInputDTOImport);
+    services.addImport(project, table, newInputDTOImport);
     // controllers.addController(table, newController);
     // controllers.addImport(table, newInputDTOImport);
     // DTO.addInputDTO(table, newInputDTO);
@@ -143,7 +143,7 @@ export const useJPAProject = (
     `;
 
     services.addService(project, table, newService);
-    // services.addImport(table, newInputDTOImport);
+    services.addImport(project, table, newInputDTOImport);
     // controllers.addController(table, newController);
     // controllers.addImport(table, newInputDTOImport);
     // DTO.addInputDTO(table, newInputDTO);
@@ -177,7 +177,7 @@ export const useJPAProject = (
     // console.log(newInputDTO);
     // console.log("------------------------");
     services.addService(project, table, newService);
-    // services.addImport(table, newServiceImport);
+    services.addImport(project, table, newServiceImport);
     // controllers.addController(table, newController);
     // controllers.addImport(table, newControllerImport);
     // DTO.addInputDTO(table, newInputDTO);
