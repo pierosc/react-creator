@@ -32,8 +32,8 @@ export const useJPAProject = (
 
     services.addService(project, table, newService);
     services.addImport(project, table, newServiceImport);
-    controllers.addController(table, newController);
-    controllers.addImport(table, newControllerImport);
+    controllers.addController(project, table, newController);
+    controllers.addImport(project, table, newControllerImport);
     // DTO.addOutputDTO(table, newOutputDTO);
   };
 
@@ -108,8 +108,8 @@ export const useJPAProject = (
 
     services.addService(project, table, newService);
     services.addImport(project, table, newInputDTOImport);
-    controllers.addController(table, newController);
-    controllers.addImport(table, newInputDTOImport);
+    controllers.addController(project, table, newController);
+    controllers.addImport(project, table, newInputDTOImport);
     // DTO.addInputDTO(table, newInputDTO);
   };
 
@@ -144,8 +144,8 @@ export const useJPAProject = (
 
     services.addService(project, table, newService);
     services.addImport(project, table, newInputDTOImport);
-    controllers.addController(table, newController);
-    controllers.addImport(table, newInputDTOImport);
+    controllers.addController(project, table, newController);
+    controllers.addImport(project, table, newInputDTOImport);
     // DTO.addInputDTO(table, newInputDTO);
   };
 
@@ -178,8 +178,8 @@ export const useJPAProject = (
     // console.log("------------------------");
     services.addService(project, table, newService);
     services.addImport(project, table, newServiceImport);
-    controllers.addController(table, newController);
-    controllers.addImport(table, newControllerImport);
+    controllers.addController(project, table, newController);
+    controllers.addImport(project, table, newControllerImport);
     // DTO.addInputDTO(table, newInputDTO);
   };
 
@@ -207,8 +207,8 @@ export const useJPAProject = (
 
     services.addService(project, table, newService);
     // repositories.addRepository(table, newRepo);
-    controllers.addController(table, newController);
-    controllers.addImport(table, newControllerImport);
+    controllers.addController(project, table, newController);
+    controllers.addImport(project, table, newControllerImport);
 
     // DTO.addInputDTO(table, newIDTO);
   };
@@ -230,7 +230,7 @@ export const useJPAProject = (
       UCC(table.name) + "FilterDTO"
     );
     services.addService(project, table, newService);
-    controllers.addController(table, newController);
+    controllers.addController(project, table, newController);
     // repositories.addRepository(table, newRepository);
     // DTO.addInputDTO(table, newInputDTO);
   };
@@ -245,7 +245,7 @@ export const useJPAProject = (
     //   UCC(table.name) + "FilterDTO"
     // );
     services.addService(project, table, newService);
-    controllers.addController(table, newController);
+    controllers.addController(project, table, newController);
   };
 
   return {

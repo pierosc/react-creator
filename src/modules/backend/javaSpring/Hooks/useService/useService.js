@@ -169,45 +169,46 @@ import ${metaData.packageName}.controllers.responses.${destinyTable}.${destinyTa
       const transactionalRepo = `import ${
         metaData.packageName
       }.repositories.dB.repo.${UCC(table.transactional.name)}Repository;`;
+
       attributesRepositoriesImports = [
         ...attributesRepositoriesImports,
         transactionalRepo,
       ];
     }
 
-    const service = `package ${metaData.packageName}.business.services;
+    const service = [
+      `package ${metaData.packageName}.business.services;`,
+      `import java.util.ArrayList;`,
+      `import java.util.List;`,
+      `import java.util.Optional;`,
+      `import java.sql.Timestamp;`,
+      `import java.util.stream.Collectors;`,
+      `import org.springframework.http.HttpStatus;`,
+      `import org.springframework.web.server.ResponseStatusException;`,
+      `import org.json.JSONObject;`,
+      `import org.json.JSONArray;`,
+      `import org.modelmapper.ModelMapper;`,
+      `import org.springframework.beans.factory.annotation.Autowired;`,
+      `import org.springframework.stereotype.Service;`,
+      `import java.lang.IllegalStateException;`,
+      `import java.io.ByteArrayOutputStream;`,
+      `import jakarta.transaction.Transactional;`,
+      `import ${metaData.packageName}.utils.Converter;`,
+      `import ${metaData.packageName}.utils.ExcelUtils;`,
+      `import ${metaData.packageName}.utils.Filter;`,
+      `import ${metaData.packageName}.utils.Response;`,
+      `import ${metaData.packageName}.business.domain.${UCC(table.name)}.${UCC(
+        table.name
+      )}FilterDTO;`,
+      `import ${metaData.packageName}.repositories.dB.entities.${UCC(
+        table.name
+      )}Entity;`,
+      `import ${metaData.packageName}.repositories.dB.repo.${UCC(
+        table.name
+      )}Repository;`,
+      ...attributesRepositoriesImports,
+    ];
 
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.sql.Timestamp;
-import java.util.stream.Collectors;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-
-import org.json.JSONObject;
-import org.json.JSONArray;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import java.lang.IllegalStateException;
-import java.io.ByteArrayOutputStream;
-import jakarta.transaction.Transactional;
-import ${metaData.packageName}.utils.Converter;
-import ${metaData.packageName}.utils.ExcelUtils;
-import ${metaData.packageName}.utils.Filter;
-import ${metaData.packageName}.utils.Response;
-import ${metaData.packageName}.business.domain.${UCC(table.name)}.${UCC(
-      table.name
-    )}FilterDTO;
-import ${metaData.packageName}.repositories.dB.entities.${UCC(
-      table.name
-    )}Entity;
-import ${metaData.packageName}.repositories.dB.repo.${UCC(
-      table.name
-    )}Repository;${JoinNewLine(attributesRepositoriesImports)}
-`;
     return service;
   };
 

@@ -4,31 +4,31 @@ import CDialog from "../../Components/Dialog/CDialog";
 import CTextfield from "../../Components/Textfield/CTextfield";
 import { useFormik } from "formik";
 
-const CreateDriverValidationSchema = z
-  .object({
-    email: z.string().email(),
-    password: z.string().min(6),
-    confirmPassword: z.string().min(6),
-    name: z.string().min(1, { message: "El nombre es requerido" }),
-    lastName: z.string().min(1, { message: "El apellido es requerido" }),
-    phone: z.string().min(9, { message: "El celular es requerido" }),
-    color: z.string().min(1, { message: "El color es requerido" }),
-    plate: z.string().min(1, { message: "La placa es requerida" }),
-    dni: z.string().min(8).max(8),
-  })
-  .refine(
-    (values) => {
-      return values.password === values.confirmPassword;
-    },
-    {
-      message: "Las contraseñas no coinciden",
-      path: ["confirmPassword"],
-    }
-  );
+// const CreateDriverValidationSchema = z
+//   .object({
+//     email: z.string().email(),
+//     password: z.string().min(6),
+//     confirmPassword: z.string().min(6),
+//     name: z.string().min(1, { message: "El nombre es requerido" }),
+//     lastName: z.string().min(1, { message: "El apellido es requerido" }),
+//     phone: z.string().min(9, { message: "El celular es requerido" }),
+//     color: z.string().min(1, { message: "El color es requerido" }),
+//     plate: z.string().min(1, { message: "La placa es requerida" }),
+//     dni: z.string().min(8).max(8),
+//   })
+//   .refine(
+//     (values) => {
+//       return values.password === values.confirmPassword;
+//     },
+//     {
+//       message: "Las contraseñas no coinciden",
+//       path: ["confirmPassword"],
+//     }
+//   );
 
 const validateForm = (values) => {
   try {
-    CreateDriverValidationSchema.parse(values);
+    // CreateDriverValidationSchema.parse(values);
   } catch (error) {
     if (error) {
       return error.formErrors.fieldErrors;
