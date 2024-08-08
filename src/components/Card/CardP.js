@@ -37,6 +37,7 @@ function CardP({ onClick, properties }) {
         <IconButton
           aria-label="add to favorites"
           onClick={() => {
+            onClick();
             console.log("hola");
           }}
         >
