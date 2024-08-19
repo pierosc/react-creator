@@ -1,25 +1,27 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   CC,
   JoinNewLine,
   UCC,
-  removeString,
   sqlVarToJavaVar,
 } from "../../../../StringFunctions";
+import SpringContext from "../../../../context/SpringProvider";
 
 function useEntity(tableStructure, metaData) {
   const [entitiesList, setEntitiesList] = useState([]); //TODAS LAS ENITDADES
+  const { springProject } = useContext(SpringContext);
 
-  const addEntity = (table, newEntity) => {
-    setEntitiesList((prevEntityList) => {
-      const newEntitiesList = { ...prevEntityList };
-      const newEntities = [
-        ...newEntity,
-        ...newEntitiesList[table?.name]["content"],
-      ];
-      newEntitiesList[table?.name]["content"] = newEntities;
-      return newEntitiesList;
-    });
+  const addEntity = (projectName, table, newEntity) => {
+    const attrFromProject = "entity";
+    const attrFromTable = "content";
+
+    springProject.addElementToTable(
+      projectName,
+      attrFromProject,
+      table,
+      attrFromTable,
+      newEntity
+    );
   };
 
   // const getEntity = (table) => {
@@ -36,28 +38,29 @@ function useEntity(tableStructure, metaData) {
   // };
 
   const getEntityImports = () => {
-    return `package ${metaData.packageName}.repositories.dB.entities;
-  
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import lombok.AllArgsConstructor;
-import java.util.UUID;
-import java.util.List;
-import lombok.Data;
-import java.sql.Timestamp;
-import lombok.NoArgsConstructor;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;`;
+    return [
+      `package ${metaData.packageName}.repositories.dB.entities;`,
+      `import jakarta.persistence.Id;`,
+      `import jakarta.persistence.Table;`,
+      `import jakarta.persistence.Temporal;`,
+      `import jakarta.persistence.TemporalType;`,
+      `import lombok.AllArgsConstructor;`,
+      `import java.util.UUID;`,
+      `import java.util.List;`,
+      `import lombok.Data;`,
+      `import java.sql.Timestamp;`,
+      `import lombok.NoArgsConstructor;`,
+      `import jakarta.persistence.Column;`,
+      `import jakarta.persistence.Entity;`,
+      `import jakarta.persistence.JoinColumn;`,
+      `import jakarta.persistence.ManyToOne;`,
+      `import jakarta.persistence.OneToMany;`,
+      `import jakarta.persistence.OneToOne;`,
+      `import jakarta.persistence.FetchType;`,
+      `import jakarta.persistence.CascadeType;`,
+      `import jakarta.persistence.GeneratedValue;`,
+      `import jakarta.persistence.GenerationType;`,
+    ];
   };
 
   const getEntityClass = (table) => {
@@ -112,13 +115,6 @@ import jakarta.persistence.GenerationType;`;
     });
     // setEntitiesList(entities);
     return entities;
-  };
-
-  const setEntities = () => {
-    tableStructure.forEach((table) => {
-      const entity = getEntity(table);
-      addEntity(table, entity);
-    });
   };
 
   function getEntity(table) {
@@ -243,8 +239,8 @@ import jakarta.persistence.GenerationType;`;
 
   return {
     //  getEntitiesFiles,
+    addEntity,
     getEntity,
-    setEntities,
     setEmptyStructure,
     getEmptyStructure,
     entitiesList,

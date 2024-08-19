@@ -10,6 +10,7 @@ import SpringContext from "../../../../../context/SpringProvider";
 import DatabaseContext from "../../../../../context/DatabaseProvider";
 
 function FolderStructureConfiguration({
+  DTO,
   entities,
   services,
   controllers,
@@ -118,33 +119,35 @@ function FolderStructureConfiguration({
           variant="contained"
           size="large"
           onClick={() => {
-            entities.setEmptyStructure();
-            services.setEmptyStructure();
-            controllers.setEmptyStructure();
-            repositories.setEmptyStructure();
-            // reactHooks.setEmptyStructure();
-
             // const initSQL = getInitSql(tableStructure);
             // setInitSQL(initSQL);
 
-            // ---------------------------------------------------------------------
-            // SETTING EMPTY STRUCTURE FOR SERVICE, CONTROLLER, REPOSITORY, ENTITIES
+            // ----------------------------------------------------------------------------
+            // SETTING EMPTY STRUCTURE FOR SERVICE, CONTROLLER, REPOSITORY, ENTITIES, DTO's
+
+            const dataBaseStructure = db.findByName(spring.db).json;
+
             const repoStructure = repositories.getEmptyStructure(
-              db.findByName(spring.db).json, // DATABASE STRUCTURE
+              dataBaseStructure,
               spring.metaData
             );
             const entitiesStructure = entities.getEmptyStructure(
-              db.findByName(spring.db).json, // DATABASE STRUCTURE
+              dataBaseStructure,
               spring.metaData
             );
             const servicesStructure = services.getEmptyStructure(
-              db.findByName(spring.db).json, // DATABASE STRUCTURE
+              dataBaseStructure,
               spring.metaData
             );
             const controllersStructure = controllers.getEmptyStructure(
-              db.findByName(spring.db).json, // DATABASE STRUCTURE
+              dataBaseStructure,
               spring.metaData
             );
+
+            let emptydto = {};
+            dataBaseStructure.forEach((e) => {
+              emptydto = { ...emptydto, [e.name]: {} };
+            });
 
             console.group("SETTING EMPTY STRUCTURES");
             console.group("EMPTY ENTITIES STRUCTURE");
@@ -167,6 +170,8 @@ function FolderStructureConfiguration({
               repository: repoStructure,
               service: servicesStructure,
               controller: controllersStructure,
+              inputDTO: emptydto,
+              outputDTO: emptydto,
             });
             // ---------------------------------------------------------------------
 

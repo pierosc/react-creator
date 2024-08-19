@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import CodeEditor from "../../../../components/CodeEditor/CodeEditor";
+import CodeEditor from "../../../../../components/CodeEditor/CodeEditor";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -8,7 +8,8 @@ import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import { Button } from "@mui/material";
-import SpringContext from "../../../../context/SpringProvider";
+import SpringContext from "../../../../../context/SpringProvider";
+import { JoinNewLine } from "../../../../../StringFunctions";
 
 function Services({ JPA, table, setSelectedService }) {
   const { springProject } = useContext(SpringContext);
@@ -91,7 +92,9 @@ function Services({ JPA, table, setSelectedService }) {
         }}
       >
         <CodeEditor
-          codeString={table?.name ? servicesList?.[table?.name]["imports"] : ""}
+          codeString={JoinNewLine(
+            table?.name ? servicesList?.[table?.name]["imports"] : ""
+          )}
           language="java"
           header={false}
           bgColor="rgba(0, 0, 0,0)"

@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
-import CodeEditor from "../../../../components/CodeEditor/CodeEditor";
-import DatabaseContext from "../../../../context/DatabaseProvider";
-import SpringContext from "../../../../context/SpringProvider";
+import CodeEditor from "../../../../../components/CodeEditor/CodeEditor";
+import SpringContext from "../../../../../context/SpringProvider";
 
-function Entities({ table }) {
+function Repositories({ table }) {
   const { springProject } = useContext(SpringContext);
-  const entitiesList = springProject?.selected?.entity ?? {};
+  const repositoriesList = springProject?.selected?.repository ?? {};
 
-  console.group("Entities view inputs");
+  console.group("repositories view inputs");
   console.log(table);
   console.groupEnd();
 
@@ -16,31 +15,31 @@ function Entities({ table }) {
       className=" p-4 grid gap-2"
       style={{
         backgroundColor: "rgb(58 64 77)",
-        maxHeight: "69vh",
+        maxHeight: "65vh",
         overflow: "auto",
       }}
     >
       <CodeEditor
-        codeString={table?.name ? entitiesList?.[table?.name]["imports"] : ""}
-        language="java"
-        header={false}
-        bgColor="rgba(0, 0, 0,0)"
-        padding="5px"
-        title="imports..."
-        internalMenu
-      />
-      <CodeEditor
         codeString={
-          table?.name ? entitiesList?.[table?.name]["classStart"] : ""
+          table?.name ? (repositoriesList?.[table?.name]["imports"] ?? "") : ""
         }
         language="java"
         header={false}
         bgColor="rgba(0, 0, 0,0)"
         padding="5px"
-        title="imports..."
-        internalMenu
       />
-      {entitiesList?.[table?.name]?.["content"]?.map((code, index) => (
+      <CodeEditor
+        codeString={
+          table?.name
+            ? (repositoriesList?.[table?.name]["classStart"] ?? "")
+            : ""
+        }
+        language="java"
+        header={false}
+        bgColor="rgba(0, 0, 0,0)"
+        padding="5px"
+      />
+      {repositoriesList?.[table?.name]?.["repositories"]?.map((code, index) => (
         <CodeEditor
           key={index}
           codeString={code}
@@ -48,11 +47,12 @@ function Entities({ table }) {
           header={false}
           bgColor="rgb(40, 44, 52)"
           padding="5px"
-          internalMenu
         />
       ))}
       <CodeEditor
-        codeString={table?.name ? entitiesList[table?.name]["classEnd"] : ""}
+        codeString={
+          table?.name ? (repositoriesList[table?.name]["classEnd"] ?? "") : ""
+        }
         language="java"
         header={false}
         bgColor="rgba(0, 0, 0,0)"
@@ -62,4 +62,4 @@ function Entities({ table }) {
   );
 }
 
-export default Entities;
+export default Repositories;

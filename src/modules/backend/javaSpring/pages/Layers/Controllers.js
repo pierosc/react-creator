@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
-import CodeEditor from "../../../../components/CodeEditor/CodeEditor";
-import SpringContext from "../../../../context/SpringProvider";
+import CodeEditor from "../../../../../components/CodeEditor/CodeEditor";
+import SpringContext from "../../../../../context/SpringProvider";
+import { JoinNewLine } from "../../../../../StringFunctions";
 
 function Controllers({ table }) {
   const { springProject } = useContext(SpringContext);
@@ -20,13 +21,15 @@ function Controllers({ table }) {
       }}
     >
       <CodeEditor
-        codeString={
+        codeString={JoinNewLine(
           table?.name ? controllersList?.[table?.name]["imports"] : ""
-        }
+        )}
         language="java"
         header={false}
         bgColor="rgba(0, 0, 0,0)"
         padding="5px"
+        title="imports..."
+        internalMenu
       />
       <CodeEditor
         codeString={

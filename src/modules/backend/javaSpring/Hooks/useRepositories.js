@@ -1,42 +1,54 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   CC,
   UCC,
   removeString,
   sqlVarToJavaVar,
 } from "../../../../StringFunctions";
-import { useLocalStorage } from "./../../../../hooks/useStorage";
+// import { useLocalStorage } from "./../../../../hooks/useStorage";
+import SpringContext from "../../../../context/SpringProvider";
 
 export const useRepositories = (tableStructue, metaData) => {
   console.group("useRepositories inputs");
   console.log(tableStructue);
   console.log(metaData);
   console.groupEnd();
-
+  const { springProject } = useContext(SpringContext);
   const [repositoriesList, setRepositoriesList] = useState([]); // REPOSITORIES FROM THE SELECTED SPRING PROJECT
-  const [springRepositories, setSpringRepositories] = useLocalStorage(
-    "springRepositories",
-    []
-  );
+  // const [springRepositories, setSpringRepositories] = useLocalStorage(
+  //   "springRepositories",
+  //   []
+  // );
 
-  const addRepositoriesToSpringProject = () => {
-    setSpringRepositories([
-      ...springRepositories,
-      { springProject: "", repositories: repositoriesList },
-    ]);
-  };
+  // const addRepositoriesToSpringProject = () => {
+  //   setSpringRepositories([
+  //     ...springRepositories,
+  //     { springProject: "", repositories: repositoriesList },
+  //   ]);
+  // };
   //   const [repositoryImports, setServiceImports] = useState("");
 
-  const addRepository = (table, newRepository) => {
-    setRepositoriesList((prevRepositoriesList) => {
-      const newRepositoriesList = { ...prevRepositoriesList };
-      const newRepositories = [
-        newRepository,
-        ...newRepositoriesList[table?.name]["repositories"],
-      ];
-      newRepositoriesList[table?.name]["repositories"] = newRepositories;
-      return newRepositoriesList;
-    });
+  const addRepository = (projectName, table, newRepository) => {
+    // setRepositoriesList((prevRepositoriesList) => {
+    //   const newRepositoriesList = { ...prevRepositoriesList };
+    //   const newRepositories = [
+    //     newRepository,
+    //     ...newRepositoriesList[table?.name]["repositories"],
+    //   ];
+    //   newRepositoriesList[table?.name]["repositories"] = newRepositories;
+    //   return newRepositoriesList;
+
+    // });
+    const attrFromProject = "repository";
+    const attrFromTable = "repositories";
+
+    springProject.addToTable(
+      projectName,
+      attrFromProject,
+      table,
+      attrFromTable,
+      newRepository
+    );
   };
 
   // const addRepositoryToAllTables = (newRepository) => {

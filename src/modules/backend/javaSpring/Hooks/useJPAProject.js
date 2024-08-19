@@ -1,12 +1,23 @@
 import { UCC } from "../../../../StringFunctions";
 
 export const useJPAProject = (
+  entities,
   repositories,
   services,
   controllers,
   DTO,
   metaData
 ) => {
+  // -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
+
+  const createEntities = (project, table) => {
+    const tableEntities = entities.getEntity(table);
+    tableEntities.forEach((newEntity) => {
+      entities.addEntity(project, table, newEntity);
+    });
+  };
+
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
@@ -34,7 +45,7 @@ export const useJPAProject = (
     services.addImport(project, table, newServiceImport);
     controllers.addController(project, table, newController);
     controllers.addImport(project, table, newControllerImport);
-    // DTO.addOutputDTO(table, newOutputDTO);
+    DTO.addOutputDTO(project, table, newOutputDTO);
   };
 
   // -------------------------------------------------------------------------------------
@@ -110,7 +121,7 @@ export const useJPAProject = (
     services.addImport(project, table, newInputDTOImport);
     controllers.addController(project, table, newController);
     controllers.addImport(project, table, newInputDTOImport);
-    // DTO.addInputDTO(table, newInputDTO);
+    DTO.addInputDTO(project, table, newInputDTO);
   };
 
   // -------------------------------------------------------------------------------------
@@ -146,7 +157,7 @@ export const useJPAProject = (
     services.addImport(project, table, newInputDTOImport);
     controllers.addController(project, table, newController);
     controllers.addImport(project, table, newInputDTOImport);
-    // DTO.addInputDTO(table, newInputDTO);
+    DTO.addInputDTO(project, table, newInputDTO);
   };
 
   // -------------------------------------------------------------------------------------
@@ -180,7 +191,7 @@ export const useJPAProject = (
     services.addImport(project, table, newServiceImport);
     controllers.addController(project, table, newController);
     controllers.addImport(project, table, newControllerImport);
-    // DTO.addInputDTO(table, newInputDTO);
+    DTO.addInputDTO(project, table, newInputDTO);
   };
 
   // -------------------------------------------------------------------------------------
@@ -206,11 +217,11 @@ export const useJPAProject = (
     //checks if newServices already exists
 
     services.addService(project, table, newService);
-    // repositories.addRepository(table, newRepo);
+    repositories.addRepository(project, table, newRepo);
     controllers.addController(project, table, newController);
     controllers.addImport(project, table, newControllerImport);
 
-    // DTO.addInputDTO(table, newIDTO);
+    DTO.addInputDTO(project, table, newIDTO);
   };
 
   // -------------------------------------------------------------------------------------
@@ -231,8 +242,8 @@ export const useJPAProject = (
     );
     services.addService(project, table, newService);
     controllers.addController(project, table, newController);
-    // repositories.addRepository(table, newRepository);
-    // DTO.addInputDTO(table, newInputDTO);
+    repositories.addRepository(project, table, newRepository);
+    DTO.addInputDTO(project, table, newInputDTO);
   };
 
   const createFilterExcelEndpoint = (project, table) => {
@@ -249,6 +260,7 @@ export const useJPAProject = (
   };
 
   return {
+    createEntities,
     createListEndpoint,
     createAddEndpoint,
     createEditEndpoint,

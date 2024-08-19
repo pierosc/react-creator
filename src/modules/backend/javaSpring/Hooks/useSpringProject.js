@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { useLocalStorage } from "../../../../hooks/useStorage";
 import DatabaseContext from "../../../../context/DatabaseProvider";
-import useEntity from "./useEntity";
 
 function useSpringProject() {
   const { db } = useContext(DatabaseContext);
@@ -52,6 +51,32 @@ function useSpringProject() {
     });
   };
 
+  const addToTable = (projectName, attrFromProject, table, newElement) => {
+    setSpringProjects((prevProjects) => {
+      const otherProjects = prevProjects.filter(
+        (pj) => pj.name !== projectName
+      );
+      let modifiedProject = prevProjects.find((pj) => pj.name === projectName);
+
+      let modifiedProject2 = {
+        ...modifiedProject,
+        [attrFromProject]: {
+          ...modifiedProject[attrFromProject],
+          [table.name]: {
+            ...modifiedProject[attrFromProject][table.name],
+            ...newElement,
+            // [attrFromTable]: [
+            //   ...modifiedProject[attrFromProject][table.name][attrFromTable],
+            //   newElement,
+            // ],
+          },
+        },
+      };
+
+      return [...otherProjects, modifiedProject2];
+    });
+  };
+
   const [selected, setSelected] = useState({});
 
   const select = (pjName) => {
@@ -96,6 +121,7 @@ function useSpringProject() {
 
   return {
     add,
+    addToTable,
     addElementToTable,
     springProjects,
     setSpringProjects,

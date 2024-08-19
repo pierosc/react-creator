@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   CC,
   JoinNewLine,
@@ -6,37 +6,72 @@ import {
   sqlVarToJavaVar,
 } from "../../../../../StringFunctions";
 import { excludeVars } from "./variablesToExclude";
+import SpringContext from "../../../../../context/SpringProvider";
 
 export const useDTO = (metaData, DTOMap) => {
   const [inputDTO, setInputDTO] = useState([]);
   const [outputDTO, setOutputDTO] = useState([]);
+  const { springProject } = useContext(SpringContext);
 
-  const addInputDTO = (table, newIDTO) => {
+  const addInputDTO = (projectName, table, newIDTO) => {
     //AGREGAR DTOMAP
-    const DTOName = newIDTO[Object.keys(newIDTO)[0]].className
-      .split("class ")[1]
-      .split(" {")[0];
-    DTOMap.addDTOMap({ table: table.name, name: DTOName, source: "input" });
-    setInputDTO((prevIDTOList) => {
-      const newIDTOList = { ...prevIDTOList };
-      const newIDTOs = { ...newIDTO, ...newIDTOList?.[UCC(table?.name)] };
-      newIDTOList[UCC(table?.name)] = newIDTOs;
-      return newIDTOList;
-    });
+    // const DTOName = newIDTO[Object.keys(newIDTO)[0]].className
+    //   .split("class ")[1]
+    //   .split(" {")[0];
+    // DTOMap.addDTOMap({ table: table.name, name: DTOName, source: "input" });
+    const attrFromProject = "inputDTO";
+    // const attrFromTable = "content";
+
+    // setInputDTO((prevIDTOList) => {
+    //   const newIDTOList = { ...prevIDTOList };
+    //   const newIDTOs = { ...newIDTO, ...newIDTOList?.[UCC(table?.name)] };
+    //   newIDTOList[UCC(table?.name)] = newIDTOs;
+    //   return newIDTOList;
+    // });
+    springProject.addToTable(
+      projectName,
+      attrFromProject,
+      table,
+      // attrFromTable,
+      newIDTO
+    );
   };
 
-  const addOutputDTO = (table, newIDTO) => {
+  // const addService = (projectName, table, newService) => {
+  //   const attrFromProject = "service";
+  //   const attrFromTable = "services";
+
+  //   springProject.addElementToTable(
+  //     projectName,
+  //     attrFromProject,
+  //     table,
+  //     attrFromTable,
+  //     newService
+  //   );
+  // };
+
+  const addOutputDTO = (projectName, table, newIDTO) => {
     //AGREGAR DTOMAP
-    const DTOName = newIDTO[Object.keys(newIDTO)[0]].className
-      .split("class ")[1]
-      .split(" {")[0];
-    DTOMap.addDTOMap({ table: table.name, name: DTOName, source: "output" });
-    setOutputDTO((prevIDTOList) => {
-      const newIDTOList = { ...prevIDTOList };
-      const newIDTOs = { ...newIDTO, ...newIDTOList?.[UCC(table?.name)] };
-      newIDTOList[UCC(table?.name)] = newIDTOs;
-      return newIDTOList;
-    });
+    // const DTOName = newIDTO[Object.keys(newIDTO)[0]].className
+    //   .split("class ")[1]
+    //   .split(" {")[0];
+    // DTOMap.addDTOMap({ table: table.name, name: DTOName, source: "output" });
+    const attrFromProject = "outputDTO";
+    // const attrFromTable = "content";
+
+    // setInputDTO((prevIDTOList) => {
+    //   const newIDTOList = { ...prevIDTOList };
+    //   const newIDTOs = { ...newIDTO, ...newIDTOList?.[UCC(table?.name)] };
+    //   newIDTOList[UCC(table?.name)] = newIDTOs;
+    //   return newIDTOList;
+    // });
+    springProject.addToTable(
+      projectName,
+      attrFromProject,
+      table,
+      // attrFromTable,
+      newIDTO
+    );
   };
 
   const getDTO = (
@@ -82,7 +117,7 @@ export const useDTO = (metaData, DTOMap) => {
         const newImport = `import ${metaData.packageName}.${
           // destination === "output"
           //   ? `controllers.responses.${UCC(rel.destinyTable)}`
-          //   : `repositories.dB.entities`
+          //   : `inputDTO.dB.entities`
           `controllers.responses.${UCC(rel.destinyTable)}`
         }.${UCC(rel.destinyTable)}${
           // destination === "output" ? `ListDTO` : `Entity`
@@ -101,17 +136,17 @@ export const useDTO = (metaData, DTOMap) => {
     const packageFolder =
       destination === "output" ? `controllers.responses` : `business.domain`;
 
-    const imports = `package ${metaData.packageName}.${packageFolder}.${UCC(
-      table.name
-    )};
-import java.util.UUID;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-${newDTOImports}
-`;
+    const imports = [
+      `package ${metaData.packageName}.${packageFolder}.${UCC(table.name)};`,
+      `import java.util.UUID;`,
+      `import java.util.List;`,
+      `import lombok.AllArgsConstructor;`,
+      `import lombok.Builder;`,
+      `import lombok.Data;`,
+      `import lombok.NonNull;`,
+      `import lombok.NoArgsConstructor;`,
+      `${newDTOImports}`,
+    ];
     return imports;
   };
 
@@ -228,40 +263,21 @@ public class ${UCC(DTOName)} {`;
     return DTOFolders;
   };
 
-  // const outputFiles = () => {
-  //   let DTOsFiles = [];
-  //   // console.log(inputDTO);
-  //   Object.keys(outputDTO).forEach((dtoName) => {
-  //     const dtosFromTable = outputDTO[dtoName];
-  //     Object.keys(dtosFromTable).forEach((dtoFromTableName) => {
-  //       const dto = dtosFromTable[dtoFromTableName];
-  //       // console.log(dto);
-  //       // console.log(dto.attributes);
-  //       const imports = dto.imports;
-  //       const className = dto.className;
-  //       const bottom = dto.bottom;
-  //       const attributes = dto.attributes.join(`
-  // `);
-  //       //   console.log(attributes);
-  //       const file =
-  //         imports +
-  //         `
-  // ` +
-  //         className +
-  //         `
-  // ` +
-  //         attributes +
-  //         `
-  // ` +
-  //         bottom;
-  //       DTOsFiles.push({
-  //         type: "file",
-  //         name: `${UCC(dtoName)}DTO.java`,
-  //         content: file,
-  //       });
-  //     });
+  // const getInputEmptyStructure = (tableStructure, metaData) => {
+  //   let inputDTO = {};
+  //   tableStructure.forEach((table) => {
+  //     //   const imports = getServiceImports(table);
+  //     const uniqueAttr = table.attributes.find((attr) => attr.unique);
+  //     // console.log(table.attributes);
+
+  //     inputDTO[table.name] = {};
+  //     inputDTO[table.name]["imports"] = getDTOImports;
+  //     inputDTO[table.name]["classStart"] = getDTOClass(table);
+  //     inputDTO[table.name]["inputDTO"] = [];
+  //     inputDTO[table.name]["classEnd"] = "}";
   //   });
-  //   return DTOsFiles;
+  //   // setRepositoriesList(inputDTO);
+  //   return inputDTO;
   // };
 
   return {

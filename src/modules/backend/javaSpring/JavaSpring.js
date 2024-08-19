@@ -22,13 +22,13 @@ import useException from "./Hooks/useException/useException";
 import useApplication from "../../../hooks/useApplication";
 import useFile from "../../../hooks/useFile/useFile";
 import { useJPAProject } from "./Hooks/useJPAProject";
-import ServiceDTOInput from "./pages/ServiceDTOInput";
-import Entities from "./pages/Entities";
-import Repositories from "./pages/Repositories";
-import Services from "./pages/Services";
-import Controllers from "./pages/Controllers";
-import DTOInput from "./pages/DTOInput";
-import DTOOutput from "./pages/DTOOutput";
+import ServiceDTOInput from "./pages/ServiceShortcuts/ServiceDTOInput";
+import Entities from "./pages/Layers/Entities";
+import Repositories from "./pages/Layers/Repositories";
+import Services from "./pages/Layers/Services";
+import Controllers from "./pages/Layers/Controllers";
+import DTOInput from "./pages/Layers/DTOInput";
+import DTOOutput from "./pages/Layers/DTOOutput";
 import InitialConfiguration from "./pages/Configuration/InitialConfiguration";
 import { boxStyle } from "../../../syles/BoxStyle";
 // import { useLocalStorage } from "../../../hooks/useStorage";
@@ -86,7 +86,14 @@ function JavaSpring() {
 
   const file = useFile();
 
-  const JPA = useJPAProject(repositories, services, controllers, DTO, metaData);
+  const JPA = useJPAProject(
+    entities,
+    repositories,
+    services,
+    controllers,
+    DTO,
+    metaData
+  );
   const [selectedService, setSelectedService] = useState({});
 
   const { springProject } = useContext(SpringContext);
@@ -164,8 +171,10 @@ function JavaSpring() {
             <Button
               size="large"
               onClick={() => {
-                // entities.setEntities();
-                db?.selected?.json.forEach((table) => {
+                const tableStructureFromDB = db?.selected?.json;
+
+                tableStructureFromDB.forEach((table) => {
+                  JPA.createEntities(springProject.selected.name, table);
                   JPA.createListEndpoint(springProject.selected.name, table);
                   JPA.createAddEndpoint(springProject.selected.name, table);
                   JPA.createEditEndpoint(springProject.selected.name, table);
@@ -277,10 +286,10 @@ function JavaSpring() {
             <Controllers table={table} />
           </TabPanel>
           <TabPanel value="4" sx={{ padding: "0" }}>
-            <DTOInput DTO={DTO} table={table} />
+            <DTOInput table={table} />
           </TabPanel>
           <TabPanel value="5" sx={{ padding: "0" }}>
-            <DTOOutput DTO={DTO} table={table} />
+            <DTOOutput table={table} />
           </TabPanel>
         </TabContext>
       </div>
@@ -288,6 +297,7 @@ function JavaSpring() {
       <Modal open={openInitialConfModal} onClose={CloseInitialConfModal}>
         <Box sx={boxStyle}>
           <InitialConfiguration
+            DTO={DTO}
             entities={entities}
             services={services}
             controllers={controllers}

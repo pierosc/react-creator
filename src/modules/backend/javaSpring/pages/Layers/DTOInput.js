@@ -1,14 +1,16 @@
-import React from "react";
-import CodeEditor from "../../../../components/CodeEditor/CodeEditor";
-import { Spaced, UCC } from "../../../../StringFunctions";
+import React, { useContext } from "react";
+import CodeEditor from "../../../../../components/CodeEditor/CodeEditor";
+import { Spaced, UCC } from "../../../../../StringFunctions";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
+import SpringContext from "../../../../../context/SpringProvider";
 
-function DTOInput({ DTO, table }) {
-  const DTOFiles = DTO.inputDTO[UCC(table.name)];
+function DTOInput({ table }) {
+  const { springProject } = useContext(SpringContext);
+  const dtoList = springProject?.selected?.inputDTO[table.name] ?? {};
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -20,12 +22,12 @@ function DTOInput({ DTO, table }) {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange}>
-            {Object.keys(DTOFiles).map((DTOName, index) => (
+            {Object.keys(dtoList).map((DTOName, index) => (
               <Tab label={Spaced(DTOName)} value={index} textTransform="none" />
             ))}
           </TabList>
         </Box>
-        {Object.keys(DTOFiles).map((IDTO, index) => (
+        {Object.keys(dtoList).map((IDTO, index) => (
           <TabPanel value={index} sx={{ padding: "0" }}>
             <div
               className=" p-4 grid gap-2 m-2"
@@ -36,7 +38,7 @@ function DTOInput({ DTO, table }) {
               }}
             >
               <CodeEditor
-                codeString={table?.name ? DTOFiles[IDTO]?.["imports"] : ""}
+                codeString={table?.name ? dtoList[IDTO]?.["imports"] : ""}
                 language="java"
                 header={false}
                 bgColor="rgba(0, 0, 0,0)"
@@ -45,7 +47,7 @@ function DTOInput({ DTO, table }) {
                 internalMenu
               />
               <CodeEditor
-                codeString={table?.name ? DTOFiles[IDTO]?.["className"] : ""}
+                codeString={table?.name ? dtoList[IDTO]?.["className"] : ""}
                 language="java"
                 header={false}
                 bgColor="rgba(0, 0, 0,0)"
@@ -53,7 +55,7 @@ function DTOInput({ DTO, table }) {
                 title="class name..."
                 internalMenu
               />
-              {DTOFiles[IDTO]?.["attributes"]?.map((code, index) => (
+              {dtoList[IDTO]?.["attributes"]?.map((code, index) => (
                 <CodeEditor
                   key={index}
                   codeString={code}
@@ -75,7 +77,7 @@ function DTOInput({ DTO, table }) {
                 />
               ))}
               <CodeEditor
-                codeString={table?.name ? DTOFiles[IDTO]["bottom"] : ""}
+                codeString={table?.name ? dtoList[IDTO]["bottom"] : ""}
                 language="java"
                 header={false}
                 bgColor="rgba(0, 0, 0,0)"

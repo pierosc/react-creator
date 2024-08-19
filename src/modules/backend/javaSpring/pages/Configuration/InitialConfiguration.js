@@ -4,6 +4,7 @@ import DependenciesConfiguration from "./DependenciesConfiguration";
 import FolderStructureConfiguration from "./FolderStructureConfiguration";
 
 function InitialConfiguration({
+  DTO,
   entities,
   services,
   controllers,
@@ -23,7 +24,8 @@ function InitialConfiguration({
     repository: [],
     service: [],
     controller: [],
-    dto: [],
+    inputDTO: [],
+    outputDTO: [],
     db: "",
     metaData: {},
   });
@@ -44,6 +46,7 @@ function InitialConfiguration({
         />
       ) : (
         <FolderStructureConfiguration
+          DTO={DTO}
           entities={entities}
           services={services}
           controllers={controllers}
@@ -51,7 +54,6 @@ function InitialConfiguration({
           CloseInitialConfModal={CloseInitialConfModal}
           handleChangeInputMenu={handleChangeInputMenu}
           spring={spring}
-          setSpring={setSpring}
         />
       )}
     </div>
