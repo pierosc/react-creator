@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import {
   CC,
+  JoinNewLine,
   UCC,
   removeString,
   sqlVarToJavaVar,
@@ -9,61 +10,21 @@ import {
 import SpringContext from "../../../../context/SpringProvider";
 
 export const useRepositories = (tableStructue, metaData) => {
-  console.group("useRepositories inputs");
-  console.log(tableStructue);
-  console.log(metaData);
-  console.groupEnd();
   const { springProject } = useContext(SpringContext);
   const [repositoriesList, setRepositoriesList] = useState([]); // REPOSITORIES FROM THE SELECTED SPRING PROJECT
-  // const [springRepositories, setSpringRepositories] = useLocalStorage(
-  //   "springRepositories",
-  //   []
-  // );
-
-  // const addRepositoriesToSpringProject = () => {
-  //   setSpringRepositories([
-  //     ...springRepositories,
-  //     { springProject: "", repositories: repositoriesList },
-  //   ]);
-  // };
-  //   const [repositoryImports, setServiceImports] = useState("");
 
   const addRepository = (projectName, table, newRepository) => {
-    // setRepositoriesList((prevRepositoriesList) => {
-    //   const newRepositoriesList = { ...prevRepositoriesList };
-    //   const newRepositories = [
-    //     newRepository,
-    //     ...newRepositoriesList[table?.name]["repositories"],
-    //   ];
-    //   newRepositoriesList[table?.name]["repositories"] = newRepositories;
-    //   return newRepositoriesList;
-
-    // });
     const attrFromProject = "repository";
     const attrFromTable = "repositories";
 
-    springProject.addToTable(
+    springProject.addElementToTable(
       projectName,
       attrFromProject,
       table,
       attrFromTable,
-      newRepository
+      ...newRepository
     );
   };
-
-  // const addRepositoryToAllTables = (newRepository) => {
-  //   setRepositoriesList((prevRepositoriesList) => {
-  //     const newRepositoriesList = { ...prevRepositoriesList };
-  //     tableStructue.forEach((table) => {
-  //       const newRepositories = [
-  //         newRepository,
-  //         ...newRepositoriesList[table?.name]["repositories"],
-  //       ];
-  //       newRepositoriesList[table?.name]["repositories"] = newRepositories;
-  //     });
-  //     return newRepositoriesList;
-  //   });
-  // };
 
   const deleteRepository = (table, repository) => {
     setRepositoriesList((prevRepositoriesList) => {
@@ -98,9 +59,6 @@ export const useRepositories = (tableStructue, metaData) => {
         newServiceImports[table?.name]["imports"],
         repositoryImport
       );
-      //         newServiceImports[table?.name]["imports"] +
-      // `
-      //   ${repositoryImport}`;
 
       newServiceImports[table?.name]["imports"] = newImports;
       return newServiceImports;
@@ -207,25 +165,17 @@ import ${metaData.packageName}.repositories.dB.entities.${UCC(
   };
 
   const files = () => {
+    const repositoriesList2 = springProject.selected.repository;
+
     let repositoriesFiles = [];
-    Object.keys(repositoriesList).forEach((repositoryName) => {
-      const repository = repositoriesList[repositoryName];
+    Object.keys(repositoriesList2).forEach((repositoryName) => {
+      const repository = repositoriesList2[repositoryName];
       const imports = repository.imports;
       const classStart = repository.classStart;
       const classEnd = repository.classEnd;
       const repositories = repository.repositories.join(`
   `);
-      const file =
-        imports +
-        `
-  ` +
-        classStart +
-        `
-  ` +
-        repositories +
-        `
-  ` +
-        classEnd;
+      const file = JoinNewLine([imports, classStart, repositories, classEnd]);
 
       repositoriesFiles.push({
         type: "file",

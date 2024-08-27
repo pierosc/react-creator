@@ -118,10 +118,12 @@ const useService = (tableStructue, metaData) => {
   };
 
   const files = () => {
+    const servicesList2 = springProject.selected.service;
+
     let servicesFiles = [];
-    Object.keys(servicesList).forEach((serviceName) => {
-      const service = servicesList[serviceName];
-      const imports = service.imports;
+    Object.keys(servicesList2).forEach((serviceName) => {
+      const service = servicesList2[serviceName];
+      const imports = JoinNewLine(service.imports);
       const classStart = service.classStart;
       const classEnd = service.classEnd;
       const services = JoinNewLine(service.services);

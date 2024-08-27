@@ -1,5 +1,4 @@
-import React from "react";
-import { jpaFolderStructure } from "../jpaFolferStructure";
+import { jpaFolderStructure } from "./jpaFolderStructure";
 
 function useFileExplorer(
   metaData,
@@ -13,7 +12,7 @@ function useFileExplorer(
   application,
   metaData
 ) {
-  let jpa = jpaFolderStructure;
+  // let jpa = jpaFolderStructure;
 
   const setEntities = (content) => {
     jpa[2].content[0].content[0].content = content;
@@ -28,6 +27,7 @@ function useFileExplorer(
   };
 
   const createFile = () => {
+    let jpa = jpaFolderStructure;
     const entityFiles = entities.files();
     jpa[2].content[0].content[0].content = entityFiles;
 

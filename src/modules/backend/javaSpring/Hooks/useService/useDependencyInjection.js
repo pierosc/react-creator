@@ -62,10 +62,10 @@ function useDependencyInjection(configuration) {
 
   const getDependencyInjection = (table) => {
     const dependencyArr = getAttributesRepositoryDependency(table);
-    // console.log("-----------------");
-    // console.log(table.name);
-    // console.log(dependencyArr);
-    // console.log("-----------------");
+    console.log("-----------------");
+    console.log(table.name);
+    console.log(dependencyArr);
+    console.log("-----------------");
     let depArr = [
       "modelMapper",
       `${UCC(table.name)}Repository`,

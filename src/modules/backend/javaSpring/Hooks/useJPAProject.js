@@ -227,7 +227,7 @@ export const useJPAProject = (
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const setEmptyFiles = () => {};
+  // const setEmptyFiles = () => {};
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
@@ -235,6 +235,7 @@ export const useJPAProject = (
     const newService = services.getFilterService(table);
     const newController = controllers.getFilterController(table);
     const newRepository = repositories.getFilterRepository(table);
+    console.log(newRepository);
     const newInputDTO = DTO.getDTO(
       table.attributes,
       table,

@@ -174,7 +174,10 @@ function FolderStructureConfiguration({
               outputDTO: emptydto,
             });
             // ---------------------------------------------------------------------
-
+            console.log(
+              "%cEMPTY PROJECT CREATED",
+              "background-color: blue; color: white;"
+            );
             // db.findByName(spring.db).json.forEach((e) => {
             //   // REPOSITORIES
             //   const repoImports = repositories.getImports(e, spring.metaData);

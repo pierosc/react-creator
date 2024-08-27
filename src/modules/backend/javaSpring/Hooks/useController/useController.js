@@ -1,5 +1,10 @@
 import { useState, useContext } from "react";
-import { CC, UCC, removeString } from "../../../../../StringFunctions";
+import {
+  CC,
+  JoinNewLine,
+  UCC,
+  removeString,
+} from "../../../../../StringFunctions";
 
 import {
   getAddTemplate,
@@ -123,25 +128,17 @@ export const useController = (tableStructue, metaData) => {
   };
 
   const files = () => {
+    const controllersList2 = springProject.selected.controller;
+
     let controllersFiles = [];
-    Object.keys(controllersList).forEach((controllerName) => {
-      const controller = controllersList[controllerName];
-      const imports = controller.imports;
+    Object.keys(controllersList2).forEach((controllerName) => {
+      const controller = controllersList2[controllerName];
+      const imports = JoinNewLine(controller.imports);
       const classStart = controller.classStart;
       const classEnd = controller.classEnd;
       const controllers = controller.controllers.join(`
   `);
-      const file =
-        imports +
-        `
-  ` +
-        classStart +
-        `
-  ` +
-        controllers +
-        `
-  ` +
-        classEnd;
+      const file = JoinNewLine([imports, classStart, controllers, classEnd]);
 
       controllersFiles.push({
         type: "file",

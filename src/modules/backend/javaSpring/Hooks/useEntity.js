@@ -8,7 +8,7 @@ import {
 import SpringContext from "../../../../context/SpringProvider";
 
 function useEntity(tableStructure, metaData) {
-  const [entitiesList, setEntitiesList] = useState([]); //TODAS LAS ENITDADES
+  // const [entitiesList, setEntitiesList] = useState([]); //TODAS LAS ENITDADES
   const { springProject } = useContext(SpringContext);
 
   const addEntity = (projectName, table, newEntity) => {
@@ -23,19 +23,6 @@ function useEntity(tableStructure, metaData) {
       newEntity
     );
   };
-
-  // const getEntity = (table) => {
-  //   let entities = {};
-  //   const content = getColumns(table.attributes, table.name) ?? "";
-  //   // console.log(content);
-  //   entities[table.name] = {};
-  //   entities[table.name]["imports"] = getEntityImports();
-  //   entities[table.name]["classStart"] = getEntityClass();
-  //   entities[table.name]["content"] = content;
-  //   // entities[table.name]["top"] = getUpperEntitie(table, artifactId);
-  //   entities[table.name]["bottom"] = "}";
-
-  // };
 
   const getEntityImports = () => {
     return [
@@ -73,10 +60,12 @@ function useEntity(tableStructure, metaData) {
   };
 
   const files = () => {
+    const entitiesList = springProject.selected.entity;
+
     let servicesFiles = [];
     Object.keys(entitiesList).forEach((serviceName) => {
       const service = entitiesList[serviceName];
-      const imports = service.imports;
+      const imports = JoinNewLine(service.imports);
       const classStart = service.classStart;
       const classEnd = service.classEnd;
       const services = JoinNewLine(service.content);
@@ -92,17 +81,17 @@ function useEntity(tableStructure, metaData) {
     return servicesFiles;
   };
 
-  const setEmptyStructure = () => {
-    let entities = {};
-    tableStructure.forEach((table) => {
-      entities[table.name] = {};
-      entities[table.name]["imports"] = getEntityImports(table, metaData);
-      entities[table.name]["classStart"] = getEntityClass(table);
-      entities[table.name]["content"] = [];
-      entities[table.name]["classEnd"] = "}";
-    });
-    setEntitiesList(entities);
-  };
+  // const setEmptyStructure = () => {
+  //   let entities = {};
+  //   tableStructure.forEach((table) => {
+  //     entities[table.name] = {};
+  //     entities[table.name]["imports"] = getEntityImports(table, metaData);
+  //     entities[table.name]["classStart"] = getEntityClass(table);
+  //     entities[table.name]["content"] = [];
+  //     entities[table.name]["classEnd"] = "}";
+  //   });
+  //   setEntitiesList(entities);
+  // };
 
   const getEmptyStructure = (tableStructure, metaData) => {
     let entities = {};
@@ -241,9 +230,9 @@ function useEntity(tableStructure, metaData) {
     //  getEntitiesFiles,
     addEntity,
     getEntity,
-    setEmptyStructure,
+    // setEmptyStructure,
     getEmptyStructure,
-    entitiesList,
+    // entitiesList,
     files,
   };
 }

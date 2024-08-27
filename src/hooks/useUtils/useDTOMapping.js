@@ -72,7 +72,7 @@ function useDTOMapping(metaData) {
   };
 
   const getFile = () => {
-    console.log(metaData);
+    // console.log(metaData);
 
     const file = JoinNewLine([
       JoinNewLine(UniqueArray(imports)),
@@ -80,7 +80,7 @@ function useDTOMapping(metaData) {
       JoinNewLine(UniqueArray(attributeMap)),
       endClass,
     ]);
-    console.log(file);
+    // console.log(file);
     return {
       type: "file",
       name: `DTOMapping.java`,

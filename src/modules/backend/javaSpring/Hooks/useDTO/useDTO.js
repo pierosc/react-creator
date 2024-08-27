@@ -235,14 +235,18 @@ public class ${UCC(DTOName)} {`;
   const files = (source) => {
     let DTOFolders = [];
     // console.log(inputDTO);
-    const dtoSource = source === "input" ? inputDTO : outputDTO;
+    const dtoSource =
+      source === "input"
+        ? springProject.selected.inputDTO
+        : springProject.selected.outputDTO;
+
     Object.keys(dtoSource).forEach((dtoName) => {
       let DTOsFiles = [];
       const dtosFromTable = dtoSource[dtoName];
 
       Object.keys(dtosFromTable).forEach((dtoFromTableName) => {
         const dto = dtosFromTable[dtoFromTableName];
-        const imports = dto.imports;
+        const imports = JoinNewLine(dto.imports);
         const className = dto.className;
         const bottom = dto.bottom;
         const attributes = dto.attributes.join(`
@@ -256,7 +260,7 @@ public class ${UCC(DTOName)} {`;
       });
       DTOFolders.push({
         type: "folder",
-        name: `${dtoName}`,
+        name: `${UCC(dtoName)}`,
         content: DTOsFiles,
       });
     });
