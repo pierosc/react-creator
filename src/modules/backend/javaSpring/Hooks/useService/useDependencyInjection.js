@@ -23,6 +23,8 @@ function useDependencyInjection(configuration) {
     `${UCC(dependency)} ${CC(dependency)}`;
 
   const getAttributesRepositoryDependency = (table) => {
+    // console.log("-----------------");
+
     // console.log(table);9
     const isTransactional = Object.keys(table).includes("transactional");
     // console.log(table.attributes);
@@ -39,8 +41,10 @@ function useDependencyInjection(configuration) {
     );
     let attributesRepositories2 = [];
     table.attributes.forEach((attr) => {
-      if (attr.pk) {
+      if (!attr.pk) {
+        // console.log(attr.name);
         attr.relations.forEach((rel) => {
+          // console.log(rel.relation);
           if (rel.relation !== "OneToMany") {
             attributesRepositories2 = [
               ...attributesRepositories2,
@@ -57,15 +61,16 @@ function useDependencyInjection(configuration) {
       attributesRepositories2 = [...attributesRepositories2, transactionalRepo];
     }
     console.log(attributesRepositories);
-    return attributesRepositories2;
+    return UniqueArray(attributesRepositories2);
   };
 
   const getDependencyInjection = (table) => {
+    // console.log("-----------------");
+    // console.log(table.name);
     const dependencyArr = getAttributesRepositoryDependency(table);
-    console.log("-----------------");
-    console.log(table.name);
-    console.log(dependencyArr);
-    console.log("-----------------");
+
+    // console.log(dependencyArr);
+
     let depArr = [
       "modelMapper",
       `${UCC(table.name)}Repository`,
@@ -89,9 +94,10 @@ function useDependencyInjection(configuration) {
       const dependencyInstanceArr = depArr.map((dep) =>
         getDependencyInstance(dep)
       );
-
+      // console.log(dependencyInstanceArr);
+      // console.log("-----------------");
       return `${JoinNewLine(dependencyDeclarationArr)}
-      @Autowired
+
       public ${UCC(table.name)}Service (
       ${JoinNewLine(dependencyInstanceArr, ",")} ) {
 
