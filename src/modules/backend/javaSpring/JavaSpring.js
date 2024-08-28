@@ -34,6 +34,8 @@ import { boxStyle } from "../../../syles/BoxStyle";
 // import { useLocalStorage } from "../../../hooks/useStorage";
 import DatabaseContext from "../../../context/DatabaseProvider";
 import SpringContext from "../../../context/SpringProvider";
+import { banner } from "./Hooks/banner";
+import { aplicationProperties } from "./Hooks/aplicationProperties";
 
 function JavaSpring() {
   const { db } = useContext(DatabaseContext);
@@ -77,7 +79,7 @@ function JavaSpring() {
   //HOOKS
   const entities = useEntity(db?.selected?.json, metaData);
   const services = useService(db?.selected?.json, metaData);
-  const controllers = useController(db?.selected?.json, metaData);
+  const controllers = useController(metaData);
   const repositories = useRepositories(db?.selected?.json, metaData);
   const utils = useUtils(metaData);
   const DTO = useDTO(metaData, utils.DTOMap);
@@ -194,56 +196,94 @@ function JavaSpring() {
               size="large"
               endIcon={<DownloadIcon />}
               onClick={() => {
-                console.groupCollapsed("FILES CREATED");
+                // console.groupCollapsed("FILES CREATED");
 
                 const entityFiles = entities.files();
                 jpa[2].content[0].content[0].content = entityFiles;
-                console.log("entityFiles");
-                console.log(entityFiles);
+                // console.log("entityFiles");
+                // console.log(entityFiles);
 
                 const repos = repositories.files();
                 jpa[2].content[0].content[1].content = repos;
-                console.log("repos");
-                console.log(repos);
+                // console.log("repos");
+                // console.log(repos);
 
                 const servicesFiles = services.files();
                 jpa[0].content[1].content = servicesFiles;
-                console.log("servicesFiles");
-                console.log(servicesFiles);
+                // console.log("servicesFiles");
+                // console.log(servicesFiles);
 
                 const controllersFiles = controllers.files();
                 jpa[1].content = [...jpa[1].content, ...controllersFiles];
-                console.log("controllersFiles");
-                console.log(controllersFiles);
+                // console.log("controllersFiles");
+                // console.log(controllersFiles);
 
                 const outputDTOFiles = DTO.files("output");
                 jpa[1].content[0].content = outputDTOFiles;
-                console.log("outputDTOFiles");
-                console.log(outputDTOFiles);
+                // console.log("outputDTOFiles");
+                // console.log(outputDTOFiles);
 
                 const inputDTOFiles = DTO.files("input");
                 jpa[0].content[0].content = inputDTOFiles;
-                console.log("inputDTOFiles");
-                console.log(inputDTOFiles);
+                // console.log("inputDTOFiles");
+                // console.log(inputDTOFiles);
 
                 const utilsFiles = utils.getFolderContent();
                 jpa[3].content = utilsFiles;
-                console.log("utilsFiles");
-                console.log(utilsFiles);
+                // console.log("utilsFiles");
+                // console.log(utilsFiles);
 
                 const exceptionFiles = exception.getFolderContent();
                 jpa[4].content = exceptionFiles;
-                console.log("exceptionFiles");
-                console.log(exceptionFiles);
+                // console.log("exceptionFiles");
+                // console.log(exceptionFiles);
 
                 const applicationFile = application.getFile();
                 jpa = [...jpa, applicationFile];
-                console.log("applicationFile");
-                console.log(applicationFile);
+                // console.log("applicationFile");
+                // console.log(applicationFile);
 
-                console.groupEnd();
+                // console.groupEnd();
                 jpa = [
-                  { type: "folder", name: metaData.artifact, content: jpa },
+                  {
+                    type: "folder",
+                    name: "main",
+                    content: [
+                      {
+                        type: "folder",
+                        name: "java",
+                        content: [
+                          {
+                            type: "folder",
+                            name: "com",
+                            content: [
+                              {
+                                type: "folder",
+                                name: metaData.artifact,
+                                content: jpa,
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      {
+                        type: "folder",
+                        name: "resources",
+                        content: [
+                          {
+                            type: "file",
+                            name: "application.properties",
+                            content: aplicationProperties,
+                          },
+                          {
+                            type: "file",
+                            name: "banner.txt",
+                            content: banner,
+                          },
+                        ],
+                      },
+                    ],
+                  },
                 ];
                 file.createRarFile(jpa);
                 jpa = jpaFolderStructure;

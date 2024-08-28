@@ -1,9 +1,10 @@
 import { useState, useContext, useEffect } from "react";
 import { useLocalStorage } from "../../../../hooks/useStorage";
-import DatabaseContext from "../../../../context/DatabaseProvider";
+// import DatabaseContext from "../../../../context/DatabaseProvider";
 
 function useSpringProject() {
-  const { db } = useContext(DatabaseContext);
+  // const { db } = useContext(DatabaseContext);
+  // CONTROLA ASPECTOS GENERALES DEL PROYECTO COMO CARPETA
   const [springProjects, setSpringProjects] = useLocalStorage(
     "springProjects",
     []

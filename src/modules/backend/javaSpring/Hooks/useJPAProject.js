@@ -8,6 +8,7 @@ export const useJPAProject = (
   DTO,
   metaData
 ) => {
+  // CONTROLA ASPECTOS GENERALES DEL PROYECTO QUE UTILIZAN VARIAS CAPAS COMO ENTIDADES, REPOSITORIOS, ETC
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 

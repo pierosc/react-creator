@@ -1,38 +1,19 @@
-import { useState, useContext } from "react";
-import {
-  CC,
-  JoinNewLine,
-  UCC,
-  removeString,
-} from "../../../../../StringFunctions";
+import { useContext } from "react";
+import { CC, JoinNewLine, UCC } from "../../../../../StringFunctions";
 
-import {
-  getAddTemplate,
-  getDeleteController2,
-  getDeleteTemplate,
-  getEditTemplate,
-  getFilterExcelTemplate,
-  getFilterTemplate,
-  getListTemplate,
-} from "./controllers/deleteController";
+import { getAddTemplate } from "./templates/addController";
+import { getDeleteTemplate } from "./templates/deleteController";
+import { getEditTemplate } from "./templates/editController";
+import { getListTemplate } from "./templates/listController";
+import { getFilterTemplate } from "./templates/filterController";
+import { getFilterExcelTemplate } from "./templates/filterExcelController";
+
 import SpringContext from "../../../../../context/SpringProvider";
+import { getControllerImports } from "./templates/imports";
+import { getControllerClass } from "./templates/class";
 
-export const useController = (tableStructue, metaData) => {
+export const useController = (metaData) => {
   const { springProject } = useContext(SpringContext);
-  const [controllersList, setControllersList] = useState([]); //TODOS LOS SERVICIOS
-  //   const [controllerImports, setServiceImports] = useState("");
-
-  // const addController = (table, newController) => {
-  //   setControllersList((prevControllersList) => {
-  //     const newControllersList = { ...prevControllersList };
-  //     const newControllers = [
-  //       newController,
-  //       ...newControllersList[table?.name]["controllers"],
-  //     ];
-  //     newControllersList[table?.name]["controllers"] = newControllers;
-  //     return newControllersList;
-  //   });
-  // };
 
   const addController = (projectName, table, newController) => {
     const attrFromProject = "controller";
@@ -45,19 +26,6 @@ export const useController = (tableStructue, metaData) => {
       attrFromTable,
       newController
     );
-  };
-
-  const deleteController = (table, controller) => {
-    setControllersList((prevControllersList) => {
-      const newControllersList = { ...prevControllersList };
-      const newControllers = [
-        ...newControllersList[table?.name]["controllers"].filter(
-          (serv) => serv !== controller
-        ),
-      ];
-      newControllersList[table?.name]["controllers"] = newControllers;
-      return newControllersList;
-    });
   };
 
   const addImport = (projectName, table, newControllerImport) => {
@@ -73,57 +41,15 @@ export const useController = (tableStructue, metaData) => {
     );
   };
 
-  // const addImport = (table, controllerImport) => {
-  //   setControllersList((prevServiceImports) => {
-  //     const newServiceImports = { ...prevServiceImports };
-  //     const newImports =
-  //       newServiceImports[table?.name]["imports"] +
-  //       `
-  // ${controllerImport}`;
-
-  //     newServiceImports[table?.name]["imports"] = newImports;
-  //     return newServiceImports;
-  //   });
-  // };
-
-  const deleteImport = (table, controllerImport) => {
-    setControllersList((prevServiceImports) => {
-      const newServiceImports = { ...prevServiceImports };
-      const newImports = removeString(
-        newServiceImports[table?.name]["imports"],
-        controllerImport
-      );
-      //         newServiceImports[table?.name]["imports"] +
-      // `
-      //   ${controllerImport}`;
-
-      newServiceImports[table?.name]["imports"] = newImports;
-      return newServiceImports;
-    });
-  };
-  const setEmptyStructure = () => {
-    let controllers = {};
-    tableStructue.forEach((table) => {
-      //   const imports = getServiceImports(table);
-      controllers[table.name] = {};
-      controllers[table.name]["imports"] = getControllerImports(table);
-      controllers[table.name]["classStart"] = getControllerClass(table);
-      controllers[table.name]["controllers"] = [];
-      controllers[table.name]["classEnd"] = "}";
-    });
-    setControllersList(controllers);
-  };
   const getEmptyStructure = (tableStructue) => {
     let controllers = {};
     tableStructue.forEach((table) => {
-      //   const imports = getServiceImports(table);
       controllers[table.name] = {};
-      controllers[table.name]["imports"] = getControllerImports(table);
-      controllers[table.name]["classStart"] = getControllerClass(table);
+      controllers[table.name]["imports"] = getImports(table);
+      controllers[table.name]["classStart"] = getClass(table);
       controllers[table.name]["controllers"] = [];
       controllers[table.name]["classEnd"] = "}";
     });
-    // setControllersList(controllers);
     return controllers;
   };
 
@@ -149,47 +75,12 @@ export const useController = (tableStructue, metaData) => {
     return controllersFiles;
   };
 
-  const getControllerImports = (table) => {
-    const controller = [
-      `package ${metaData.packageName}.controllers;`,
-
-      `import java.util.List;`,
-      `import java.io.ByteArrayOutputStream;`,
-      `import org.springframework.beans.factory.annotation.Autowired;`,
-      `import org.springframework.http.HttpStatus;`,
-      `import org.springframework.core.io.Resource;`,
-      `import org.springframework.http.ResponseEntity;`,
-      `import org.springframework.web.bind.annotation.DeleteMapping;`,
-      `import org.springframework.web.bind.annotation.GetMapping;`,
-      `import org.springframework.web.bind.annotation.PostMapping;`,
-      `import org.springframework.web.bind.annotation.PutMapping;`,
-      `import org.springframework.web.bind.annotation.RequestBody;`,
-      `import org.springframework.web.bind.annotation.RequestMapping;`,
-      `import org.springframework.web.server.ResponseStatusException;`,
-      `import org.springframework.web.bind.annotation.RestController;`,
-      `import org.springframework.web.bind.annotation.CrossOrigin;`,
-      `import ${metaData.packageName}.utils.Response;`,
-      `import ${metaData.packageName}.utils.ExcelUtils;`,
-      `import ${metaData.packageName}.utils.ServiceUtils;`,
-      `import ${metaData.packageName}.business.domain.${UCC(table.name)}.${UCC(
-        table.name
-      )}FilterDTO;`,
-      `import ${metaData.packageName}.business.services.${UCC(table.name)}Service;`,
-      `import ${metaData.packageName}.repositories.dB.entities.${UCC(
-        table.name
-      )}Entity;`,
-    ];
-    return controller;
+  const getImports = (table) => {
+    return getControllerImports(metaData, table);
   };
 
-  const getControllerClass = (table) => {
-    const controller = `@RestController
-@RequestMapping("/${CC(table.name)}")
-public class ${UCC(table.name)}Controller {
-    @Autowired
-    private ${UCC(table.name)}Service ${CC(table.name)}Service;
-`;
-    return controller;
+  const getClass = (table) => {
+    return getControllerClass(table);
   };
   // ____ ____ _  _ ___ ____ ____ _    _    ____ ____ ____
   // |    |  | |\ |  |  |__/ |  | |    |    |___ |__/ [__
@@ -361,13 +252,8 @@ public class ${UCC(table.name)}Controller {
 
   return {
     addController,
-    deleteController,
     addImport,
-    deleteImport,
-    setEmptyStructure,
     getEmptyStructure,
-    // setCRUDFControllers,
-    controllersList,
     files,
     //CONTROLLERS
     getListController,

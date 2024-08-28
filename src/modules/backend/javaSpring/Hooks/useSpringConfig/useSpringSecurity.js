@@ -1,8 +1,6 @@
-import React from "react";
-
 function useSpringSecurity() {
   const securityConfig = `
-package com.api.rest.SpringBootKeycloak.config;
+package com.${api.rest.SpringBootKeycloak.config};
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +36,7 @@ public class SecurityConfig {
                 .build();
     }
 }`;
-  return <div>useSpringSecurity</div>;
+  return {};
 }
 
 export default useSpringSecurity;
