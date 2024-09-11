@@ -1,45 +1,37 @@
 import React, { useContext, useState } from "react";
 import AddDatabase from "./AddDatabase";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import DatabaseContext from "../../context/DatabaseProvider";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import DBManager from "./pages/DBManager";
+import JSONMigrator from "./pages/JSONMigrator";
 
 function Databases() {
-  const { db } = useContext(DatabaseContext);
-  const [url, setUrl] = useState("");
+  const [inputMenu, setInputMenu] = React.useState("0");
 
-  const handleChange = (event) => {
-    // console.log(db.dataBases);
-    // console.log(event.target.value);
-    // console.log(db.dataBases.find((t) => t.name === event.target.value));
-    setUrl(db.dataBases.find((t) => t.name === event.target.value).url);
-    db.setSelected(db.dataBases.find((t) => t.name === event.target.value));
+  const handleChangeInputMenu = (event, newValue) => {
+    setInputMenu(newValue);
   };
-
-  // console.log(db.selected);
 
   return (
     <div className="grid gap-6 ">
-      <div className="flex gap-2 mt-4 justify-start">
-        <AddDatabase />
-        <FormControl fullWidth>
-          <InputLabel>DB</InputLabel>
-          <Select
-            value={db?.selected?.name ?? ""}
-            label="PROJECT"
-            onChange={handleChange}
-          >
-            {db.dataBases.map((db, index) => (
-              <MenuItem key={index} value={db.name}>
-                {db.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-      {/* <label className="text-white">{url} </label> */}
-      {url !== "" && (
-        <iframe title="DBDiagram" src={url} width="100%" height="800"></iframe>
-      )}
+      <TabContext value={inputMenu}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <TabList onChange={handleChangeInputMenu}>
+            <Tab label="DB DIAGRAM" value="0" />
+            <Tab label="JSON MIGRATOR" value="1" />
+          </TabList>
+        </Box>
+
+        <TabPanel value="0" sx={{ padding: "0" }}>
+          <DBManager />
+        </TabPanel>
+        <TabPanel value="1" sx={{ padding: "0" }}>
+          <JSONMigrator />
+        </TabPanel>
+      </TabContext>
     </div>
   );
 }
