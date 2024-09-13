@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import CodeEditor from "../../../../../components/CodeEditor/CodeEditor";
-import SpringContext from "../../../../../context/SpringProvider";
+import SpringContext from "../../Context/SpringProvider";
 import { JoinNewLine } from "../../../../../StringFunctions";
 
 function Controllers({ table }) {

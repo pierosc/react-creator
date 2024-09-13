@@ -8,11 +8,11 @@ import { getListTemplate } from "./templates/listController";
 import { getFilterTemplate } from "./templates/filterController";
 import { getFilterExcelTemplate } from "./templates/filterExcelController";
 
-import SpringContext from "../../../../../context/SpringProvider";
+import SpringContext from "../../Context/SpringProvider";
 import { getControllerImports } from "./templates/imports";
 import { getControllerClass } from "./templates/class";
 
-export const useController = (metaData) => {
+export const useController = () => {
   const { springProject } = useContext(SpringContext);
 
   const addController = (projectName, table, newController) => {
@@ -41,11 +41,11 @@ export const useController = (metaData) => {
     );
   };
 
-  const getEmptyStructure = (tableStructue) => {
+  const getEmptyStructure = (tableStructue, metaData) => {
     let controllers = {};
     tableStructue.forEach((table) => {
       controllers[table.name] = {};
-      controllers[table.name]["imports"] = getImports(table);
+      controllers[table.name]["imports"] = getImports(table, metaData);
       controllers[table.name]["classStart"] = getClass(table);
       controllers[table.name]["controllers"] = [];
       controllers[table.name]["classEnd"] = "}";
@@ -75,7 +75,7 @@ export const useController = (metaData) => {
     return controllersFiles;
   };
 
-  const getImports = (table) => {
+  const getImports = (table, metaData) => {
     return getControllerImports(metaData, table);
   };
 

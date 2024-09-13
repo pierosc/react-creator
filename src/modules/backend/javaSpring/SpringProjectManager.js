@@ -29,24 +29,15 @@ import Services from "./pages/Layers/Services";
 import Controllers from "./pages/Layers/Controllers";
 import DTOInput from "./pages/Layers/DTOInput";
 import DTOOutput from "./pages/Layers/DTOOutput";
-import InitialConfiguration from "./pages/Configuration/InitialConfiguration";
-import { boxStyle } from "../../../syles/BoxStyle";
 // import { useLocalStorage } from "../../../hooks/useStorage";
 import DatabaseContext from "../../../context/DatabaseProvider";
-import SpringContext from "../../../context/SpringProvider";
+import SpringContext from "./Context/SpringProvider";
 import { banner } from "./Hooks/banner";
 import { aplicationProperties } from "./Hooks/aplicationProperties";
+import CreateProject from "./pages/CreateProject/CreateProject";
 
-function JavaSpring() {
+function SpringProjectManager() {
   const { db } = useContext(DatabaseContext);
-
-  // MODAL CONTROLS --------------------------------
-  const [openInitialConfModal, setOpenInitialConfModal] = useState(false);
-  const CloseInitialConfModal = () => setOpenInitialConfModal(false);
-
-  // const [open, setOpen] = React.useState(false);
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
 
   // MENU CONTROLS --------------------------------
   const [value, setValue] = React.useState("1");
@@ -132,13 +123,15 @@ function JavaSpring() {
               ))}
             </Select>
           </FormControl>
-          <Button
-            onClick={() => {
-              setOpenInitialConfModal(true);
-            }}
-          >
-            CREATE BACKEND
-          </Button>
+          <CreateProject
+            DTO={DTO}
+            entities={entities}
+            services={services}
+            controllers={controllers}
+            repositories={repositories}
+            setMetaData={setMetaData}
+            metaData={metaData}
+          />
         </div>
         <label className="text-white">
           {`Servicio: ${selectedService?.service ?? ""}`}{" "}
@@ -354,23 +347,8 @@ function JavaSpring() {
           </TabPanel>
         </TabContext>
       </div>
-
-      <Modal open={openInitialConfModal} onClose={CloseInitialConfModal}>
-        <Box sx={boxStyle}>
-          <InitialConfiguration
-            DTO={DTO}
-            entities={entities}
-            services={services}
-            controllers={controllers}
-            repositories={repositories}
-            CloseInitialConfModal={CloseInitialConfModal}
-            setMetaData={setMetaData}
-            metaData={metaData}
-          />
-        </Box>
-      </Modal>
     </div>
   );
 }
 
-export default JavaSpring;
+export default SpringProjectManager;

@@ -1,4 +1,10 @@
-function useException(metaData) {
+import { useContext } from "react";
+import SpringContext from "../../Context/SpringProvider";
+
+function useException() {
+  const { springProject } = useContext(SpringContext);
+  const metaData = springProject.selected.metaData ?? {};
+
   const file = `package ${metaData.packageName}.exception;
 
     import org.springframework.http.HttpStatus;
@@ -9,6 +15,7 @@ function useException(metaData) {
     import org.springframework.web.bind.annotation.RestControllerAdvice;
     import org.springframework.web.context.request.WebRequest;
     import org.springframework.web.server.ResponseStatusException;
+    import java.util.Map;
     
     @ControllerAdvice
     @RestControllerAdvice
@@ -38,6 +45,15 @@ function useException(metaData) {
             public String getError() {
                 return error;
             }
+        }
+        
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+        public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
     }`;
 

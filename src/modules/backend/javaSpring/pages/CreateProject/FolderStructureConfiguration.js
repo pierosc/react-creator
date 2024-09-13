@@ -6,21 +6,16 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import EditIcon from "@mui/icons-material/Edit";
 import { getInitSql } from "../../../../../initSql";
-import SpringContext from "../../../../../context/SpringProvider";
+import SpringContext from "../../Context/SpringProvider";
 import DatabaseContext from "../../../../../context/DatabaseProvider";
 
 function FolderStructureConfiguration({
-  DTO,
-  entities,
-  services,
-  controllers,
-  repositories,
-  // reactHooks,
   CloseInitialConfModal,
   handleChangeInputMenu,
   spring,
 }) {
-  const { springProject } = useContext(SpringContext);
+  const { entities, services, controllers, repositories, springProject } =
+    useContext(SpringContext);
   const { db } = useContext(DatabaseContext);
 
   return (

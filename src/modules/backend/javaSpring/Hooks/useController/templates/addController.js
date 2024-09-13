@@ -1,7 +1,7 @@
 export const getAddTemplate = (conf) => {
   return `    @CrossOrigin
       @PostMapping("${conf.url}")
-      public String ${conf.name}(${conf.input.all}) {
+      public String ${conf.name}(@Valid ${conf.input.all}) {
   
         List<String> emptyFields = ServiceUtils.validateEmptyNonNullFields(${conf.input.instance});
         if (!emptyFields.isEmpty()) {

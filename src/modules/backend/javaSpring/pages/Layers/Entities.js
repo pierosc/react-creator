@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import CodeEditor from "../../../../../components/CodeEditor/CodeEditor";
 import DatabaseContext from "../../../../../context/DatabaseProvider";
-import SpringContext from "../../../../../context/SpringProvider";
+import SpringContext from "../../Context/SpringProvider";
 import { JoinNewLine } from "../../../../../StringFunctions";
 
 function Entities({ table }) {

@@ -4,6 +4,7 @@ export const getControllerImports = (metaData, table) => {
   const controller = [
     `package ${metaData.packageName}.controllers;`,
 
+    `import jakarta.validation.Valid;`,
     `import java.util.List;`,
     `import java.io.ByteArrayOutputStream;`,
     `import org.springframework.beans.factory.annotation.Autowired;`,

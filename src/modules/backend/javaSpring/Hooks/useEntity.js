@@ -5,9 +5,9 @@ import {
   UCC,
   sqlVarToJavaVar,
 } from "../../../../StringFunctions";
-import SpringContext from "../../../../context/SpringProvider";
+import SpringContext from "../Context/SpringProvider";
 
-function useEntity(tableStructure, metaData) {
+function useEntity() {
   // const [entitiesList, setEntitiesList] = useState([]); //TODAS LAS ENITDADES
   const { springProject } = useContext(SpringContext);
 
@@ -24,7 +24,7 @@ function useEntity(tableStructure, metaData) {
     );
   };
 
-  const getEntityImports = () => {
+  const getEntityImports = (metaData) => {
     return [
       `package ${metaData.packageName}.repositories.dB.entities;`,
       `import jakarta.persistence.Id;`,
@@ -97,7 +97,7 @@ function useEntity(tableStructure, metaData) {
     let entities = {};
     tableStructure.forEach((table) => {
       entities[table.name] = {};
-      entities[table.name]["imports"] = getEntityImports(table, metaData);
+      entities[table.name]["imports"] = getEntityImports(metaData);
       entities[table.name]["classStart"] = getEntityClass(table);
       entities[table.name]["content"] = [];
       entities[table.name]["classEnd"] = "}";

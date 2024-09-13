@@ -36,7 +36,7 @@ const validateForm = (values) => {
   }
 };
 
-function FormsIndex() {
+function FormsIndex({ table }) {
   const [open, setOpen] = useState(false);
   const onClose = () => {
     setOpen(false);
@@ -67,11 +67,11 @@ function FormsIndex() {
           setOpen(true);
         }}
       >
-        OPEN FORM
+        OPEN {table.name}
       </Button>
       <CDialog
         open={open}
-        title="Activar nuevo conductor"
+        title={`ADD ${table.name}`}
         onClickClose={onClose}
         actions={
           <Box
@@ -86,7 +86,7 @@ function FormsIndex() {
               size="large"
               // onClick={() => handleSubmit()}
             >
-              Activar conductor
+              ADD
             </Button>
             <Typography
               variant="body2"
@@ -108,17 +108,23 @@ function FormsIndex() {
         >
           Datos de usuario
         </Typography>
-        <CTextfield
-          name="email"
-          label="Correo"
-          type="email"
-          placeholder="jorge@gmail.com"
-          fullWidth
-          //  value={values.email}
-          //  error={touched.email && !!errors.email}
-          //  helperText={touched.email && errors.email}
-          //  onChange={handleChange}
-        />
+        {table.attributes.map(
+          (attr) =>
+            !attr.pk &&
+            attr.type !== "timestamp" && (
+              <CTextfield
+                name={attr.name}
+                label={attr.name}
+                type="email"
+                placeholder="jorge@gmail.com"
+                fullWidth
+                //  value={values.email}
+                //  error={touched.email && !!errors.email}
+                //  helperText={touched.email && errors.email}
+                //  onChange={handleChange}
+              />
+            )
+        )}
       </CDialog>
     </div>
   );

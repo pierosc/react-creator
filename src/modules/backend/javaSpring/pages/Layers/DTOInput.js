@@ -6,7 +6,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import SpringContext from "../../../../../context/SpringProvider";
+import SpringContext from "../../Context/SpringProvider";
 
 function DTOInput({ table }) {
   const { springProject } = useContext(SpringContext);

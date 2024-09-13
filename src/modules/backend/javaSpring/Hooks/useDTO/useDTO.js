@@ -6,12 +6,13 @@ import {
   sqlVarToJavaVar,
 } from "../../../../../StringFunctions";
 import { excludeVars } from "./variablesToExclude";
-import SpringContext from "../../../../../context/SpringProvider";
+import SpringContext from "../../Context/SpringProvider";
 
-export const useDTO = (metaData, DTOMap) => {
+export const useDTO = () => {
   const [inputDTO, setInputDTO] = useState([]);
   const [outputDTO, setOutputDTO] = useState([]);
   const { springProject } = useContext(SpringContext);
+  const metaData = springProject.selected.metaData ?? {};
 
   const addInputDTO = (projectName, table, newIDTO) => {
     //AGREGAR DTOMAP
@@ -145,6 +146,7 @@ export const useDTO = (metaData, DTOMap) => {
       `import lombok.Data;`,
       `import lombok.NonNull;`,
       `import lombok.NoArgsConstructor;`,
+      `import jakarta.validation.constraints.NotNull;`,
       `${newDTOImports}`,
     ];
     return imports;
@@ -179,7 +181,8 @@ public class ${UCC(DTOName)} {`;
       // console.log(relationsData);
       const attrVar =
         relationsData.length === 0
-          ? `  private ${sqlVarToJavaVar(attr.type)} ${CC(attr.name)};`
+          ? `  ${!attr.nullabe ?? `@NotNull(message = "${CC(attr.name)} is required")`}
+          private ${sqlVarToJavaVar(attr.type)} ${CC(attr.name)};`
           : "";
       const attrsVars =
         relationsData.length === 0 && !attr.pk ? [attrVar] : relationsData;

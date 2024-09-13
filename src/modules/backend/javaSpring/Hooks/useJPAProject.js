@@ -1,13 +1,17 @@
+import { useContext } from "react";
 import { UCC } from "../../../../StringFunctions";
+import SpringContext from "../Context/SpringProvider";
 
 export const useJPAProject = (
   entities,
   repositories,
   services,
   controllers,
-  DTO,
-  metaData
+  DTO
 ) => {
+  const { springProject } = useContext(SpringContext);
+  const metaData = springProject.selected.metaData ?? {};
+
   // CONTROLA ASPECTOS GENERALES DEL PROYECTO QUE UTILIZAN VARIAS CAPAS COMO ENTIDADES, REPOSITORIOS, ETC
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------

@@ -15,9 +15,9 @@ import { getFilterService } from "./services/filterService";
 import { getFilterExcelService } from "./services/filterExcelService";
 
 import useDependencyInjection from "./useDependencyInjection";
-import SpringContext from "../../../../../context/SpringProvider";
+import SpringContext from "../../Context/SpringProvider";
 
-const useService = (tableStructue, metaData) => {
+const useService = () => {
   const { springProject } = useContext(SpringContext);
   const [servicesList, setServicesList] = useState([]); //TODOS LOS SERVICIOS
   const depInjection = useDependencyInjection(false); // true use Autowired fields, false use Constructor Injection
@@ -90,25 +90,11 @@ const useService = (tableStructue, metaData) => {
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const setEmptyStructure = () => {
+  const getEmptyStructure = (tableStructue, metaData) => {
     let services = {};
     tableStructue.forEach((table) => {
-      //   const imports = getServiceImports(table);
       services[table.name] = {};
-      services[table.name]["imports"] = getServiceImports(table);
-      services[table.name]["classStart"] = getServiceClass(table);
-      services[table.name]["services"] = [];
-      services[table.name]["classEnd"] = "}";
-    });
-    setServicesList(services);
-  };
-
-  const getEmptyStructure = (tableStructue) => {
-    let services = {};
-    tableStructue.forEach((table) => {
-      //   const imports = getServiceImports(table);
-      services[table.name] = {};
-      services[table.name]["imports"] = getServiceImports(table);
+      services[table.name]["imports"] = getServiceImports(table, metaData);
       services[table.name]["classStart"] = getServiceClass(table);
       services[table.name]["services"] = [];
       services[table.name]["classEnd"] = "}";
@@ -146,7 +132,7 @@ const useService = (tableStructue, metaData) => {
   // |  |     |  | |  `----.|  |____    .----)   |      |  |     |  |\  \----.|  `--'  | |  `----.    |  |     |  `--'  | |  |\  \----.|  |____
   // |__|     |__| |_______||_______|   |_______/       |__|     | _| `._____| \______/   \______|    |__|      \______/  | _| `._____||_______|
 
-  const getServiceImports = (table) => {
+  const getServiceImports = (table, metaData) => {
     const isTransactional = Object.keys(table).includes("transactional");
 
     let attributesRepositoriesImports = UniqueArray(
@@ -309,7 +295,7 @@ public class ${UCC(table.name)}Service {
     deleteService,
     addImport,
     deleteImport,
-    setEmptyStructure,
+    // setEmptyStructure,
     getEmptyStructure,
     // setCRUDFServices,
     // getServicesFileStructure,

@@ -4,8 +4,13 @@ import useFilter from "./useFilter";
 import useServiceUtils from "./useServiceUtils";
 import useExcelUtils from "./useExcelUtils";
 import useConverter from "./useConverter";
+import SpringContext from "../../modules/backend/javaSpring/Context/SpringProvider";
+import { useContext } from "react";
 
-const useUtils = (metaData) => {
+const useUtils = () => {
+  const { springProject } = useContext(SpringContext);
+  const metaData = springProject.selected.metaData ?? {};
+
   const DTOMap = useDTOMapping(metaData);
 
   const Response = useResponse(metaData);
@@ -36,7 +41,11 @@ const useUtils = (metaData) => {
     ];
   };
 
-  return { DTOMap, Response, getFolderContent };
+  return {
+    // DTOMap,
+    Response,
+    getFolderContent,
+  };
 };
 
 export default useUtils;

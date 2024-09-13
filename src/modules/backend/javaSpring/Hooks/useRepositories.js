@@ -7,9 +7,9 @@ import {
   sqlVarToJavaVar,
 } from "../../../../StringFunctions";
 // import { useLocalStorage } from "./../../../../hooks/useStorage";
-import SpringContext from "../../../../context/SpringProvider";
+import SpringContext from "../Context/SpringProvider";
 
-export const useRepositories = (tableStructue, metaData) => {
+export const useRepositories = () => {
   const { springProject } = useContext(SpringContext);
   const [repositoriesList, setRepositoriesList] = useState([]); // REPOSITORIES FROM THE SELECTED SPRING PROJECT
 
@@ -65,27 +65,27 @@ export const useRepositories = (tableStructue, metaData) => {
     });
   };
 
-  const setEmptyStructure = () => {
-    let repositories = {};
-    tableStructue.forEach((table) => {
-      //   const imports = getServiceImports(table);
-      const uniqueAttr = table.attributes.find((attr) => attr.unique);
-      // console.log(table.attributes);
+  // const setEmptyStructure = () => {
+  //   let repositories = {};
+  //   tableStructue.forEach((table) => {
+  //     //   const imports = getServiceImports(table);
+  //     const uniqueAttr = table.attributes.find((attr) => attr.unique);
+  //     // console.log(table.attributes);
 
-      repositories[table.name] = {};
-      repositories[table.name]["imports"] = getRepositoryImports(
-        table,
-        metaData
-      );
-      repositories[table.name]["classStart"] = getRepositoryClassStart(table);
-      repositories[table.name]["repositories"] = uniqueAttr
-        ? [getfindByRepository([uniqueAttr], table, true)]
-        : [];
-      repositories[table.name]["classEnd"] = "}";
-    });
-    setRepositoriesList(repositories);
-    return repositories;
-  };
+  //     repositories[table.name] = {};
+  //     repositories[table.name]["imports"] = getRepositoryImports(
+  //       table,
+  //       metaData
+  //     );
+  //     repositories[table.name]["classStart"] = getRepositoryClassStart(table);
+  //     repositories[table.name]["repositories"] = uniqueAttr
+  //       ? [getfindByRepository([uniqueAttr], table, true)]
+  //       : [];
+  //     repositories[table.name]["classEnd"] = "}";
+  //   });
+  //   setRepositoriesList(repositories);
+  //   return repositories;
+  // };
   //
 
   const getEmptyStructure = (tableStructure, metaData) => {
@@ -125,21 +125,21 @@ export const useRepositories = (tableStructue, metaData) => {
   };
 
   //
-  const setFilterRepositories = () => {
-    tableStructue.forEach((table) => {
-      const filter = getFilterRepository(table);
+  // const setFilterRepositories = () => {
+  //   tableStructue.forEach((table) => {
+  //     const filter = getFilterRepository(table);
 
-      setRepositoriesList((prevRepositoriesList) => {
-        const newRepositoriesList = { ...prevRepositoriesList };
-        const newRepositories = [
-          filter,
-          ...newRepositoriesList[table?.name]["repositories"],
-        ];
-        newRepositoriesList[table?.name]["repositories"] = newRepositories;
-        return newRepositoriesList;
-      });
-    });
-  };
+  //     setRepositoriesList((prevRepositoriesList) => {
+  //       const newRepositoriesList = { ...prevRepositoriesList };
+  //       const newRepositories = [
+  //         filter,
+  //         ...newRepositoriesList[table?.name]["repositories"],
+  //       ];
+  //       newRepositoriesList[table?.name]["repositories"] = newRepositories;
+  //       return newRepositoriesList;
+  //     });
+  //   });
+  // };
 
   const getRepositoryImports = (table, metaData) => {
     const repo = `package ${metaData.packageName}.repositories.dB.repo;
@@ -219,12 +219,12 @@ import ${metaData.packageName}.repositories.dB.entities.${UCC(
 
   return {
     // addRepositoryToAllTables,
-    setFilterRepositories,
+    // setFilterRepositories,
     addRepository,
     deleteRepository,
     addImport,
     deleteImport,
-    setEmptyStructure,
+    // setEmptyStructure,
     getEmptyStructure,
     files,
     repositoriesList,

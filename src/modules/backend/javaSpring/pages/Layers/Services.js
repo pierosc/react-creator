@@ -8,7 +8,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import { Button } from "@mui/material";
-import SpringContext from "../../../../../context/SpringProvider";
+import SpringContext from "../../Context/SpringProvider";
 import { JoinNewLine } from "../../../../../StringFunctions";
 
 function Services({ JPA, table, setSelectedService }) {

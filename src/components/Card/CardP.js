@@ -15,8 +15,8 @@ import { ExpandMore } from "@mui/icons-material";
 
 function CardP({ onClick, properties }) {
   return (
-    <Card sx={{ width: 250, height: 200 }}>
-      <CardActionArea>
+    <Card sx={{ width: "200px", height: "150px" }}>
+      <CardActionArea sx={{ height: "100%" }}>
         {/* <CardMedia
         component="img"
         height="140"
@@ -33,7 +33,7 @@ function CardP({ onClick, properties }) {
         </CardContent>
       </CardActionArea>
 
-      <CardActions disableSpacing>
+      {/* <CardActions disableSpacing>
         <IconButton
           aria-label="add to favorites"
           onClick={() => {
@@ -46,7 +46,7 @@ function CardP({ onClick, properties }) {
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 }
