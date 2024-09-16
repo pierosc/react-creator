@@ -9,19 +9,10 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 // import SettingsIcon from "@mui/icons-material/Settings";
 import DownloadIcon from "@mui/icons-material/Download";
-import { Button, Modal } from "@mui/material";
+import { Button } from "@mui/material";
 import React, { useState, useContext } from "react";
 import { jpaFolderStructure } from "../../../jpaFolferStructure";
-import useEntity from "./Hooks/useEntity";
-import useService from "./Hooks/useService/useService";
-import { useController } from "./Hooks/useController/useController";
-import { useRepositories } from "./Hooks/useRepositories";
-import useUtils from "../../../hooks/useUtils/useUtils";
-import { useDTO } from "./Hooks/useDTO/useDTO";
-import useException from "./Hooks/useException/useException";
-import useApplication from "../../../hooks/useApplication";
 import useFile from "../../../hooks/useFile/useFile";
-import { useJPAProject } from "./Hooks/useJPAProject";
 import ServiceDTOInput from "./pages/ServiceShortcuts/ServiceDTOInput";
 import Entities from "./pages/Layers/Entities";
 import Repositories from "./pages/Layers/Repositories";
@@ -34,7 +25,7 @@ import DatabaseContext from "../../../context/DatabaseProvider";
 import SpringContext from "./Context/SpringProvider";
 import { banner } from "./Hooks/banner";
 import { aplicationProperties } from "./Hooks/aplicationProperties";
-import CreateProject from "./pages/CreateProject/CreateProject";
+import BackButton from "./Components/BackButton";
 
 function SpringProjectManager() {
   const { db } = useContext(DatabaseContext);
@@ -51,6 +42,7 @@ function SpringProjectManager() {
 
   // SELECTION CONTROLS --------------------------------
   const [table, setTable] = React.useState({});
+  const isTableSelected = Object.keys(table).length !== 0;
 
   const handleChangeTable = (event) => {
     setTable(db?.selected?.json.find((t) => t.name === event.target.value));
@@ -59,45 +51,33 @@ function SpringProjectManager() {
 
   let jpa = jpaFolderStructure;
 
-  //CONFIGURATION DATA
-  const [metaData, setMetaData] = useState({
-    group: "com.users",
-    artifact: "users",
-    name: "users",
-    packageName: "com.users",
-  });
-
-  //HOOKS
-  const entities = useEntity(db?.selected?.json, metaData);
-  const services = useService(db?.selected?.json, metaData);
-  const controllers = useController(metaData);
-  const repositories = useRepositories(db?.selected?.json, metaData);
-  const utils = useUtils(metaData);
-  const DTO = useDTO(metaData, utils.DTOMap);
-  const exception = useException(metaData);
-  const application = useApplication(metaData);
-
   const file = useFile();
 
-  const JPA = useJPAProject(
-    entities,
-    repositories,
-    services,
-    controllers,
-    DTO,
-    metaData
-  );
   const [selectedService, setSelectedService] = useState({});
 
-  const { springProject } = useContext(SpringContext);
+  const {
+    springProject,
+    entities,
+    services,
+    controllers,
+    repositories,
+    utils,
+    DTO,
+    exception,
+    application,
+    JPA,
+  } = useContext(SpringContext);
 
   return (
     <div
-      className="grid grid-cols-3 gap-4 p-12 items-start"
+      className="grid grid-cols-3 gap-4 items-start"
       style={{ backgroundColor: "rgba(6,8,25)" }}
     >
+      <div className="col-span-3">
+        <BackButton />
+      </div>
       <div className="grid gap-4 ">
-        <div className="flex gap-4 bg-slate-800 p-4">
+        {/* <div className="flex gap-4 bg-slate-800 p-4">
           <FormControl fullWidth>
             <InputLabel>PROJECT</InputLabel>
             <Select
@@ -132,7 +112,7 @@ function SpringProjectManager() {
             setMetaData={setMetaData}
             metaData={metaData}
           />
-        </div>
+        </div> */}
         <label className="text-white">
           {`Servicio: ${selectedService?.service ?? ""}`}{" "}
         </label>
@@ -252,7 +232,8 @@ function SpringProjectManager() {
                             content: [
                               {
                                 type: "folder",
-                                name: metaData.artifact,
+                                name: springProject?.selected?.metaData
+                                  .artifact,
                                 content: jpa,
                               },
                             ],
@@ -314,12 +295,20 @@ function SpringProjectManager() {
                 </Select>
               </FormControl>
               <TabList onChange={handleChange}>
-                <Tab label="Entities" value="0" />
-                <Tab label="Repositories" value="1" />
-                <Tab label="Services" value="2" />
-                <Tab label="Controllers" value="3" />
-                <Tab label="IN-DTO's" value="4" />
-                <Tab label="OUT-DTO's" value="5" />
+                <Tab label="Entities" value="0" disabled={!isTableSelected} />
+                <Tab
+                  label="Repositories"
+                  value="1"
+                  disabled={!isTableSelected}
+                />
+                <Tab label="Services" value="2" disabled={!isTableSelected} />
+                <Tab
+                  label="Controllers"
+                  value="3"
+                  disabled={!isTableSelected}
+                />
+                <Tab label="IN-DTO's" value="4" disabled={!isTableSelected} />
+                <Tab label="OUT-DTO's" value="5" disabled={!isTableSelected} />
               </TabList>
             </div>
           </Box>

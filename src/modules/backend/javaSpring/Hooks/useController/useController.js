@@ -12,8 +12,8 @@ import SpringContext from "../../Context/SpringProvider";
 import { getControllerImports } from "./templates/imports";
 import { getControllerClass } from "./templates/class";
 
-export const useController = () => {
-  const { springProject } = useContext(SpringContext);
+export const useController = (springProject) => {
+  // const { springProject } = useContext(SpringContext);
 
   const addController = (projectName, table, newController) => {
     const attrFromProject = "controller";

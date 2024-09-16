@@ -17,8 +17,8 @@ import { getFilterExcelService } from "./services/filterExcelService";
 import useDependencyInjection from "./useDependencyInjection";
 import SpringContext from "../../Context/SpringProvider";
 
-const useService = () => {
-  const { springProject } = useContext(SpringContext);
+const useService = (springProject) => {
+  // const { springProject } = useContext(SpringContext);
   const [servicesList, setServicesList] = useState([]); //TODOS LOS SERVICIOS
   const depInjection = useDependencyInjection(false); // true use Autowired fields, false use Constructor Injection
 

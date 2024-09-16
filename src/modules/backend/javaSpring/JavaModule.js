@@ -5,9 +5,9 @@ import { SpringProvider } from "./Context/SpringProvider";
 function JavaModule() {
   return (
     <div className="p-6">
-      <SpringProvider>
-        <ProjectView />
-      </SpringProvider>
+      {/* <SpringProvider> */}
+      <ProjectView />
+      {/* </SpringProvider> */}
     </div>
   );
 }

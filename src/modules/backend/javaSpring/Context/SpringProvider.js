@@ -15,16 +15,23 @@ const SpringContext = createContext();
 function SpringProvider({ children }) {
   const springProject = useSpringProject();
 
-  const entities = useEntity();
-  const services = useService();
-  const controllers = useController();
-  const repositories = useRepositories();
-  const utils = useUtils();
-  const DTO = useDTO();
-  const exception = useException();
-  const application = useApplication();
+  const entities = useEntity(springProject);
+  const services = useService(springProject);
+  const controllers = useController(springProject);
+  const repositories = useRepositories(springProject);
+  const utils = useUtils(springProject);
+  const DTO = useDTO(springProject);
+  const exception = useException(springProject);
+  const application = useApplication(springProject);
 
-  const JPA = useJPAProject(entities, repositories, services, controllers, DTO);
+  const JPA = useJPAProject(
+    entities,
+    repositories,
+    services,
+    controllers,
+    DTO,
+    springProject
+  );
 
   return (
     <SpringContext.Provider

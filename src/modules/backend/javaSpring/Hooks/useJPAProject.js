@@ -7,10 +7,11 @@ export const useJPAProject = (
   repositories,
   services,
   controllers,
-  DTO
+  DTO,
+  springProject
 ) => {
-  const { springProject } = useContext(SpringContext);
-  const metaData = springProject.selected.metaData ?? {};
+  // const { springProject } = useContext(SpringContext);
+  const metaData = springProject?.selected?.metaData ?? {};
 
   // CONTROLA ASPECTOS GENERALES DEL PROYECTO QUE UTILIZAN VARIAS CAPAS COMO ENTIDADES, REPOSITORIOS, ETC
   // -------------------------------------------------------------------------------------

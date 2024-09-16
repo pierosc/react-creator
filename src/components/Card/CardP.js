@@ -1,22 +1,18 @@
-import {
-  Button,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  IconButton,
-} from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { CardActionArea, CardContent } from "@mui/material";
+
 import Card from "@mui/material/Card";
 import React from "react";
-import { ExpandMore } from "@mui/icons-material";
 
 function CardP({ onClick, properties }) {
   return (
     <Card sx={{ width: "200px", height: "150px" }}>
-      <CardActionArea sx={{ height: "100%" }}>
+      <CardActionArea
+        sx={{ height: "100%" }}
+        onClick={() => {
+          onClick();
+          console.log("hola");
+        }}
+      >
         {/* <CardMedia
         component="img"
         height="140"
@@ -24,8 +20,8 @@ function CardP({ onClick, properties }) {
         alt="green iguana"
       /> */}
         <CardContent>
-          {Object.keys(properties).map((p) => (
-            <div className="flex gap-1">
+          {Object.keys(properties).map((p, index) => (
+            <div className="flex gap-1" key={index}>
               <h2 className="font-extrabold">{p}</h2>
               <h2>{properties[p]} </h2>
             </div>

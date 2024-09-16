@@ -2,9 +2,9 @@ import { useContext } from "react";
 import { UCC } from "../StringFunctions";
 import SpringContext from "../modules/backend/javaSpring/Context/SpringProvider";
 
-function useApplication() {
-  const { springProject } = useContext(SpringContext);
-  const metaData = springProject.selected.metaData ?? {};
+function useApplication(springProject) {
+  // const { springProject } = useContext(SpringContext);
+  const metaData = springProject?.selected?.metaData ?? {};
 
   const file = `package ${metaData.packageName};
 

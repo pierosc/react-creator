@@ -91,11 +91,11 @@ function useSpringProject() {
     setSpringProjects([...PJNoSelected, { ...selected, attrs }]);
   };
 
-  useEffect(() => {
-    console.group("NEW SPRING PROJECT SELECTED");
-    console.log(selected);
-    console.groupEnd();
-  }, [selected]);
+  // useEffect(() => {
+  //   console.group("NEW SPRING PROJECT SELECTED");
+  //   console.log(selected);
+  //   console.groupEnd();
+  // }, [selected]);
 
   //base seleccionada
 

@@ -10,9 +10,9 @@ import Kafka from "./modules/kafka/Kafka";
 import kafkaLogo from "./assets/kafka.svg";
 import Databases from "./modules/database/Databases";
 import { DatabaseProvider } from "./context/DatabaseProvider";
-// import { SpringProvider } from "./context/SpringProvider";
 import ReactModule from "./modules/frontend/react/ReactModule";
 import JavaModule from "./modules/backend/javaSpring/JavaModule";
+import { SpringProvider } from "./modules/backend/javaSpring/Context/SpringProvider";
 
 function APP() {
   let theme = useTheme();
@@ -25,48 +25,48 @@ function APP() {
   return (
     <ThemeProvider theme={theme}>
       <DatabaseProvider>
-        {/* <SpringProvider> */}
-        <TabContext value={value}>
-          <Box
-            sx={{
-              borderBottom: 1,
-              borderColor: "divider",
-              backgroundColor: "rgb(75, 75, 75)",
-            }}
-          >
-            <div className="flex gap-2 justify-center">
-              <TabList onChange={handleChange}>
-                <Tab label="Databases" value="0" />
-                <Tab label="Java" value="1" />
-                <Tab label="React" value="2" />
-                <Tab
-                  label={
-                    <img
-                      src={kafkaLogo}
-                      alt="kafka_logo"
-                      style={{ maxWidth: "50px" }}
-                    />
-                  }
-                  value="3"
-                />
-              </TabList>
-            </div>
-          </Box>
-          <TabPanel value="0" sx={{ padding: "0" }}>
-            <Databases />
-          </TabPanel>
-          <TabPanel value="1" sx={{ padding: "0" }}>
-            <JavaModule />
-          </TabPanel>
+        <SpringProvider>
+          <TabContext value={value}>
+            <Box
+              sx={{
+                borderBottom: 1,
+                borderColor: "divider",
+                backgroundColor: "rgb(75, 75, 75)",
+              }}
+            >
+              <div className="flex gap-2 justify-center">
+                <TabList onChange={handleChange}>
+                  <Tab label="Databases" value="0" />
+                  <Tab label="Java" value="1" />
+                  <Tab label="React" value="2" />
+                  <Tab
+                    label={
+                      <img
+                        src={kafkaLogo}
+                        alt="kafka_logo"
+                        style={{ maxWidth: "50px" }}
+                      />
+                    }
+                    value="3"
+                  />
+                </TabList>
+              </div>
+            </Box>
+            <TabPanel value="0" sx={{ padding: "0" }}>
+              <Databases />
+            </TabPanel>
+            <TabPanel value="1" sx={{ padding: "0" }}>
+              <JavaModule />
+            </TabPanel>
 
-          <TabPanel value="2" sx={{ padding: "0" }}>
-            <ReactModule />
-          </TabPanel>
-          <TabPanel value="3" sx={{ padding: "0" }}>
-            <Kafka />
-          </TabPanel>
-        </TabContext>
-        {/* </SpringProvider> */}
+            <TabPanel value="2" sx={{ padding: "0" }}>
+              <ReactModule />
+            </TabPanel>
+            <TabPanel value="3" sx={{ padding: "0" }}>
+              <Kafka />
+            </TabPanel>
+          </TabContext>
+        </SpringProvider>
       </DatabaseProvider>
     </ThemeProvider>
   );

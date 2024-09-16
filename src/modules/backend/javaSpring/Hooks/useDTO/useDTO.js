@@ -2,17 +2,17 @@ import { useState, useContext } from "react";
 import {
   CC,
   JoinNewLine,
+  TC,
   UCC,
   sqlVarToJavaVar,
 } from "../../../../../StringFunctions";
 import { excludeVars } from "./variablesToExclude";
-import SpringContext from "../../Context/SpringProvider";
 
-export const useDTO = () => {
+export const useDTO = (springProject) => {
   const [inputDTO, setInputDTO] = useState([]);
   const [outputDTO, setOutputDTO] = useState([]);
-  const { springProject } = useContext(SpringContext);
-  const metaData = springProject.selected.metaData ?? {};
+  // const { springProject } = useContext(SpringContext);
+  const metaData = springProject?.selected?.metaData ?? {};
 
   const addInputDTO = (projectName, table, newIDTO) => {
     //AGREGAR DTOMAP
@@ -181,7 +181,7 @@ public class ${UCC(DTOName)} {`;
       // console.log(relationsData);
       const attrVar =
         relationsData.length === 0
-          ? `  ${!attr.nullabe ?? `@NotNull(message = "${CC(attr.name)} is required")`}
+          ? `  ${!attr.nullabe ? `@NotNull(message = "${TC(attr.name)} is required")` : ""}
           private ${sqlVarToJavaVar(attr.type)} ${CC(attr.name)};`
           : "";
       const attrsVars =

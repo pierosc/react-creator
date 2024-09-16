@@ -5,9 +5,7 @@ import { Box, Button, Modal } from "@mui/material";
 import { boxStyle } from "../../../../../syles/BoxStyle";
 import SpringContext from "../../Context/SpringProvider";
 
-function CreateProject({ setMetaData, metaData }) {
-  const { springProject } = useContext(SpringContext);
-
+function CreateProject({}) {
   const [openInitialConfModal, setOpenInitialConfModal] = useState(false);
   const CloseInitialConfModal = () => setOpenInitialConfModal(false);
 
@@ -15,6 +13,13 @@ function CreateProject({ setMetaData, metaData }) {
   const handleChangeInputMenu = (newValue) => {
     setInputMenu(newValue);
   };
+
+  const [metaData, setMetaData] = useState({
+    group: "com.users",
+    artifact: "users",
+    name: "users",
+    packageName: "com.users",
+  });
 
   const [spring, setSpring] = useState({
     name: "",

@@ -9,8 +9,8 @@ import {
 // import { useLocalStorage } from "./../../../../hooks/useStorage";
 import SpringContext from "../Context/SpringProvider";
 
-export const useRepositories = () => {
-  const { springProject } = useContext(SpringContext);
+export const useRepositories = (springProject) => {
+  // const { springProject } = useContext(SpringContext);
   const [repositoriesList, setRepositoriesList] = useState([]); // REPOSITORIES FROM THE SELECTED SPRING PROJECT
 
   const addRepository = (projectName, table, newRepository) => {

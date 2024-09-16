@@ -5,11 +5,11 @@ import {
   UCC,
   sqlVarToJavaVar,
 } from "../../../../StringFunctions";
-import SpringContext from "../Context/SpringProvider";
+// import SpringContext from "../Context/SpringProvider";
 
-function useEntity() {
+function useEntity(springProject) {
   // const [entitiesList, setEntitiesList] = useState([]); //TODAS LAS ENITDADES
-  const { springProject } = useContext(SpringContext);
+  // const { springProject } = useContext(SpringContext);
 
   const addEntity = (projectName, table, newEntity) => {
     const attrFromProject = "entity";

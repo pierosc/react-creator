@@ -1,9 +1,6 @@
-import { useContext } from "react";
-import SpringContext from "../../Context/SpringProvider";
-
-function useException() {
-  const { springProject } = useContext(SpringContext);
-  const metaData = springProject.selected.metaData ?? {};
+function useException(springProject) {
+  // const { springProject } = useContext(SpringContext);
+  const metaData = springProject?.selected?.metaData ?? {};
 
   const file = `package ${metaData.packageName}.exception;
 

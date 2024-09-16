@@ -13,6 +13,16 @@ export function UCC(text) {
     ?.replace(/^(.)/, (_, char) => char.toUpperCase());
 }
 
+export function TC(text) {
+  // Inserta un espacio antes de letras mayúsculas si no están al principio y reemplaza guiones y guiones bajos con un espacio
+  return text
+    ?.replace(/([A-Z])/g, " $1") // Inserta espacio antes de mayúsculas
+    ?.replace(/[_-]+/g, " ") // Convierte guiones y guiones bajos en espacios
+    ?.trim() // Elimina espacios al principio y al final
+    ?.toLowerCase() // Convierte todo a minúsculas para empezar de una base uniforme
+    ?.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase()); // Capitaliza la primera letra de cada palabra
+}
+
 export function Spaced(text) {
   return text.replace(/([a-z])([A-Z])/g, "$1 $2");
 }
