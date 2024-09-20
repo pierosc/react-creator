@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import CDialog from "../../Components/Dialog/CDialog";
 import CTextfield from "../../Components/Textfield/CTextfield";
 import { useFormik } from "formik";
+import { TC } from "../../../../../StringFunctions";
 
 // const CreateDriverValidationSchema = z
 //   .object({
@@ -60,6 +61,8 @@ function FormsIndex({ table }) {
     },
   });
 
+  console.log(table);
+
   return (
     <div>
       <Button
@@ -71,7 +74,7 @@ function FormsIndex({ table }) {
       </Button>
       <CDialog
         open={open}
-        title={`ADD ${table.name}`}
+        title={`ADD ${TC(table.name).toUpperCase()}`}
         onClickClose={onClose}
         actions={
           <Box
@@ -106,7 +109,7 @@ function FormsIndex({ table }) {
           fontWeight={600}
           sx={{ marginBottom: "12px" }}
         >
-          Datos de usuario
+          {TC(table.name)} data
         </Typography>
         {table.attributes.map(
           (attr) =>
@@ -114,7 +117,7 @@ function FormsIndex({ table }) {
             attr.type !== "timestamp" && (
               <CTextfield
                 name={attr.name}
-                label={attr.name}
+                label={TC(attr.name)}
                 type="email"
                 placeholder="jorge@gmail.com"
                 fullWidth
