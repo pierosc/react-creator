@@ -7,6 +7,7 @@ function useForm() {
       content: [
         {
           group: table.name,
+          attr: table.attr,
         },
       ],
     };
