@@ -1,6 +1,6 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import React, { useContext, useState } from "react";
-import AddDatabase from "../AddDatabase";
+import AddDatabase from "./AddDatabase";
 import DatabaseContext from "../../../context/DatabaseProvider";
 
 function DBManager() {

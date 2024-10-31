@@ -1,5 +1,4 @@
-import { Box, Button, Modal } from "@mui/material";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import CardP from "../../../../components/Card/CardP";
 import SpringContext from "../Context/SpringProvider";
 import SpringProjectManager from "../SpringProjectManager";
@@ -38,11 +37,6 @@ function ProjectView() {
           <CreateProject />
         </div>
       )}
-      {/* <Modal open={openInitialConfModal} onClose={CloseInitialConfModal}>
-        <Box sx={boxStyle}>
-          <FormsConfiguration />
-        </Box>
-      </Modal> */}
     </>
   );
 }

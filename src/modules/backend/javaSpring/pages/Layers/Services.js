@@ -11,8 +11,8 @@ import { Button } from "@mui/material";
 import SpringContext from "../../Context/SpringProvider";
 import { JoinNewLine } from "../../../../../StringFunctions";
 
-function Services({ JPA, table, setSelectedService }) {
-  const { springProject } = useContext(SpringContext);
+function Services({ table, setSelectedService }) {
+  const { JPA, springProject } = useContext(SpringContext);
   const servicesList = springProject?.selected?.service ?? {};
 
   console.group("Services view inputs");

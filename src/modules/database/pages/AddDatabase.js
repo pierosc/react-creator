@@ -1,8 +1,11 @@
 import { Box, Button, Divider, Modal } from "@mui/material";
 import React, { useState, useContext } from "react";
-import { boxStyle } from "../../syles/BoxStyle";
+import { boxStyle } from "../../../syles/BoxStyle";
 import TextField from "@mui/material/TextField";
-import DatabaseContext from "../../context/DatabaseProvider";
+import DatabaseContext from "../../../context/DatabaseProvider";
+import BigButton from "../../../components/BigButton/BigButton";
+import CTextField from "../../../components/CTextField/CTextField";
+import CDivider from "../../../components/CDivider/CDivider";
 
 function AddDatabase() {
   const { db } = useContext(DatabaseContext);
@@ -46,14 +49,12 @@ function AddDatabase() {
   return (
     <>
       <div className="grid items-start">
-        <Button
-          size="large"
+        <BigButton
+          label="Add Database"
           onClick={() => {
             setOpen(true);
           }}
-        >
-          Add Database
-        </Button>
+        />
       </div>
       <Modal
         open={open}
@@ -70,108 +71,71 @@ function AddDatabase() {
               <label className="text-white text-center font-semibold text-lg">
                 ADD DATABASE
               </label>
-              <Divider variant="middle" sx={{ paddingBottom: "14px" }}>
-                DATABASE
-              </Divider>
+
+              <CDivider label={"DATABASE"} />
+
               <div className="flex gap-2">
-                <TextField
+                <CTextField
                   label="name"
-                  size="small"
                   defaultValue={name}
                   onChange={(e) => {
                     setName(e?.target?.value);
                   }}
-                  sx={{
-                    backgroundColor: "rgb(40, 44, 52)",
-                    color: "white",
-                    border: "none",
-                  }}
                 />
-                <TextField
+
+                <CTextField
                   label="username"
-                  size="small"
                   defaultValue={username}
                   onChange={(e) => {
                     setUsername(e?.target?.value);
                   }}
-                  sx={{
-                    backgroundColor: "rgb(40, 44, 52)",
-                    color: "white",
-                    border: "none",
-                  }}
                 />
-                <TextField
+
+                <CTextField
                   label="password"
-                  size="small"
                   defaultValue={password}
                   onChange={(e) => {
                     setPassword(e?.target?.value);
                   }}
-                  sx={{
-                    backgroundColor: "rgb(40, 44, 52)",
-                    color: "white",
-                    border: "none",
-                  }}
                 />
-                <TextField
+
+                <CTextField
                   label="location"
-                  size="small"
                   defaultValue={address}
                   onChange={(e) => {
                     setAddress(e?.target?.value);
                   }}
-                  sx={{
-                    backgroundColor: "rgb(40, 44, 52)",
-                    color: "white",
-                    border: "none",
-                  }}
                 />
               </div>
-              <Divider variant="middle" sx={{ paddingBottom: "14px" }}>
-                DOCKER
-              </Divider>
+
+              <CDivider label={"DOCKER"} />
+
               <div className="flex gap-2">
-                <TextField
-                  label="imageName	"
-                  size="small"
+                <CTextField
+                  label="imageName"
                   defaultValue={imageName}
                   onChange={(e) => {
                     setImageName(e?.target?.value);
                   }}
-                  sx={{
-                    backgroundColor: "rgb(40, 44, 52)",
-                    color: "white",
-                    border: "none",
-                  }}
                 />
-                <TextField
+                <CTextField
                   label="containerName"
-                  size="small"
                   defaultValue={containerName}
                   onChange={(e) => {
                     setContainerName(e?.target?.value);
                   }}
-                  sx={{
-                    backgroundColor: "rgb(40, 44, 52)",
-                    color: "white",
-                    border: "none",
-                  }}
                 />
-                <TextField
-                  label="port "
-                  size="small"
+                <CTextField
+                  label="port"
                   defaultValue={port}
                   onChange={(e) => {
                     setPort(e?.target?.value);
                   }}
-                  sx={{
-                    backgroundColor: "rgb(40, 44, 52)",
-                    color: "white",
-                    border: "none",
-                  }}
                 />
               </div>
-              <Divider variant="middle">DATA MODEL</Divider>
+
+              <CDivider label={"DATA MODEL"} />
+
               <div className="flex justify-between items-start gap-4">
                 <div className="grid">
                   <label className="text-white">

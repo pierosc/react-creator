@@ -1,19 +1,7 @@
-import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
 import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-// import SettingsIcon from "@mui/icons-material/Settings";
-import DownloadIcon from "@mui/icons-material/Download";
-import { Button } from "@mui/material";
 import React, { useState, useContext } from "react";
 import { jpaFolderStructure } from "../../../jpaFolferStructure";
 import useFile from "../../../hooks/useFile/useFile";
-import ServiceDTOInput from "./pages/ServiceShortcuts/ServiceDTOInput";
 import Entities from "./pages/Layers/Entities";
 import Repositories from "./pages/Layers/Repositories";
 import Services from "./pages/Layers/Services";
@@ -23,22 +11,15 @@ import DTOOutput from "./pages/Layers/DTOOutput";
 // import { useLocalStorage } from "../../../hooks/useStorage";
 import DatabaseContext from "../../../context/DatabaseProvider";
 import SpringContext from "./Context/SpringProvider";
-import { banner } from "./Hooks/banner";
-import { aplicationProperties } from "./Hooks/aplicationProperties";
 import BackButton from "./Components/BackButton";
+import TabMenu from "../../../components/TabMenu/TabMenu";
+import ServiceViewer from "./Components/ServiceViewer";
+import AddCRUDButton from "./Components/AddCRUDButton";
+import CSelect from "../../../components/CSelect/CSelect";
+import DownloadButton from "./Components/DownloadButton";
 
 function SpringProjectManager() {
   const { db } = useContext(DatabaseContext);
-
-  // MENU CONTROLS --------------------------------
-  const [value, setValue] = React.useState("1");
-  const [inputMenu, setInputMenu] = React.useState("0");
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  const handleChangeInputMenu = (event, newValue) => {
-    setInputMenu(newValue);
-  };
 
   // SELECTION CONTROLS --------------------------------
   const [table, setTable] = React.useState({});
@@ -47,26 +28,10 @@ function SpringProjectManager() {
   const handleChangeTable = (event) => {
     setTable(db?.selected?.json.find((t) => t.name === event.target.value));
   };
+
   //----------------------------------------------------------------
 
-  let jpa = jpaFolderStructure;
-
-  const file = useFile();
-
   const [selectedService, setSelectedService] = useState({});
-
-  const {
-    springProject,
-    entities,
-    services,
-    controllers,
-    repositories,
-    utils,
-    DTO,
-    exception,
-    application,
-    JPA,
-  } = useContext(SpringContext);
 
   return (
     <div
@@ -76,95 +41,15 @@ function SpringProjectManager() {
       <div className="col-span-3">
         <BackButton />
       </div>
-      <div className="grid gap-4 ">
-        {/* <div className="flex gap-4 bg-slate-800 p-4">
-          <FormControl fullWidth>
-            <InputLabel>PROJECT</InputLabel>
-            <Select
-              defaultValue=""
-              value={springProject.selected.name}
-              label="PROJECT"
-              onChange={(v) => {
-                const projectToSelect = springProject.springProjects.find(
-                  (t) => t.name === v.target.value
-                );
-                springProject.setSelected(projectToSelect);
-                const dbToSelect = db.findByName(projectToSelect.db);
-                // console.log(dbToSelect);
-                db.setSelected(dbToSelect);
-                // console.log(dbToSelect.json[0].name);
-                setTable(dbToSelect.json[0].name);
-              }}
-            >
-              {springProject.springProjects.map((pj, index) => (
-                <MenuItem value={pj.name} key={index}>
-                  {pj.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <CreateProject
-            DTO={DTO}
-            entities={entities}
-            services={services}
-            controllers={controllers}
-            repositories={repositories}
-            setMetaData={setMetaData}
-            metaData={metaData}
-          />
-        </div> */}
-        <label className="text-white">
-          {`Servicio: ${selectedService?.service ?? ""}`}{" "}
-        </label>
-        <TabContext value={inputMenu}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChangeInputMenu}>
-              <Tab label="INPUT DTO's" value="0" />
-              <Tab label="OUTPUT DTO's" value="1" />
-              <Tab label="CONTROLLER" value="2" />
-            </TabList>
-          </Box>
 
-          <TabPanel value="0" sx={{ padding: "0" }}>
-            <ServiceDTOInput
-              DTO={DTO}
-              table={table}
-              selectedService={selectedService}
-            />
-          </TabPanel>
-          <TabPanel value="1" sx={{ padding: "0" }}>
-            {/* <TableJSONView tableStructure={tableStructure} /> */}
-          </TabPanel>
-          <TabPanel value="2" sx={{ padding: "0" }}>
-            {/* <FolderView /> */}
-          </TabPanel>
-        </TabContext>
-      </div>
+      <ServiceViewer table={table} selectedService={selectedService} />
+
       <div className="col-span-2 grid gap-2">
         <div className="flex gap-2 justify-between">
           <div className="flex gap-2">
-            <Button
-              size="large"
-              onClick={() => {
-                const tableStructureFromDB = db?.selected?.json;
+            <AddCRUDButton />
 
-                tableStructureFromDB.forEach((table) => {
-                  JPA.createEntities(springProject.selected.name, table);
-                  JPA.createListEndpoint(springProject.selected.name, table);
-                  JPA.createAddEndpoint(springProject.selected.name, table);
-                  JPA.createEditEndpoint(springProject.selected.name, table);
-                  JPA.createDeleteEndpoint(springProject.selected.name, table);
-                  JPA.createFilterEndpoint(springProject.selected.name, table);
-                  JPA.createFilterExcelEndpoint(
-                    springProject.selected.name,
-                    table
-                  );
-                });
-              }}
-            >
-              Add CRUDF Service
-            </Button>
-            <Button
+            {/* <Button
               variant="outlined"
               size="large"
               endIcon={<DownloadIcon />}
@@ -264,77 +149,65 @@ function SpringProjectManager() {
               }}
             >
               Download Project
-            </Button>
-            <Button
-              variant="outlined"
-              size="large"
-              // disabled={!filesCreated}
-              endIcon={<DownloadIcon />}
-              onClick={() => {}}
-            >
-              How to Use
-            </Button>
+            </Button> */}
+
+            <DownloadButton />
           </div>
         </div>
-        <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <div className="flex gap-2">
-              <FormControl>
-                <InputLabel>Tables</InputLabel>
-                <Select
-                  label="Tables"
-                  defaultValue=""
-                  value={table.name}
-                  onChange={handleChangeTable}
-                >
-                  {db?.selected?.json?.map((table, i) => (
-                    <MenuItem value={table.name} key={i}>
-                      {table.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <TabList onChange={handleChange}>
-                <Tab label="Entities" value="0" disabled={!isTableSelected} />
-                <Tab
-                  label="Repositories"
-                  value="1"
-                  disabled={!isTableSelected}
+        <CSelect
+          label="Tables"
+          defaultValue=""
+          value={table.name}
+          onChange={handleChangeTable}
+        >
+          {db?.selected?.json?.map((table, i) => (
+            <MenuItem value={table.name} key={i}>
+              {table.name}
+            </MenuItem>
+          ))}
+        </CSelect>
+
+        <TabMenu
+          position="start"
+          backgroundColor="rgba(0, 0, 0, 0)"
+          menu={[
+            {
+              label: "Entities",
+              disabled: !isTableSelected,
+              content: <Entities table={table} />,
+            },
+            {
+              label: "Repositories",
+              disabled: !isTableSelected,
+              content: <Repositories table={table} />,
+            },
+            {
+              label: "Services",
+              disabled: !isTableSelected,
+              content: (
+                <Services
+                  setSelectedService={setSelectedService}
+                  table={table}
                 />
-                <Tab label="Services" value="2" disabled={!isTableSelected} />
-                <Tab
-                  label="Controllers"
-                  value="3"
-                  disabled={!isTableSelected}
-                />
-                <Tab label="IN-DTO's" value="4" disabled={!isTableSelected} />
-                <Tab label="OUT-DTO's" value="5" disabled={!isTableSelected} />
-              </TabList>
-            </div>
-          </Box>
-          <TabPanel value="0" sx={{ padding: "0" }}>
-            <Entities table={table} />
-          </TabPanel>
-          <TabPanel value="1" sx={{ padding: "0" }}>
-            <Repositories table={table} />
-          </TabPanel>
-          <TabPanel value="2" sx={{ padding: "0" }}>
-            <Services
-              JPA={JPA}
-              setSelectedService={setSelectedService}
-              table={table}
-            />
-          </TabPanel>
-          <TabPanel value="3" sx={{ padding: "0" }}>
-            <Controllers table={table} />
-          </TabPanel>
-          <TabPanel value="4" sx={{ padding: "0" }}>
-            <DTOInput table={table} />
-          </TabPanel>
-          <TabPanel value="5" sx={{ padding: "0" }}>
-            <DTOOutput table={table} />
-          </TabPanel>
-        </TabContext>
+              ),
+            },
+            {
+              label: "Controllers",
+              disabled: !isTableSelected,
+              content: <Controllers table={table} />,
+            },
+            {
+              label: "IN-DTO's",
+              disabled: !isTableSelected,
+              content: <DTOInput table={table} />,
+            },
+            {
+              label: "OUT-DTO's",
+              disabled: !isTableSelected,
+              content: <DTOOutput table={table} />,
+            },
+          ]}
+        />
       </div>
     </div>
   );

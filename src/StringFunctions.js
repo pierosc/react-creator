@@ -106,10 +106,14 @@ export function UniqueArray(array) {
 
 export function JoinNewLine(array, separator) {
   if (separator) {
-    return array.join(`${separator}
-`);
+    return Array.isArray(array)
+      ? array.join(`${separator}
+`)
+      : "";
   } else {
-    return array.join(`
-`);
+    return Array.isArray(array)
+      ? array.join(`
+`)
+      : "";
   }
 }
