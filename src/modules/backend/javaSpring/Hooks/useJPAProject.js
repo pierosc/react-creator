@@ -18,7 +18,12 @@ export const useJPAProject = (
   // -------------------------------------------------------------------------------------
 
   const createEntities = (project, table) => {
+    console.log(
+      `%cCreating Entities for ${table.name}`,
+      "background-color: blue; color: white;"
+    );
     const tableEntities = entities.getEntity(table);
+    console.log(tableEntities);
     tableEntities.forEach((newEntity) => {
       entities.addEntity(project, table, newEntity);
     });
@@ -28,6 +33,10 @@ export const useJPAProject = (
   // -------------------------------------------------------------------------------------
 
   const createListEndpoint = (project, table) => {
+    console.log(
+      `%cCreating List Endpoint for ${table.name}`,
+      "background-color: blue; color: white;"
+    );
     console.log(project);
     const newService = services.getListAllService(table.name);
     const newServiceImport = `import ${

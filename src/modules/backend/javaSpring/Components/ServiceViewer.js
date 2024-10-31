@@ -7,7 +7,10 @@ function ServiceViewer({ table, selectedService }) {
   const { DTO } = useContext(SpringContext);
 
   return (
-    <div className="grid gap-4 ">
+    <div
+      className="grid gap-4 p-2 rounded-md"
+      style={{ backgroundColor: "rgba(0,0,0,0.7" }}
+    >
       <label className="text-white">
         {`Servicio: ${selectedService?.service ?? ""}`}
       </label>
@@ -17,7 +20,7 @@ function ServiceViewer({ table, selectedService }) {
         backgroundColor="rgba(0, 0, 0, 0)"
         menu={[
           {
-            label: "INPUT DTO's",
+            label: "REQUEST DTO",
             content: (
               <ServiceDTOInput
                 DTO={DTO}
@@ -27,11 +30,11 @@ function ServiceViewer({ table, selectedService }) {
             ),
           },
           {
-            label: "OUTPUT DTO's",
+            label: "RESPONSE DTO",
             content: <></>,
           },
           {
-            label: "CONTROLLER",
+            label: "PERMITS",
             content: <></>,
           },
         ]}

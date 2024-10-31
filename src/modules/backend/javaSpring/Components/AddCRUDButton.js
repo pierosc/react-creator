@@ -12,6 +12,7 @@ function AddCRUDButton() {
     <Button
       size="large"
       onClick={() => {
+        console.log("Creating CRUD ...");
         const tableStructureFromDB = db?.selected?.json;
 
         tableStructureFromDB.forEach((table) => {

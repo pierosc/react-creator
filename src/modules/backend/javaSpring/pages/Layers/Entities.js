@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import CodeEditor from "../../../../../components/CodeEditor/CodeEditor";
 import DatabaseContext from "../../../../../context/DatabaseProvider";
 import SpringContext from "../../Context/SpringProvider";
@@ -8,9 +8,17 @@ function Entities({ table }) {
   const { springProject } = useContext(SpringContext);
   const entitiesList = springProject?.selected?.entity ?? {};
 
-  console.group("Entities view inputs");
-  console.log(table);
-  console.groupEnd();
+  // console.group("Entities view inputs");
+  // console.log(table);
+  // console.log(entitiesList);
+
+  useEffect(() => {
+    console.group("Entities view updated with springProject or table change:", {
+      springProject,
+      table,
+    });
+    console.groupEnd();
+  }, [springProject, table]);
 
   return (
     <div
