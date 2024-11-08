@@ -11,6 +11,7 @@ export const getControllerImports = (metaData, table) => {
     `import org.springframework.http.HttpStatus;`,
     `import org.springframework.core.io.Resource;`,
     `import org.springframework.http.ResponseEntity;`,
+    `import org.springframework.security.access.prepost.PreAuthorize;`,
     `import org.springframework.web.bind.annotation.DeleteMapping;`,
     `import org.springframework.web.bind.annotation.GetMapping;`,
     `import org.springframework.web.bind.annotation.PostMapping;`,
@@ -27,9 +28,7 @@ export const getControllerImports = (metaData, table) => {
       table.name
     )}FilterDTO;`,
     `import ${metaData.packageName}.business.services.${UCC(table.name)}Service;`,
-    `import ${metaData.packageName}.repositories.dB.entities.${UCC(
-      table.name
-    )}Entity;`,
+    `import ${metaData.packageName}.entities.${UCC(table.name)}Entity;`,
   ];
   return controller;
 };

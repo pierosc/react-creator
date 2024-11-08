@@ -145,10 +145,10 @@ ${inputEntityClass} ${inputEntityInstance} = modelMapper.map(${inputInstance}, $
   const SetDestinyEntityID = `
   ${inputEntityInstance}.set${UCC(table?.transactional?.linkAttr)}(
       ${CC(table?.transactional?.name)}Repository.findBy${UCC(
-    uniqueTransAttr?.name
-  )}(${inputInstance}.get${UCC(uniqueTransAttr?.name)}()).get${UCC(
-    idAttr?.name
-  )}());
+        uniqueTransAttr?.name
+      )}(${inputInstance}.get${UCC(uniqueTransAttr?.name)}()).get${UCC(
+        idAttr?.name
+      )}());
   `;
 
   // *************************************************************************
@@ -177,6 +177,7 @@ ${inputEntityClass} ${inputEntityInstance} = modelMapper.map(${inputInstance}, $
 
   const add = `
   @Transactional
+  @Override
   public JSONObject ${serviceName}(${input}) {
     try {
       ${existenceValidationCall}

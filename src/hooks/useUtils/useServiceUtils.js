@@ -3,35 +3,15 @@ function useServiceUtils(metaData) {
   
 package ${metaData.packageName}.utils;
 
-// import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-// import java.util.Collection;
 import java.util.List;
-// import java.util.Map;
 import java.lang.annotation.Annotation;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-// import jakarta.persistence.criteria.Predicate;
-
-// import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
-// import org.springframework.http.HttpStatus;
 
-// import com.users.repositories.dB.entities.AdministrativesStaffEntity;
-// import com.users.repositories.dB.entities.InstitutionsEntity;
-// import com.users.repositories.dB.entities.PersonalsDataEntity;
-
-// import org.json.JSONObject;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.stereotype.Service;
-// import org.springframework.web.server.ResponseStatusException;
-
-// import java.util.function.Consumer;
-// import java.util.function.Function;
-// import java.util.stream.Collectors;
 
 public class ServiceUtils {
 
@@ -93,7 +73,7 @@ public class ServiceUtils {
 
     private static boolean isEntity(Class<?> clazz) {
         Package classPackage = clazz.getPackage();
-        return classPackage != null && classPackage.getName().startsWith("com.users.repositories.dB.entities");
+        return classPackage != null && classPackage.getName().startsWith("com.users.entities");
     }
 
     private static boolean isDTO(Object value) {
@@ -102,111 +82,6 @@ public class ServiceUtils {
         return nombreTipo.startsWith("com.users.controllers.responses")
                 || nombreTipo.startsWith("com.users.business.domain");
     }
-
-    public static List<String> validateEmptyNonNullFields(Object dto) {
-        List<String> emptyNonNullFields = new ArrayList<>();
-        Class<?> dtoClass = dto.getClass();
-        String className = dtoClass.getName();
-        System.out.println(className);
-        Class<?> newEntityClass = DTOMapping.getEntityClass(className);
-
-        try {
-            Field[] dtoFields = dto.getClass().getDeclaredFields();
-            Field[] entityFields = newEntityClass.getDeclaredFields();
-
-            // System.out.println("-------------------------------");
-            // System.out.println("DTOFields");
-            // System.out.println(dtoFields);
-            // System.out.println("EntityFields");
-            // System.out.println(entityFields);
-
-            for (Field entityField : entityFields) {
-                entityField.setAccessible(true);
-
-                // System.out.println("-----------");
-                // System.out.println("entityField");
-                // System.out.println(entityField);
-
-                // Check if the field is marked as non-nullable
-                Annotation[] annotations = entityField.getDeclaredAnnotations();
-                boolean isNonNullable = false;
-                for (Annotation annotation : annotations) {
-
-                    // System.out.println("--- annotation ---");
-                    // System.out.println(annotation);
-                    // System.out.println("Annotation Type");
-                    // System.out.println(annotation.annotationType());
-
-                    if (annotation.annotationType() == JoinColumn.class) {
-                        JoinColumn columnAnnotation = (JoinColumn) annotation;
-                        if (!columnAnnotation.nullable()) {
-                            isNonNullable = true;
-                            break;
-                        }
-                    } else if (annotation.annotationType() == Column.class) {
-                        Column columnAnnotation = (Column) annotation;
-                        if (!columnAnnotation.nullable()) {
-                            isNonNullable = true;
-                            break;
-                        }
-                    }
-
-                    else if (annotation.annotationType() == Id.class) {
-                        isNonNullable = true;
-                        break;
-                    }
-                }
-
-                System.out.println("isNonNullable: " + isNonNullable);
-
-                if (isNonNullable) {
-
-                    for (Field dtoField : dtoFields) {
-
-                        System.out.println("dtoField");
-                        System.out.println(dtoField);
-
-                        if (dtoField.getName().equals(entityField.getName())) {
-                            dtoField.setAccessible(true);
-                            Object value = dtoField.get(dto);
-
-                            if (value != null && isDTO(value)) {
-
-                                List<String> emptyFields = validateEmptyNonNullFields(value);
-
-                                if (!emptyFields.isEmpty()) {
-                                    System.out.println("Campos vacíos: " + emptyFields);
-                                    emptyNonNullFields.addAll(emptyFields);
-                                }
-
-                            }
-                            if (value == null || (value instanceof String && ((String) value).isEmpty())) {
-
-                                emptyNonNullFields.add(dtoField.getName());
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return emptyNonNullFields;
-    }
-
-    // Puedes crear una función reutilizable que tome un DTO, un repositorio y el
-    // nombre del campo que deseas verificar y actualizar. Aquí tienes un ejemplo de
-    // cómo podrías hacerlo:
-
-    // java
-    // Copy code
-    // import java.lang.reflect.Field;
-    // import java.util.List;
-
-    // import org.springframework.data.jpa.repository.JpaRepository;
-
-    // public class UpdateFieldUtil {
 
     public static <T, R> void updateFieldIfNotNull(T dto, JpaRepository<R, Integer> repository, String fieldName) {
         try {
@@ -242,3 +117,97 @@ public class ServiceUtils {
 }
 
 export default useServiceUtils;
+
+// OLD CODE
+
+// public static List<String> validateEmptyNonNullFields(Object dto) {
+//     List<String> emptyNonNullFields = new ArrayList<>();
+//     Class<?> dtoClass = dto.getClass();
+//     String className = dtoClass.getName();
+//     System.out.println(className);
+//     Class<?> newEntityClass = DTOMapping.getEntityClass(className);
+
+//     try {
+//         Field[] dtoFields = dto.getClass().getDeclaredFields();
+//         Field[] entityFields = newEntityClass.getDeclaredFields();
+
+//         // System.out.println("-------------------------------");
+//         // System.out.println("DTOFields");
+//         // System.out.println(dtoFields);
+//         // System.out.println("EntityFields");
+//         // System.out.println(entityFields);
+
+//         for (Field entityField : entityFields) {
+//             entityField.setAccessible(true);
+
+//             // System.out.println("-----------");
+//             // System.out.println("entityField");
+//             // System.out.println(entityField);
+
+//             // Check if the field is marked as non-nullable
+//             Annotation[] annotations = entityField.getDeclaredAnnotations();
+//             boolean isNonNullable = false;
+//             for (Annotation annotation : annotations) {
+
+//                 // System.out.println("--- annotation ---");
+//                 // System.out.println(annotation);
+//                 // System.out.println("Annotation Type");
+//                 // System.out.println(annotation.annotationType());
+
+//                 if (annotation.annotationType() == JoinColumn.class) {
+//                     JoinColumn columnAnnotation = (JoinColumn) annotation;
+//                     if (!columnAnnotation.nullable()) {
+//                         isNonNullable = true;
+//                         break;
+//                     }
+//                 } else if (annotation.annotationType() == Column.class) {
+//                     Column columnAnnotation = (Column) annotation;
+//                     if (!columnAnnotation.nullable()) {
+//                         isNonNullable = true;
+//                         break;
+//                     }
+//                 }
+
+//                 else if (annotation.annotationType() == Id.class) {
+//                     isNonNullable = true;
+//                     break;
+//                 }
+//             }
+
+//             System.out.println("isNonNullable: " + isNonNullable);
+
+//             if (isNonNullable) {
+
+//                 for (Field dtoField : dtoFields) {
+
+//                     System.out.println("dtoField");
+//                     System.out.println(dtoField);
+
+//                     if (dtoField.getName().equals(entityField.getName())) {
+//                         dtoField.setAccessible(true);
+//                         Object value = dtoField.get(dto);
+
+//                         if (value != null && isDTO(value)) {
+
+//                             List<String> emptyFields = validateEmptyNonNullFields(value);
+
+//                             if (!emptyFields.isEmpty()) {
+//                                 System.out.println("Campos vacíos: " + emptyFields);
+//                                 emptyNonNullFields.addAll(emptyFields);
+//                             }
+
+//                         }
+//                         if (value == null || (value instanceof String && ((String) value).isEmpty())) {
+
+//                             emptyNonNullFields.add(dtoField.getName());
+//                         }
+//                         break;
+//                     }
+//                 }
+//             }
+//         }
+//     } catch (IllegalAccessException e) {
+//         e.printStackTrace();
+//     }
+//     return emptyNonNullFields;
+// }

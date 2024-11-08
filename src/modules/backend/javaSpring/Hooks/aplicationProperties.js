@@ -27,12 +27,18 @@ springdoc.api-docs.enabled = true
 springdoc.swagger-ui.enabled=true
 springdoc.swagger-ui.path=/doc/swagger-ui.html
 
-# Keycloak Config
+# --------- Keycloak Config
 spring.security.oauth2.resourceserver.jwt.issuer-uri=http://172.17.32.97:8080/realms/URP
 spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://172.17.32.97:8080/realms/URP/protocol/openid-connect/certs
+keycloak.base-url=http://172.17.32.97:8080
+keycloak.realm=URP
+keycloak.resource-id=backend
+jwt.auth.converter.principal-attribute=sub
+# ---------------------------
 
 jwt.auth.converter.resource-id=spring-client-api-rest
 jwt.auth.converter.principle-attribute=preferred_username
 
 logging.level.org.keycloak = DEBUG
+# logging.level.root=DEBUG    
 `;

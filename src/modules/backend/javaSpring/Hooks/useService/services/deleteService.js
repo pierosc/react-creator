@@ -24,6 +24,7 @@ export const getDeleteService = (table) => {
 
   const del = `    
   @Transactional
+  @Override
   public JSONObject ${serviceName}(${input}) {
       try {
 
@@ -55,8 +56,8 @@ export const getDeleteService = (table) => {
     try {
 
       ${entityClass} entityToDelete = ${repositoryInstance}.findBy${UCC(
-    uniqueAttr?.name
-  )}(${inputInstance}.get${UCC(uniqueAttr?.name)}());
+        uniqueAttr?.name
+      )}(${inputInstance}.get${UCC(uniqueAttr?.name)}());
 
         ${repositoryInstance}.delete(entityToDelete);
 

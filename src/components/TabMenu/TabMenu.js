@@ -8,7 +8,7 @@ function TabMenu({
   backgroundColor = "rgb(75, 75, 75)",
   position = "center",
 }) {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState("0");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -26,6 +26,7 @@ function TabMenu({
           <TabList onChange={handleChange}>
             {menu.map((tab, i) => (
               <Tab
+                key={i}
                 label={
                   tab?.img !== undefined ? (
                     <img
@@ -37,7 +38,7 @@ function TabMenu({
                     tab?.label
                   )
                 }
-                value={i}
+                value={i.toString()}
                 disabled={tab?.disabled ?? false}
               />
             ))}
@@ -45,7 +46,7 @@ function TabMenu({
         </div>
       </Box>
       {menu.map((tab, i) => (
-        <TabPanel value={i} sx={{ padding: "0" }}>
+        <TabPanel key={i} value={i.toString()} sx={{ padding: "0" }}>
           {tab?.content ?? <div></div>}
         </TabPanel>
       ))}

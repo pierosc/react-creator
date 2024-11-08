@@ -182,7 +182,7 @@ public class ${UCC(DTOName)} {`;
       const attrVar =
         relationsData.length === 0
           ? `  ${!attr.nullabe ? `@NotNull(message = "${TC(attr.name)} is required")` : ""}
-          private ${sqlVarToJavaVar(attr.type)} ${CC(attr.name)};`
+  private ${sqlVarToJavaVar(attr.type)} ${CC(attr.name)};`
           : "";
       const attrsVars =
         relationsData.length === 0 && !attr.pk ? [attrVar] : relationsData;

@@ -10,6 +10,7 @@ export const getFilterExcelService = (table) => {
   const repository = `${CC(table?.name)}Repository`;
 
   const service = `  
+  @Override
   public ByteArrayOutputStream ${serviceName}(${input}) {
     List<${entityClass}> filteredList = ${repository}
         .findAll(Filter.buildSpecification(${inputInstance}));

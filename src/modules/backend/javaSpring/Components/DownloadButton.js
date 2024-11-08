@@ -15,6 +15,7 @@ function DownloadButton() {
     springProject,
     entities,
     services,
+    interfaces,
     controllers,
     repositories,
     utils,
@@ -33,19 +34,25 @@ function DownloadButton() {
         // console.groupCollapsed("FILES CREATED");
 
         const entityFiles = entities.files();
-        jpa[2].content[0].content[0].content = entityFiles;
+        jpa[5].content = entityFiles;
         // console.log("entityFiles");
         // console.log(entityFiles);
 
         const repos = repositories.files();
-        jpa[2].content[0].content[1].content = repos;
+        jpa[2].content = repos;
         // console.log("repos");
         // console.log(repos);
 
         const servicesFiles = services.files();
-        jpa[0].content[1].content = servicesFiles;
+        jpa[0].content[1].content = [
+          ...jpa[0].content[1].content,
+          ...servicesFiles,
+        ];
         // console.log("servicesFiles");
         // console.log(servicesFiles);
+
+        const interfacesFiles = interfaces.files();
+        jpa[0].content[1].content[0].content = interfacesFiles;
 
         const controllersFiles = controllers.files();
         jpa[1].content = [...jpa[1].content, ...controllersFiles];
@@ -81,38 +88,44 @@ function DownloadButton() {
         jpa = [
           {
             type: "folder",
-            name: "main",
+            name: "src",
             content: [
               {
                 type: "folder",
-                name: "java",
+                name: "main",
                 content: [
                   {
                     type: "folder",
-                    name: "com",
+                    name: "java",
                     content: [
                       {
                         type: "folder",
-                        name: springProject?.selected?.metaData.artifact,
-                        content: jpa,
+                        name: "com",
+                        content: [
+                          {
+                            type: "folder",
+                            name: springProject?.selected?.metaData.artifact,
+                            content: jpa,
+                          },
+                        ],
                       },
                     ],
                   },
-                ],
-              },
-              {
-                type: "folder",
-                name: "resources",
-                content: [
                   {
-                    type: "file",
-                    name: "application.properties",
-                    content: aplicationProperties,
-                  },
-                  {
-                    type: "file",
-                    name: "banner.txt",
-                    content: banner,
+                    type: "folder",
+                    name: "resources",
+                    content: [
+                      {
+                        type: "file",
+                        name: "application.properties",
+                        content: aplicationProperties,
+                      },
+                      {
+                        type: "file",
+                        name: "banner.txt",
+                        content: banner,
+                      },
+                    ],
                   },
                 ],
               },

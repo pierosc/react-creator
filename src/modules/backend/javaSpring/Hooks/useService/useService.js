@@ -144,7 +144,7 @@ const useService = (springProject) => {
               const destinyTable = `${UCC(rel.destinyTable)}`;
               const imports =
                 rel.relation !== "OneToMany"
-                  ? `import ${metaData.packageName}.repositories.dB.repo.${relRepository};
+                  ? `import ${metaData.packageName}.repositories.${relRepository};
 import ${metaData.packageName}.controllers.responses.${destinyTable}.${destinyTable}ListDTO;`
                   : ``;
               return imports;
@@ -156,7 +156,7 @@ import ${metaData.packageName}.controllers.responses.${destinyTable}.${destinyTa
     if (isTransactional) {
       const transactionalRepo = `import ${
         metaData.packageName
-      }.repositories.dB.repo.${UCC(table.transactional.name)}Repository;`;
+      }.repositories.${UCC(table.transactional.name)}Repository;`;
 
       attributesRepositoriesImports = [
         ...attributesRepositoriesImports,
@@ -185,13 +185,12 @@ import ${metaData.packageName}.controllers.responses.${destinyTable}.${destinyTa
       `import ${metaData.packageName}.utils.ExcelUtils;`,
       `import ${metaData.packageName}.utils.Filter;`,
       `import ${metaData.packageName}.utils.Response;`,
+      `import ${metaData.packageName}.business.services.interfaces.I${UCC(table.name)}Service;`,
       `import ${metaData.packageName}.business.domain.${UCC(table.name)}.${UCC(
         table.name
       )}FilterDTO;`,
-      `import ${metaData.packageName}.repositories.dB.entities.${UCC(
-        table.name
-      )}Entity;`,
-      `import ${metaData.packageName}.repositories.dB.repo.${UCC(
+      `import ${metaData.packageName}.entities.${UCC(table.name)}Entity;`,
+      `import ${metaData.packageName}.repositories.${UCC(
         table.name
       )}Repository;`,
       ...attributesRepositoriesImports,
@@ -207,7 +206,7 @@ import ${metaData.packageName}.controllers.responses.${destinyTable}.${destinyTa
 
   const getServiceClass = (table) => {
     const service = `@Service
-public class ${UCC(table.name)}Service {
+public class ${UCC(table.name)}Service implements I${UCC(table.name)}Service {
  ${depInjection.getDependencyInjection(table)}
 `;
 
@@ -232,7 +231,9 @@ public class ${UCC(table.name)}Service {
     const entityListName = `${CC(tableName)}List`;
     // const entityInstance = `${CC(tableName)}Entity`;
 
-    const list = `    public List<${output}> ${serviceName}() {
+    const list = `    
+    @Override
+    public List<${output}> ${serviceName}() {
         ModelMapper modelMapper = new ModelMapper();
         List<${entityClass}> ${entityListName} = ${repositoryInstance}.findAll();
 

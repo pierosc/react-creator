@@ -7,7 +7,7 @@ import {
   sqlVarToJavaVar,
 } from "../../../../StringFunctions";
 // import { useLocalStorage } from "./../../../../hooks/useStorage";
-import SpringContext from "../Context/SpringProvider";
+// import SpringContext from "../Context/SpringProvider";
 
 export const useRepositories = (springProject) => {
   // const { springProject } = useContext(SpringContext);
@@ -110,20 +110,6 @@ export const useRepositories = (springProject) => {
     return repositories;
   };
 
-  const getImports = (table, metaData) => {
-    const repo = [
-      "package ${metaData.packageName}.repositories.dB.repo;",
-      "import org.springframework.data.jpa.repository.JpaRepository;",
-      "import java.util.UUID;",
-      "import java.util.List;",
-      "import org.springframework.data.jpa.domain.Specification;",
-      `import ${metaData.packageName}.repositories.dB.entities.${UCC(
-        table.name
-      )}Entity;`,
-    ];
-    return repo;
-  };
-
   //
   // const setFilterRepositories = () => {
   //   tableStructue.forEach((table) => {
@@ -142,15 +128,13 @@ export const useRepositories = (springProject) => {
   // };
 
   const getRepositoryImports = (table, metaData) => {
-    const repo = `package ${metaData.packageName}.repositories.dB.repo;
+    const repo = `package ${metaData.packageName}.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
-import ${metaData.packageName}.repositories.dB.entities.${UCC(
-      table.name
-    )}Entity;`;
+import ${metaData.packageName}.entities.${UCC(table.name)}Entity;`;
     return repo;
   };
 

@@ -96,6 +96,7 @@ ${entityClass} entityToEdit = filteredList.get(0);
 
   const edit = `  
   @Transactional
+  @Override
   public JSONObject ${serviceName}(${input}) {
       try {
           ${entityToEdit}

@@ -54,9 +54,7 @@ function useDTOMapping(metaData) {
   };
 
   const getImport = (DTO) => {
-    return `import ${metaData.packageName}.repositories.dB.entities.${UCC(
-      DTO.table
-    )}Entity;`;
+    return `import ${metaData.packageName}.entities.${UCC(DTO.table)}Entity;`;
   };
 
   const addDTOMap = (DTO) => {

@@ -11,6 +11,7 @@ export const getFilterService = (table) => {
 
   const service = `  
   @Transactional
+  @Override
   public ${output} ${serviceName}(${input}) {
   List<${entityClass}> filteredList = ${repository}
           .findAll(Filter.buildSpecification(${inputInstance}));

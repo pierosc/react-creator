@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+// import { useState, useContext } from "react";
 import {
   CC,
   JoinNewLine,
@@ -26,7 +26,7 @@ function useEntity(springProject) {
 
   const getEntityImports = (metaData) => {
     return [
-      `package ${metaData.packageName}.repositories.dB.entities;`,
+      `package ${metaData.packageName}.entities;`,
       `import jakarta.persistence.Id;`,
       `import jakarta.persistence.Table;`,
       `import jakarta.persistence.Temporal;`,
@@ -225,6 +225,27 @@ function useEntity(springProject) {
       return "IDENTITY";
     }
   }
+
+  const auditoryEntity = `
+package com.users.domain.entities;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "audit_logs")
+public class AuditLog {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String username;
+    private String action;
+    private String details;
+    private LocalDateTime timestamp;
+
+    // Getters y Setters...
+}`;
 
   return {
     //  getEntitiesFiles,

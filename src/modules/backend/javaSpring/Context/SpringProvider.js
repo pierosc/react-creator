@@ -9,6 +9,7 @@ import useApplication from "../../../../hooks/useApplication";
 import useException from "../Hooks/useException/useException";
 import { useJPAProject } from "../Hooks/useJPAProject";
 import useEntity from "../Hooks/useEntity";
+import useInterface from "../Hooks/useInterface/useInterface";
 
 const SpringContext = createContext();
 
@@ -17,6 +18,7 @@ function SpringProvider({ children }) {
 
   const entities = useEntity(springProject);
   const services = useService(springProject);
+  const interfaces = useInterface(springProject);
   const controllers = useController(springProject);
   const repositories = useRepositories(springProject);
   const utils = useUtils(springProject);
@@ -28,6 +30,7 @@ function SpringProvider({ children }) {
     entities,
     repositories,
     services,
+    interfaces,
     controllers,
     DTO,
     springProject
@@ -39,6 +42,7 @@ function SpringProvider({ children }) {
         springProject,
         entities,
         services,
+        interfaces,
         controllers,
         repositories,
         utils,

@@ -14,8 +14,14 @@ function FolderStructureConfiguration({
   handleChangeInputMenu,
   spring,
 }) {
-  const { entities, services, controllers, repositories, springProject } =
-    useContext(SpringContext);
+  const {
+    entities,
+    services,
+    interfaces,
+    controllers,
+    repositories,
+    springProject,
+  } = useContext(SpringContext);
   const { db } = useContext(DatabaseContext);
 
   return (
@@ -130,6 +136,10 @@ function FolderStructureConfiguration({
               dataBaseStructure,
               spring.metaData
             );
+            const interfacesStructure = interfaces.getEmptyStructure(
+              dataBaseStructure,
+              spring.metaData
+            );
             const servicesStructure = services.getEmptyStructure(
               dataBaseStructure,
               spring.metaData
@@ -151,6 +161,9 @@ function FolderStructureConfiguration({
             console.group("EMPTY REPOSITORY STRUCTURE");
             console.log(repoStructure);
             console.groupEnd();
+            console.group("EMPTY INTERFACES STRUCTURE");
+            console.log(interfacesStructure);
+            console.groupEnd();
             console.group("EMPTY SERVICES STRUCTURE");
             console.log(servicesStructure);
             console.groupEnd();
@@ -164,6 +177,7 @@ function FolderStructureConfiguration({
               entity: entitiesStructure,
               repository: repoStructure,
               service: servicesStructure,
+              interface: interfacesStructure,
               controller: controllersStructure,
               inputDTO: emptydto,
               outputDTO: emptydto,
