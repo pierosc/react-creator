@@ -22,11 +22,12 @@ function ServiceViewer({ table, selectedService }) {
           {
             label: "REQUEST DTO",
             content: (
-              <ServiceDTOInput
-                DTO={DTO}
-                table={table}
-                selectedService={selectedService}
-              />
+              // <ServiceDTOInput
+              //   DTO={DTO}
+              //   table={table}
+              //   selectedService={selectedService}
+              // />
+              <></>
             ),
           },
           {

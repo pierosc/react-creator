@@ -190,6 +190,7 @@ export const useController = (springProject) => {
             instance: `${CC(table.name)}Service`,
             method: `add${UCC(table.name)}`,
           },
+          msg: `${UCC(table.name)} added succesfully`,
         },
       },
     };

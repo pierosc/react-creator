@@ -8,17 +8,6 @@ export const jpaFolderStructure = [
         name: "domain",
         content: [],
       },
-      {
-        type: "folder",
-        name: "services",
-        content: [
-          {
-            type: "folder",
-            name: "interfaces",
-            content: [],
-          },
-        ],
-      },
     ],
   },
   {
@@ -54,7 +43,13 @@ export const jpaFolderStructure = [
   },
   {
     type: "folder",
-    name: "audit",
-    content: [],
+    name: "services",
+    content: [
+      {
+        type: "folder",
+        name: "interfaces",
+        content: [],
+      },
+    ],
   },
 ];

@@ -47,9 +47,9 @@ function useDTOMapping(metaData) {
   // -------------------------------------------------------------------------------------
 
   const getMap = (DTO) => {
-    //`dtoToEntityMapping.put("com.users.controllers.responses.Genders.GendersListDTO", GendersEntity.class);`
+    //`dtoToEntityMapping.put("com.users.dtos.responses.Genders.GendersListDTO", GendersEntity.class);`
     return `dtoToEntityMapping.put("${metaData.packageName}.${
-      DTO.source === "output" ? "controllers.responses" : "business.domain"
+      DTO.source === "output" ? "dtos.responses" : "dtos.requests"
     }.${UCC(DTO.table)}.${DTO.name}", ${UCC(DTO.table)}Entity.class);`;
   };
 

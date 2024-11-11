@@ -145,7 +145,7 @@ const useService = (springProject) => {
               const imports =
                 rel.relation !== "OneToMany"
                   ? `import ${metaData.packageName}.repositories.${relRepository};
-import ${metaData.packageName}.controllers.responses.${destinyTable}.${destinyTable}ListDTO;`
+import ${metaData.packageName}.dtos.responses.${destinyTable}.${destinyTable}ListDTO;`
                   : ``;
               return imports;
             })
@@ -165,7 +165,7 @@ import ${metaData.packageName}.controllers.responses.${destinyTable}.${destinyTa
     }
 
     const service = [
-      `package ${metaData.packageName}.business.services;`,
+      `package ${metaData.packageName}.services;`,
       `import java.util.ArrayList;`,
       `import java.util.List;`,
       `import java.util.Optional;`,
@@ -185,8 +185,8 @@ import ${metaData.packageName}.controllers.responses.${destinyTable}.${destinyTa
       `import ${metaData.packageName}.utils.ExcelUtils;`,
       `import ${metaData.packageName}.utils.Filter;`,
       `import ${metaData.packageName}.utils.Response;`,
-      `import ${metaData.packageName}.business.services.interfaces.I${UCC(table.name)}Service;`,
-      `import ${metaData.packageName}.business.domain.${UCC(table.name)}.${UCC(
+      `import ${metaData.packageName}.services.interfaces.I${UCC(table.name)}Service;`,
+      `import ${metaData.packageName}.dtos.requests.${UCC(table.name)}.${UCC(
         table.name
       )}FilterDTO;`,
       `import ${metaData.packageName}.entities.${UCC(table.name)}Entity;`,

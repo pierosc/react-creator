@@ -28,18 +28,18 @@ function useInterface(springProject) {
 
   const getInterfaceImports = (table, metaData) => {
     return [
-      `package ${metaData.group}.business.services.interfaces;
+      `package ${metaData.group}.services.interfaces;
 `,
       `import java.io.ByteArrayOutputStream;`,
       `import java.util.List;`,
       `import org.json.JSONObject;`,
-      `import ${metaData.group}.business.domain.${UCC(table.name)}.${UCC(table.name)}AddDTO;`,
+      `import ${metaData.group}.dtos.requests.${UCC(table.name)}.${UCC(table.name)}AddDTO;`,
 
-      `import ${metaData.group}.business.domain.${UCC(table.name)}.${UCC(table.name)}EditDTO;`,
+      `import ${metaData.group}.dtos.requests.${UCC(table.name)}.${UCC(table.name)}EditDTO;`,
 
-      `import ${metaData.group}.business.domain.${UCC(table.name)}.${UCC(table.name)}DeleteDTO;`,
-      `import ${metaData.group}.business.domain.${UCC(table.name)}.${UCC(table.name)}FilterDTO;`,
-      `import ${metaData.group}.controllers.responses.${UCC(table.name)}.${UCC(table.name)}ListDTO;`,
+      `import ${metaData.group}.dtos.requests.${UCC(table.name)}.${UCC(table.name)}DeleteDTO;`,
+      `import ${metaData.group}.dtos.requests.${UCC(table.name)}.${UCC(table.name)}FilterDTO;`,
+      `import ${metaData.group}.dtos.responses.${UCC(table.name)}.${UCC(table.name)}ListDTO;`,
     ];
   };
 

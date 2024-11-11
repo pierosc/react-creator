@@ -79,8 +79,8 @@ public class ServiceUtils {
     private static boolean isDTO(Object value) {
         Class<?> tipo = value.getClass();
         String nombreTipo = tipo.getName();
-        return nombreTipo.startsWith("com.users.controllers.responses")
-                || nombreTipo.startsWith("com.users.business.domain");
+        return nombreTipo.startsWith("com.users.dtos.responses")
+                || nombreTipo.startsWith("com.users.dtos.requests");
     }
 
     public static <T, R> void updateFieldIfNotNull(T dto, JpaRepository<R, Integer> repository, String fieldName) {

@@ -2,13 +2,11 @@ import { Button } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import React, { useContext } from "react";
 import SpringContext from "../Context/SpringProvider";
-import { jpaFolderStructure } from "../../../../jpaFolferStructure";
 import useFile from "../../../../hooks/useFile/useFile";
 import { aplicationProperties } from "../Hooks/aplicationProperties";
 import { banner } from "../Hooks/banner";
 
 function DownloadButton() {
-  let jpa = jpaFolderStructure;
   const file = useFile();
 
   const {
@@ -31,61 +29,81 @@ function DownloadButton() {
       size="large"
       endIcon={<DownloadIcon />}
       onClick={() => {
-        // console.groupCollapsed("FILES CREATED");
+        const resourcesFolder = {
+          type: "folder",
+          name: "resources",
+          content: [
+            {
+              type: "file",
+              name: "application.properties",
+              content: aplicationProperties,
+            },
+            {
+              type: "file",
+              name: "banner.txt",
+              content: banner,
+            },
+          ],
+        };
 
-        const entityFiles = entities.files();
-        jpa[5].content = entityFiles;
-        // console.log("entityFiles");
-        // console.log(entityFiles);
-
-        const repos = repositories.files();
-        jpa[2].content = repos;
-        // console.log("repos");
-        // console.log(repos);
-
-        const servicesFiles = services.files();
-        jpa[0].content[1].content = [
-          ...jpa[0].content[1].content,
-          ...servicesFiles,
+        const projectFolder = [
+          {
+            type: "folder",
+            name: "dtos",
+            content: [
+              {
+                type: "folder",
+                name: "requests",
+                content: DTO.files("input"),
+              },
+              {
+                type: "folder",
+                name: "responses",
+                content: DTO.files("output"),
+              },
+            ],
+          },
+          {
+            type: "folder",
+            name: "controllers",
+            content: controllers.files(),
+          },
+          {
+            type: "folder",
+            name: "repositories",
+            content: repositories.files(),
+          },
+          {
+            type: "folder",
+            name: "utils",
+            content: utils.getFolderContent(),
+          },
+          {
+            type: "folder",
+            name: "exception",
+            content: exception.getFolderContent(),
+          },
+          {
+            type: "folder",
+            name: "entities",
+            content: entities.files(),
+          },
+          {
+            type: "folder",
+            name: "services",
+            content: [
+              ...services.files(),
+              {
+                type: "folder",
+                name: "interfaces",
+                content: interfaces.files(),
+              },
+            ],
+          },
+          application.getFile(),
         ];
-        // console.log("servicesFiles");
-        // console.log(servicesFiles);
 
-        const interfacesFiles = interfaces.files();
-        jpa[0].content[1].content[0].content = interfacesFiles;
-
-        const controllersFiles = controllers.files();
-        jpa[1].content = [...jpa[1].content, ...controllersFiles];
-        // console.log("controllersFiles");
-        // console.log(controllersFiles);
-
-        const outputDTOFiles = DTO.files("output");
-        jpa[1].content[0].content = outputDTOFiles;
-        // console.log("outputDTOFiles");
-        // console.log(outputDTOFiles);
-
-        const inputDTOFiles = DTO.files("input");
-        jpa[0].content[0].content = inputDTOFiles;
-        // console.log("inputDTOFiles");
-        // console.log(inputDTOFiles);
-
-        const utilsFiles = utils.getFolderContent();
-        jpa[3].content = utilsFiles;
-        // console.log("utilsFiles");
-        // console.log(utilsFiles);
-
-        const exceptionFiles = exception.getFolderContent();
-        jpa[4].content = exceptionFiles;
-        // console.log("exceptionFiles");
-        // console.log(exceptionFiles);
-
-        const applicationFile = application.getFile();
-        jpa = [...jpa, applicationFile];
-        // console.log("applicationFile");
-        // console.log(applicationFile);
-
-        // console.groupEnd();
-        jpa = [
+        const jpa = [
           {
             type: "folder",
             name: "src",
@@ -105,35 +123,19 @@ function DownloadButton() {
                           {
                             type: "folder",
                             name: springProject?.selected?.metaData.artifact,
-                            content: jpa,
+                            content: projectFolder,
                           },
                         ],
                       },
                     ],
                   },
-                  {
-                    type: "folder",
-                    name: "resources",
-                    content: [
-                      {
-                        type: "file",
-                        name: "application.properties",
-                        content: aplicationProperties,
-                      },
-                      {
-                        type: "file",
-                        name: "banner.txt",
-                        content: banner,
-                      },
-                    ],
-                  },
+                  resourcesFolder,
                 ],
               },
             ],
           },
         ];
         file.createRarFile(jpa);
-        jpa = jpaFolderStructure;
       }}
     >
       Download Project

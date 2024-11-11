@@ -45,13 +45,13 @@ export const useJPAProject = (
     const newInterface = interfaces.getListAllInterface(table);
     const newServiceImport = `import ${
       metaData.packageName
-    }.controllers.responses.${UCC(table.name)}.${UCC(table.name)}ListDTO;
+    }.dtos.responses.${UCC(table.name)}.${UCC(table.name)}ListDTO;
 `;
     console.log("Creating List All Controller");
     const newController = controllers.getListController(table);
     const newControllerImport = `import ${
       metaData.packageName
-    }.controllers.responses.${UCC(table.name)}.${UCC(table.name)}ListDTO;
+    }.dtos.responses.${UCC(table.name)}.${UCC(table.name)}ListDTO;
 `;
     console.log("Creating List All Response DTO");
     const newOutputDTO = DTO.getDTO(
@@ -137,7 +137,7 @@ export const useJPAProject = (
     );
     const newInputDTOImport = `import ${
       metaData.packageName
-    }.business.domain.${UCC(table.name)}.${UCC(table.name)}AddDTO;
+    }.dtos.requests.${UCC(table.name)}.${UCC(table.name)}AddDTO;
 `;
 
     services.addService(project, table, newService);
@@ -174,7 +174,7 @@ export const useJPAProject = (
     );
     const newInputDTOImport = `import ${
       metaData.packageName
-    }.business.domain.${UCC(table.name)}.${UCC(table.name)}EditDTO;
+    }.dtos.requests.${UCC(table.name)}.${UCC(table.name)}EditDTO;
     `;
 
     services.addService(project, table, newService);
@@ -193,12 +193,12 @@ export const useJPAProject = (
     const newInterface = interfaces.getDeleteInterface(table);
     const newServiceImport = `import ${
       metaData.packageName
-    }.business.domain.${UCC(table.name)}.${UCC(table.name)}DeleteDTO;
+    }.dtos.requests.${UCC(table.name)}.${UCC(table.name)}DeleteDTO;
 `;
     const newController = controllers.getDeleteController(table);
     const newControllerImport = `import ${
       metaData.packageName
-    }.business.domain.${UCC(table.name)}.${UCC(table.name)}DeleteDTO;
+    }.dtos.requests.${UCC(table.name)}.${UCC(table.name)}DeleteDTO;
 `;
     const uniqueAttr = table.attributes.find((attr) => attr.unique === true);
     // console.log(uniqueAttr);
@@ -232,7 +232,7 @@ export const useJPAProject = (
     const newController = controllers.getFindByController(attributes, table);
     const newControllerImport = `import ${
       metaData.packageName
-    }.business.domain.${UCC(table.name)}.${attributes
+    }.dtos.requests.${UCC(table.name)}.${attributes
       .map((attr) => UCC(attr.name))
       .join("And")}IDTO;
     `;

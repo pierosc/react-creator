@@ -2,6 +2,19 @@ export const getAddTemplate = (conf) => {
   return `   @CrossOrigin
     //@PreAuthorize("hasPermission('Documents', 'delete')")
     @PostMapping("${conf.url}")
+    public ResponseEntity<ApiResponse<Void>> ${conf.name}(@Valid ${conf.input.all}) {
+      ${conf.output.service.instance}.${conf.output.service.method}(${conf.input.instance});
+
+      ApiResponse<Void> response = new ApiResponse<>(true, "${conf.output.msg}", null);
+      return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+    }`;
+};
+
+const getAddTemplatev1 = (conf) => {
+  return `   @CrossOrigin
+    //@PreAuthorize("hasPermission('Documents', 'delete')")
+    @PostMapping("${conf.url}")
     public String ${conf.name}(@Valid ${conf.input.all}) {
 
       return ${conf.output.service.instance}.${conf.output.service.method}(${conf.input.instance}).toString();

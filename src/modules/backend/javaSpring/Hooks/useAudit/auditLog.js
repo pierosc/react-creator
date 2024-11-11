@@ -24,7 +24,7 @@ public class AuditLog {
     private String parameters;
     private String result;
     private LocalDateTime timestamp;
-
+    private String ipAddress;
 }
   `;
 }

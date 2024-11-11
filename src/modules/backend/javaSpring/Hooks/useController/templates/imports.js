@@ -24,10 +24,10 @@ export const getControllerImports = (metaData, table) => {
     `import ${metaData.packageName}.utils.Response;`,
     `import ${metaData.packageName}.utils.ExcelUtils;`,
     `import ${metaData.packageName}.utils.ServiceUtils;`,
-    `import ${metaData.packageName}.business.domain.${UCC(table.name)}.${UCC(
+    `import ${metaData.packageName}.dtos.requests.${UCC(table.name)}.${UCC(
       table.name
     )}FilterDTO;`,
-    `import ${metaData.packageName}.business.services.${UCC(table.name)}Service;`,
+    `import ${metaData.packageName}.services.${UCC(table.name)}Service;`,
     `import ${metaData.packageName}.entities.${UCC(table.name)}Entity;`,
   ];
   return controller;
