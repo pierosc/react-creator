@@ -1,4 +1,4 @@
-import { CC, UCC } from "../../.././../../../StringFunctions";
+import { CC, TC, UCC } from "../../.././../../../StringFunctions";
 
 export const getDeleteService = (table) => {
   const input = `${UCC(table.name)}DeleteDTO ${CC(table.name)}DeleteDTO`;
@@ -22,10 +22,10 @@ export const getDeleteService = (table) => {
   // -------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------
 
-  const del = `    
+  const del = ` @Auditable(action = "delete ${TC(table.name)}")    
   @Transactional
   @Override
-  public JSONObject ${serviceName}(${input}) {
+  public void ${serviceName}(${input}) {
       try {
 
         List<${UCC(table.name)}Entity> filteredList = ${repositoryInstance}
@@ -40,19 +40,20 @@ export const getDeleteService = (table) => {
         ${UCC(table.name)}Entity entityToDelete = filteredList.get(0);
         ${repositoryInstance}.delete(entityToDelete);
 
-        return Response.JSONObject(${successMsg});
+        // return Response.JSONObject(${successMsg});
 
       } catch (Exception e) {
-        JSONObject jsonError = new JSONObject();
+        // JSONObject jsonError = new JSONObject();
         e.printStackTrace();
-        jsonError.put("error", ${catchErrorMsg});
-        return jsonError;
+        // jsonError.put("error", ${catchErrorMsg});
+        // return jsonError;
       }
     }
 `;
-  const deleteServiceUniqueAttr = `    
+  const deleteServiceUniqueAttr = ` @Override   
+  @Auditable(action = "delete ${TC(table.name)}")
   @Transactional
-  public JSONObject ${serviceName}(${input}) {
+  public void ${serviceName}(${input}) {
     try {
 
       ${entityClass} entityToDelete = ${repositoryInstance}.findBy${UCC(
@@ -61,13 +62,13 @@ export const getDeleteService = (table) => {
 
         ${repositoryInstance}.delete(entityToDelete);
 
-        return Response.JSONObject(${successMsg});
+        // return Response.JSONObject(${successMsg});
 
     } catch (Exception e) {
-        JSONObject jsonError = new JSONObject();
+        // JSONObject jsonError = new JSONObject();
         e.printStackTrace();
-        jsonError.put("error", ${catchErrorMsg});
-        return jsonError;
+        // jsonError.put("error", ${catchErrorMsg});
+        // return jsonError;
     }
     }
 `;

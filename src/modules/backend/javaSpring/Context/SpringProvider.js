@@ -10,6 +10,7 @@ import useException from "../Hooks/useException/useException";
 import { useJPAProject } from "../Hooks/useJPAProject";
 import useEntity from "../Hooks/useEntity";
 import useInterface from "../Hooks/useInterface/useInterface";
+import useAudit from "../Hooks/useAudit/useAudit";
 
 const SpringContext = createContext();
 
@@ -25,6 +26,7 @@ function SpringProvider({ children }) {
   const DTO = useDTO(springProject);
   const exception = useException(springProject);
   const application = useApplication(springProject);
+  const audit = useAudit(springProject);
 
   const JPA = useJPAProject(
     entities,
@@ -50,6 +52,7 @@ function SpringProvider({ children }) {
         exception,
         application,
         JPA,
+        audit,
       }}
     >
       {children}

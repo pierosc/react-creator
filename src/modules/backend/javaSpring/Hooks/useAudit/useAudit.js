@@ -5,7 +5,8 @@ import { auditable } from "./auditable";
 import { auditRepository } from "./auditRepository";
 
 function useAudit(springProject) {
-  const getAuditEmptyEstructure = (metaData) => {
+  const metaData = springProject?.selected?.metaData ?? {};
+  const getAuditEmptyEstructure = () => {
     return [
       {
         type: "file",
@@ -29,31 +30,32 @@ function useAudit(springProject) {
       },
     ];
   };
-  const getFiles = () => {};
-  let servicesFiles = [
-    {
-      type: "file",
-      name: `auditLog.java`,
-      content: auditLog(),
-    },
-    {
-      type: "file",
-      name: `auditAspect.java`,
-      content: auditAspect(),
-    },
-    {
-      type: "file",
-      name: `auditable.java`,
-      content: auditable(),
-    },
-    {
-      type: "file",
-      name: `auditRepository.java`,
-      content: auditRepository(),
-    },
-  ];
+  const files = () => {
+    return [
+      {
+        type: "file",
+        name: `AuditLog.java`,
+        content: auditLog(metaData),
+      },
+      {
+        type: "file",
+        name: `AuditAspect.java`,
+        content: auditAspect(metaData),
+      },
+      {
+        type: "file",
+        name: `Auditable.java`,
+        content: auditable(metaData),
+      },
+      {
+        type: "file",
+        name: `AuditRepository.java`,
+        content: auditRepository(metaData),
+      },
+    ];
+  };
 
-  return { getAuditEmptyEstructure };
+  return { getAuditEmptyEstructure, files };
 }
 
 export default useAudit;

@@ -97,7 +97,7 @@ ${entityClass} entityToEdit = filteredList.get(0);
   const edit = `  
   @Transactional
   @Override
-  public JSONObject ${serviceName}(${input}) {
+  public void ${serviceName}(${input}) {
       try {
           ${entityToEdit}
           ${attributesEntitiesSetter}
@@ -107,11 +107,11 @@ ${entityClass} entityToEdit = filteredList.get(0);
           ${temporalAttribute ? setUpdateTime : ""}
           ${repositoryInstance}.save(entityToEdit);
         
-          return Response.JSONObject(${successMsg});
+          // return Response.JSONObject(${successMsg});
 
       } catch (Exception e) {
           e.printStackTrace();      
-          return Response.JSONObject(${errorCatch});
+          // return Response.JSONObject(${errorCatch});
       }
     }`;
 

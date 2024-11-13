@@ -1,6 +1,5 @@
 export const getFilterExcelTemplate = (conf) => {
-  return `@CrossOrigin
-    //@PreAuthorize("hasPermission('Documents', 'delete')")
+  return `  //@PreAuthorize("hasPermission('Documents', 'delete')")
     @PostMapping("${conf.url}")
     public ResponseEntity<Resource> ${conf.name}(@Valid ${conf.input.all}) {
     try {

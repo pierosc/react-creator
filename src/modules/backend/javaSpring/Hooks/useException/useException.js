@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
 }`;
 
   const getEntityNotFoundException = () => {
-    const file = `package ${metaData.group}.exceptions;
+    return `package ${metaData.group}.exceptions;
 
 public class EntityNotFoundException extends RuntimeException {
 
@@ -62,7 +62,7 @@ public class EntityNotFoundException extends RuntimeException {
   };
 
   const getEntityAlreadyExistsException = () => {
-    const file = `package ${metaData.group}.exceptions;
+    return `package ${metaData.group}.exceptions;
 
 public class EntityAlreadyExistsException extends RuntimeException {
 

@@ -65,29 +65,6 @@ export const useRepositories = (springProject) => {
     });
   };
 
-  // const setEmptyStructure = () => {
-  //   let repositories = {};
-  //   tableStructue.forEach((table) => {
-  //     //   const imports = getServiceImports(table);
-  //     const uniqueAttr = table.attributes.find((attr) => attr.unique);
-  //     // console.log(table.attributes);
-
-  //     repositories[table.name] = {};
-  //     repositories[table.name]["imports"] = getRepositoryImports(
-  //       table,
-  //       metaData
-  //     );
-  //     repositories[table.name]["classStart"] = getRepositoryClassStart(table);
-  //     repositories[table.name]["repositories"] = uniqueAttr
-  //       ? [getfindByRepository([uniqueAttr], table, true)]
-  //       : [];
-  //     repositories[table.name]["classEnd"] = "}";
-  //   });
-  //   setRepositoriesList(repositories);
-  //   return repositories;
-  // };
-  //
-
   const getEmptyStructure = (tableStructure, metaData) => {
     let repositories = {};
     tableStructure.forEach((table) => {
@@ -109,23 +86,6 @@ export const useRepositories = (springProject) => {
     // setRepositoriesList(repositories);
     return repositories;
   };
-
-  //
-  // const setFilterRepositories = () => {
-  //   tableStructue.forEach((table) => {
-  //     const filter = getFilterRepository(table);
-
-  //     setRepositoriesList((prevRepositoriesList) => {
-  //       const newRepositoriesList = { ...prevRepositoriesList };
-  //       const newRepositories = [
-  //         filter,
-  //         ...newRepositoriesList[table?.name]["repositories"],
-  //       ];
-  //       newRepositoriesList[table?.name]["repositories"] = newRepositories;
-  //       return newRepositoriesList;
-  //     });
-  //   });
-  // };
 
   const getRepositoryImports = (table, metaData) => {
     const repo = `package ${metaData.packageName}.repositories;

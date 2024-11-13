@@ -20,7 +20,7 @@ function DownloadButton() {
     DTO,
     exception,
     application,
-    JPA,
+    audit,
   } = useContext(SpringContext);
 
   return (
@@ -80,7 +80,7 @@ function DownloadButton() {
           },
           {
             type: "folder",
-            name: "exception",
+            name: "exceptions",
             content: exception.getFolderContent(),
           },
           {
@@ -99,6 +99,11 @@ function DownloadButton() {
                 content: interfaces.files(),
               },
             ],
+          },
+          {
+            type: "folder",
+            name: "audit",
+            content: audit.files(),
           },
           application.getFile(),
         ];

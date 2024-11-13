@@ -171,6 +171,7 @@ import ${metaData.packageName}.dtos.responses.${destinyTable}.${destinyTable}Lis
       `import java.util.Optional;`,
       `import java.sql.Timestamp;`,
       `import java.util.stream.Collectors;`,
+      `import ${metaData.packageName}.audit.Auditable;`,
       `import org.springframework.http.HttpStatus;`,
       `import org.springframework.web.server.ResponseStatusException;`,
       `import org.json.JSONObject;`,
@@ -228,19 +229,19 @@ public class ${UCC(table.name)}Service implements I${UCC(table.name)}Service {
     const output = `${UCC(tableName)}ListDTO`;
     const repositoryInstance = `${CC(tableName)}Repository`;
     const entityClass = `${UCC(tableName)}Entity`;
-    const entityListName = `${CC(tableName)}List`;
+    // const entityListName = `${CC(tableName)}List`;
     // const entityInstance = `${CC(tableName)}Entity`;
 
     const list = `    
-    @Override
-    public List<${output}> ${serviceName}() {
-        ModelMapper modelMapper = new ModelMapper();
-        List<${entityClass}> ${entityListName} = ${repositoryInstance}.findAll();
-
-        return ${entityListName}.stream()
-                .map(entity -> modelMapper.map(entity, ${output}.class))
-                .collect(Collectors.toList());
-    }`;
+  @Override
+  public List<${output}> ${serviceName}() {
+      
+    List<${entityClass}> entities = ${repositoryInstance}.findAll();
+    return entities.stream()
+            .map(entity -> modelMapper.map(entity, ${output}.class))
+            .collect(Collectors.toList());
+              
+  }`;
     return list;
   };
 

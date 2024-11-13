@@ -32,13 +32,8 @@ function useInterface(springProject) {
 `,
       `import java.io.ByteArrayOutputStream;`,
       `import java.util.List;`,
-      `import org.json.JSONObject;`,
-      `import ${metaData.group}.dtos.requests.${UCC(table.name)}.${UCC(table.name)}AddDTO;`,
-
-      `import ${metaData.group}.dtos.requests.${UCC(table.name)}.${UCC(table.name)}EditDTO;`,
-
-      `import ${metaData.group}.dtos.requests.${UCC(table.name)}.${UCC(table.name)}DeleteDTO;`,
-      `import ${metaData.group}.dtos.requests.${UCC(table.name)}.${UCC(table.name)}FilterDTO;`,
+      //   `import org.json.JSONObject;`,
+      `import ${metaData.group}.dtos.requests.${UCC(table.name)}.*;`,
       `import ${metaData.group}.dtos.responses.${UCC(table.name)}.${UCC(table.name)}ListDTO;`,
     ];
   };
@@ -61,24 +56,24 @@ public interface ${interfaceName} {
   const getAddInterface = (table) => {
     //ADD SERVICE
     const addServiceName = `add${UCC(table.name)}`;
-    const addInput = `${UCC(table.name)}AddDTO ${CC(table.name)}AddDTO`;
-    return `    JSONObject ${addServiceName}(${addInput});
+    const addInput = `${UCC(table.name)}AddDTO dto`;
+    return `    void ${addServiceName}(${addInput});
 `;
   };
 
   const getEditInterface = (table) => {
     // EDIT SERVICE
     const editServiceName = ` edit${UCC(table.name)}`;
-    const editInput = `${UCC(table.name)}EditDTO ${CC(table.name)}EditDTO`;
-    return `    JSONObject ${editServiceName}(${editInput});
+    const editInput = `${UCC(table.name)}EditDTO dto`;
+    return `    void ${editServiceName}(${editInput});
 `;
   };
 
   const getDeleteInterface = (table) => {
     //DELETE SERVICE
     const deleteServiceName = `delete${UCC(table.name)}`;
-    const deleteInput = `${UCC(table.name)}DeleteDTO ${CC(table.name)}DeleteDTO`;
-    return `    JSONObject ${deleteServiceName}(${deleteInput});
+    const deleteInput = `${UCC(table.name)}DeleteDTO dto`;
+    return `    void ${deleteServiceName}(${deleteInput});
 `;
   };
 
@@ -86,7 +81,7 @@ public interface ${interfaceName} {
     // FILTER SERVICE
     const filterOutput = `List<${UCC(table?.name)}ListDTO>`;
     const filterServiceName = `${CC(table?.name)}Filter`;
-    const filterInput = `${UCC(table?.name)}FilterDTO ${CC(table?.name)}FilterDTO`;
+    const filterInput = `${UCC(table?.name)}FilterDTO dto`;
     return `    ${filterOutput} ${filterServiceName}(${filterInput});
 `;
   };
@@ -94,7 +89,7 @@ public interface ${interfaceName} {
   const getFilterExcelInterface = (table) => {
     // FILTER EXCEL
     const FExcelServiceName = `${CC(table?.name)}FilterExcel`;
-    const FExcelInput = `${UCC(table?.name)}FilterDTO ${CC(table?.name)}FilterDTO`;
+    const FExcelInput = `${UCC(table?.name)}FilterDTO dto`;
     return `    ByteArrayOutputStream ${FExcelServiceName}(${FExcelInput});
 `;
   };

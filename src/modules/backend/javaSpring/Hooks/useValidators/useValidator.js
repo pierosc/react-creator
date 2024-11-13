@@ -4,12 +4,13 @@ function useValidator() {
   const a = `
 package com.users.validators;
 
-import org.springframework.stereotype.Component;
-import com.users.domain.dto.academicdegrees.*;
+import com.users.dtos.requests.academicdegrees.*;
+import com.users.exceptions.EntityAlreadyExistsException;
+import com.users.exceptions.EntityNotFoundException;
 import com.users.repositories.AcademicDegreesRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.stereotype.Component;
 
 @Component
 public class AcademicDegreesValidator {
@@ -23,18 +24,19 @@ public class AcademicDegreesValidator {
 
     public void validateAdd(AcademicDegreesAddDTO dto) {
         if (academicDegreesRepository.existsByDegreeUrl(dto.getDegreeUrl())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El grado académico ya existe");
+            throw new EntityAlreadyExistsException("El grado académico con esa URL ya existe");
         }
-        // Otras validaciones...
+        // Other validations...
     }
 
     public void validateEdit(AcademicDegreesEditDTO dto) {
-        // Validaciones para la edición...
+        if (!academicDegreesRepository.existsById(dto.getAcademicDegreeId())) {
+            throw new EntityNotFoundException("El grado académico no existe");
+        }
+        // Other validations...
     }
 
-    public void validateDelete(AcademicDegreesDeleteDTO dto) {
-        // Validaciones para la eliminación...
-    }
+    // Otros validation methods...
 }
 `;
 

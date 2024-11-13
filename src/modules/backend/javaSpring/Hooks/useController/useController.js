@@ -94,9 +94,7 @@ export const useController = (springProject) => {
         input: {
           class: `${UCC(table.name)}DeleteDTO`,
           instance: `${CC(table.name)}DeleteDTO`,
-          all: `@RequestBody ${UCC(table.name)}DeleteDTO ${CC(
-            table.name
-          )}DeleteDTO`,
+          all: `@RequestBody ${UCC(table.name)}DeleteDTO dto`,
         },
         output: {
           service: {
@@ -112,9 +110,7 @@ export const useController = (springProject) => {
         input: {
           class: `${UCC(table.name)}EditDTO`,
           instance: `${CC(table.name)}EditDTO`,
-          all: `@RequestBody ${UCC(table.name)}EditDTO ${CC(
-            table.name
-          )}EditDTO`,
+          all: `@RequestBody ${UCC(table.name)}EditDTO dto`,
         },
         output: {
           service: {
@@ -137,14 +133,12 @@ export const useController = (springProject) => {
         },
       },
       filter: {
-        url: `/${CC(table.name)}Filter`,
+        // url: `/${CC(table.name)}Filter`,
         name: `${CC(table.name)}Filter`,
         input: {
           class: `${UCC(table.name)}FilterDTO`,
           instance: `${CC(table.name)}FilterDTO`,
-          all: `@RequestBody ${UCC(table.name)}FilterDTO ${CC(
-            table.name
-          )}FilterDTO`,
+          all: `@RequestBody ${UCC(table.name)}FilterDTO dto`,
         },
         output: {
           service: {
@@ -182,7 +176,7 @@ export const useController = (springProject) => {
         input: {
           class: `${UCC(table.name)}AddDTO`,
           instance: `${CC(table.name)}AddDTO`,
-          all: `@RequestBody ${UCC(table.name)}AddDTO ${CC(table.name)}AddDTO`,
+          all: `@RequestBody ${UCC(table.name)}AddDTO dto`,
         },
         output: {
           service: {

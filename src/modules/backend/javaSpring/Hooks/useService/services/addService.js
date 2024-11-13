@@ -10,8 +10,8 @@ export const getAddService = (table) => {
   const repositoryInstance = `${CC(table.name)}Repository`;
   //TODO: revisar si lo tienen como lista de otra cosa para poner addXtoY
   const serviceName = `add${UCC(table.name)}`;
-  const input = `${UCC(table.name)}AddDTO ${CC(table.name)}AddDTO`;
-  const inputInstance = `${CC(table.name)}AddDTO`;
+  const input = `${UCC(table.name)}AddDTO dto`;
+  const inputInstance = `dto`;
   const inputClass = `${UCC(table.name)}AddDTO`;
   const inputEntityClass = `${UCC(table.name)}Entity`;
   const inputEntityInstance = `${CC(table.name)}Entity`;
@@ -176,11 +176,14 @@ ${inputEntityClass} ${inputEntityInstance} = modelMapper.map(${inputInstance}, $
   // -------------------------------------------------------------------------------------
 
   const add = `
-  @Transactional
   @Override
-  public JSONObject ${serviceName}(${input}) {
+  @Auditable(action = "Add")
+  @Transactional
+  public void ${serviceName}(${input}) {
+    // validator.validateAdd(dto);
+    // ${inputEntityClass} entity = modelMapper.map(dto, ${inputEntityClass}.class);
+
     try {
-      ${existenceValidationCall}
       ${attributesDTOSetter}
       ${DTOtoEntityMapper}
       ${attributesEntitiesSetter}
@@ -188,13 +191,33 @@ ${inputEntityClass} ${inputEntityInstance} = modelMapper.map(${inputInstance}, $
       ${temporalAttribute ? setCreateTime : ""}
       ${saveMappedEntity}
       
-      return Response.JSONObject(${successMsg});
     
     } catch (Exception e) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ${errorMsg});
     }
   }
-  ${existenceValidation}  
 `;
   return add;
 };
+
+// const addv0 = `
+// @Override
+// @Transactional
+// public void ${serviceName}(${input}) {
+//   try {
+//     ${existenceValidationCall}
+//     ${attributesDTOSetter}
+//     ${DTOtoEntityMapper}
+//     ${attributesEntitiesSetter}
+//     ${isTransactional && uniqueTransAttr ? SetDestinyEntityID : ""}
+//     ${temporalAttribute ? setCreateTime : ""}
+//     ${saveMappedEntity}
+
+//     // return Response.JSONObject(${successMsg});
+
+//   } catch (Exception e) {
+//     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ${errorMsg});
+//   }
+// }
+// ${existenceValidation}
+// `;
