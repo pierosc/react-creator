@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import {
   CC,
   UCC,
@@ -15,7 +15,7 @@ import { getFilterService } from "./services/filterService";
 import { getFilterExcelService } from "./services/filterExcelService";
 
 import useDependencyInjection from "./useDependencyInjection";
-import SpringContext from "../../Context/SpringProvider";
+// import SpringContext from "../../Context/SpringProvider";
 
 const useService = (springProject) => {
   // const { springProject } = useContext(SpringContext);
@@ -140,7 +140,7 @@ const useService = (springProject) => {
         !attr.pk
           ? attr.relations.map((rel) => {
               const relRepository = `${UCC(rel.destinyTable)}Repository`;
-              const relEntity = `${UCC(rel.destinyTable)}Entity`;
+              // const relEntity = `${UCC(rel.destinyTable)}Entity`;
               const destinyTable = `${UCC(rel.destinyTable)}`;
               const imports =
                 rel.relation !== "OneToMany"
@@ -190,6 +190,7 @@ import ${metaData.packageName}.dtos.responses.${destinyTable}.${destinyTable}Lis
       `import ${metaData.packageName}.dtos.requests.${UCC(table.name)}.${UCC(
         table.name
       )}FilterDTO;`,
+      `import ${metaData.packageName}.validators.${UCC(table.name)}Validator;`,
       `import ${metaData.packageName}.entities.${UCC(table.name)}Entity;`,
       `import ${metaData.packageName}.repositories.${UCC(
         table.name

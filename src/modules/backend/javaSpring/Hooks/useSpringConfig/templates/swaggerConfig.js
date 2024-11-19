@@ -1,5 +1,5 @@
-export const swaggerConfig = `
-package com.users.config;
+export const getSwaggerConfig = (metaData) => `
+package ${metaData.group}.config;
 
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;

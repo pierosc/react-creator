@@ -14,6 +14,7 @@ function DownloadButton() {
     entities,
     services,
     interfaces,
+    validators,
     controllers,
     repositories,
     utils,
@@ -21,6 +22,7 @@ function DownloadButton() {
     exception,
     application,
     audit,
+    config,
   } = useContext(SpringContext);
 
   return (
@@ -85,8 +87,18 @@ function DownloadButton() {
           },
           {
             type: "folder",
+            name: "validators",
+            content: validators.files(),
+          },
+          {
+            type: "folder",
             name: "entities",
             content: entities.files(),
+          },
+          {
+            type: "folder",
+            name: "config",
+            content: config.files(),
           },
           {
             type: "folder",

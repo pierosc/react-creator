@@ -79,7 +79,10 @@ export const useRepositories = (springProject) => {
       );
       repositories[table.name]["classStart"] = getRepositoryClassStart(table);
       repositories[table.name]["repositories"] = uniqueAttr
-        ? [getfindByRepository([uniqueAttr], table, true)]
+        ? [
+            getfindByRepository([uniqueAttr], table, true),
+            getExistsByUniqueAttr(table),
+          ]
         : [];
       repositories[table.name]["classEnd"] = "}";
     });
@@ -149,6 +152,15 @@ import ${metaData.packageName}.entities.${UCC(table.name)}Entity;`;
       : `List<${entityClass}>`;
 
     const repo = `   ${returnedDataType} findBy${attrsList}(${inputs});`;
+
+    return repo;
+  };
+
+  const getExistsByUniqueAttr = (table) => {
+    const uniqueAttr =
+      table.attributes.find((attr) => attr.unique === true) ?? {};
+
+    const repo = `   boolean existsBy${UCC(uniqueAttr?.name)}(String ${CC(uniqueAttr?.name)});`;
 
     return repo;
   };

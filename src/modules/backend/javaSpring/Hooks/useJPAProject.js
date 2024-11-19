@@ -7,6 +7,7 @@ export const useJPAProject = (
   repositories,
   services,
   interfaces,
+  validators,
   controllers,
   DTO,
   springProject
@@ -20,12 +21,13 @@ export const useJPAProject = (
   // -------------------------------------------------------------------------------------
 
   const createEntities = (project, table) => {
-    console.log(
+    console.groupCollapsed(
       `%cCreating Entities for ${table.name}`,
       "background-color: blue; color: white;"
     );
     const tableEntities = entities.getEntity(table);
     console.log(tableEntities);
+    console.groupEnd();
     tableEntities.forEach((newEntity) => {
       entities.addEntity(project, table, newEntity);
     });
@@ -35,7 +37,7 @@ export const useJPAProject = (
   // -------------------------------------------------------------------------------------
 
   const createListEndpoint = (project, table) => {
-    console.group(
+    console.groupCollapsed(
       `%cCreating List Endpoint for ${table.name}`,
       "background-color: blue; color: white;"
     );
@@ -76,6 +78,7 @@ export const useJPAProject = (
   const createAddEndpoint = (project, table) => {
     const newService = services.getAddService(table);
     const newInterface = interfaces.getAddInterface(table);
+    const newValidator = validators.getAddValidator(table);
     const newController = controllers.getAddController(table);
     const isTransactional = Object.keys(table).includes("transactional");
 
@@ -142,6 +145,7 @@ export const useJPAProject = (
 
     services.addService(project, table, newService);
     interfaces.addInterface(project, table, newInterface);
+    validators.addValidator(project, table, newValidator);
     services.addImport(project, table, newInputDTOImport);
     controllers.addController(project, table, newController);
     controllers.addImport(project, table, newInputDTOImport);
@@ -154,6 +158,7 @@ export const useJPAProject = (
   const createEditEndpoint = (project, table) => {
     const newService = services.getEditService(table);
     const newInterface = interfaces.getEditInterface(table);
+    const newValidator = validators.getEditValidator(table);
     const newController = controllers.getEditController(table);
 
     const isTransactional = Object.keys(table).includes("transactional");
@@ -180,6 +185,7 @@ export const useJPAProject = (
     services.addService(project, table, newService);
     interfaces.addInterface(project, table, newInterface);
     services.addImport(project, table, newInputDTOImport);
+    validators.addValidator(project, table, newValidator);
     controllers.addController(project, table, newController);
     controllers.addImport(project, table, newInputDTOImport);
     DTO.addInputDTO(project, table, newInputDTO);

@@ -1,5 +1,5 @@
-export const CustomPermissionEvaluator = `
-package com.users.config;
+export const getCustomPermissionEvaluator = (metaData) => `
+package ${metaData.group}.config;
 
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;

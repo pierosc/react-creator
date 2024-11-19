@@ -122,6 +122,7 @@ export const getAddService = (table) => {
   }`;
 
   const existenceValidationCall = `ExistenceEntityValidation(${inputInstance});`;
+
   // *************************************************************************
   // MAPEAR ENTIDAD CON DTO
   // Descripción: Se crea una nueva entidad con los datos recolectados para
@@ -180,21 +181,17 @@ ${inputEntityClass} ${inputEntityInstance} = modelMapper.map(${inputInstance}, $
   @Auditable(action = "Add")
   @Transactional
   public void ${serviceName}(${input}) {
-    // validator.validateAdd(dto);
+    ${CC(table.name)}Validator.validateAdd(dto);
     // ${inputEntityClass} entity = modelMapper.map(dto, ${inputEntityClass}.class);
+    // academicDegreesRepository.save(entity);
 
-    try {
       ${attributesDTOSetter}
       ${DTOtoEntityMapper}
       ${attributesEntitiesSetter}
       ${isTransactional && uniqueTransAttr ? SetDestinyEntityID : ""}
       ${temporalAttribute ? setCreateTime : ""}
       ${saveMappedEntity}
-      
-    
-    } catch (Exception e) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ${errorMsg});
-    }
+
   }
 `;
   return add;

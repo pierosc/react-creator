@@ -1,4 +1,3 @@
-import React from "react";
 import { CC, JoinNewLine, UCC } from "../../../../../StringFunctions";
 
 function useInterface(springProject) {

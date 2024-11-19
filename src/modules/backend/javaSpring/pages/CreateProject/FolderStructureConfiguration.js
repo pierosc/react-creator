@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
 import { Button } from "@mui/material";
-import { TreeView } from "@mui/x-tree-view";
-import { TreeItem } from "@mui/x-tree-view";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import EditIcon from "@mui/icons-material/Edit";
-import { getInitSql } from "../../../../../initSql";
+// import { TreeView } from "@mui/x-tree-view";
+// import { TreeItem } from "@mui/x-tree-view";
+// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+// import EditIcon from "@mui/icons-material/Edit";
 import SpringContext from "../../Context/SpringProvider";
 import DatabaseContext from "../../../../../context/DatabaseProvider";
 
@@ -18,6 +17,7 @@ function FolderStructureConfiguration({
     entities,
     services,
     interfaces,
+    validators,
     controllers,
     repositories,
     springProject,
@@ -29,7 +29,7 @@ function FolderStructureConfiguration({
       className="flex flex-col gap-2 justify-between"
       style={{ height: "800px" }}
     >
-      <div className="grid gap-2">
+      {/* <div className="grid gap-2">
         <label className="text-white text-center font-semibold text-lg">
           FOLDER STRUCTURE
         </label>
@@ -104,7 +104,7 @@ function FolderStructureConfiguration({
             </TreeView>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="flex gap-4 justify-between">
         <Button
           variant="contained"
@@ -137,6 +137,10 @@ function FolderStructureConfiguration({
               spring.metaData
             );
             const interfacesStructure = interfaces.getEmptyStructure(
+              dataBaseStructure,
+              spring.metaData
+            );
+            const validatorStructure = validators.getEmptyStructure(
               dataBaseStructure,
               spring.metaData
             );
@@ -178,6 +182,7 @@ function FolderStructureConfiguration({
               repository: repoStructure,
               service: servicesStructure,
               interface: interfacesStructure,
+              validator: validatorStructure,
               controller: controllersStructure,
               inputDTO: emptydto,
               outputDTO: emptydto,
@@ -204,20 +209,20 @@ function FolderStructureConfiguration({
 
 export default FolderStructureConfiguration;
 
-function File(props) {
-  return (
-    <div className="flex justify-between">
-      <div className="flex">
-        <div
-          className="w-4
-  "
-        ></div>
-        <label>{"label"}</label>
-      </div>
-      <div className="flex gap-1">
-        <EditIcon />
-        <EditIcon />
-      </div>
-    </div>
-  );
-}
+// function File(props) {
+//   return (
+//     <div className="flex justify-between">
+//       <div className="flex">
+//         <div
+//           className="w-4
+//   "
+//         ></div>
+//         <label>{"label"}</label>
+//       </div>
+//       <div className="flex gap-1">
+//         <EditIcon />
+//         <EditIcon />
+//       </div>
+//     </div>
+//   );
+// }

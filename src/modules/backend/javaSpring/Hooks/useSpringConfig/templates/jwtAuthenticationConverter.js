@@ -1,5 +1,5 @@
-export const jwtAuthenticationConverter = `
-package com.api.rest.SpringBootKeycloak.config;
+export const getJwtAuthenticationConverter = (metaData) => {
+  return `package ${metaData.group}.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
@@ -20,14 +20,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
+
 public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
     private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
-    @Value("\\${jwt.auth.converter.principle - attribute}")
+    @Value("\${jwt.auth.converter.principle-attribute}")
     private String principleAttribute;
 
-    @Value("\\${jwt.auth.converter.resource - id}")
+    @Value("\${jwt.auth.converter.resource-id}")
     private String resourceId;
 
     @Override
@@ -45,22 +46,33 @@ public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthen
 
     private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
 
-        Map<String, Object> resourceAccess;
+        // Map<String, Object> resourceAccess;
         Map<String, Object> resource;
         Collection<String> resourceRoles;
 
         if (jwt.getClaim("resource_access") == null) {
             return Set.of();
         }
-        resourceAccess = jwt.getClaim("resource_access");
+        // resourceAccess = jwt.getClaim("resource_access");
+        Object resourceAccessObj = jwt.getClaim("resource_access");
 
-        if (resourceAccess.get(resourceId) == null) {
+        if (!(resourceAccessObj instanceof Map)) {
+
+            // logger.warn("resource_access claim is missing or not a map");
             return Set.of();
         }
 
+        // if (resourceAccess.get(resourceId) == null) {
+        // return Set.of();
+        // }
+        Map<String, Object> resourceAccess = (Map<String, Object>) resourceAccessObj;
+        System.out.println("--------------------------------------------");
+        System.out.println("resource");
         resource = (Map<String, Object>) resourceAccess.get(resourceId);
-
+        System.out.println(resource);
         resourceRoles = (Collection<String>) resource.get("roles");
+        System.out.println(resourceRoles);
+        System.out.println("--------------------------------------------");
         return resourceRoles
                 .stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
@@ -75,5 +87,5 @@ public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthen
         return jwt.getClaim(claimName);
     }
 }
-
 `;
+};

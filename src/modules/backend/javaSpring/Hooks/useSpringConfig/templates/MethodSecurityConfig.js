@@ -1,6 +1,6 @@
-export const getMethodSecurityConfig = () => {
+export const getMethodSecurityConfig = (metaData) => {
   return `
-package com.users.config;
+package ${metaData.group}.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

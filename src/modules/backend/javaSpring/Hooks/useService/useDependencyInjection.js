@@ -73,6 +73,7 @@ function useDependencyInjection(configuration) {
 
     let depArr = [
       "modelMapper",
+      `${UCC(table.name)}Validator`,
       `${UCC(table.name)}Repository`,
       ...dependencyArr,
     ].flat();
