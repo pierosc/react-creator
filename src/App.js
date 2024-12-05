@@ -10,6 +10,7 @@ import ReactModule from "./modules/frontend/react/ReactModule";
 import JavaModule from "./modules/backend/javaSpring/JavaModule";
 import { SpringProvider } from "./modules/backend/javaSpring/Context/SpringProvider";
 import TabMenu from "./components/TabMenu/TabMenu";
+import Docker from "./modules/docker/Docker";
 
 function APP() {
   let theme = useTheme();
@@ -37,6 +38,11 @@ function APP() {
                 // img: { kafkaLogo },
                 label: "Kafka",
                 content: <Kafka />,
+              },
+              {
+                // img: { kafkaLogo },
+                label: "Docker",
+                content: <Docker />,
               },
             ]}
           />

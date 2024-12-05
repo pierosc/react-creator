@@ -86,6 +86,7 @@ export function sqlVarToJavaVar(sqlVar) {
     return "UUID";
   } else if (
     sqlVar.toUpperCase().includes("INT") ||
+    sqlVar.toUpperCase().includes("INTEGER") ||
     sqlVar.toUpperCase().includes("SERIAL")
   ) {
     return "Integer";

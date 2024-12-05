@@ -37,7 +37,7 @@ const CodeEditor = ({
   return (
     <div
       className=" min-w-[25rem] rounded-md
-      overflow-hidden
+      overflow-auto
       "
       style={{
         backgroundColor: bgColor,
@@ -82,7 +82,7 @@ const CodeEditor = ({
           )}
         </div>
       )}
-      <div style={{ position: "relative" }}>
+      <div className="overflow-auto" style={{ position: "relative" }}>
         {internalMenu && (
           <div
             className="flex justify-end text-white z-10 "

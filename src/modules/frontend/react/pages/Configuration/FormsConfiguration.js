@@ -10,7 +10,6 @@ import ReactContext from "../../Context/ReactProvider";
 function FormsConfiguration() {
   const { db } = useContext(DatabaseContext);
   const { reactPJ } = useContext(ReactContext);
-
   const selectedDB = db.dataBases.find(
     (db) => db.name === reactPJ.selected?.db
   );

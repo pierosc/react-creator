@@ -54,6 +54,22 @@ function JSONMigrator() {
     }
   };
 
+  function obtenerValoresUnicos(array, atributo) {
+    // Usamos un Set para asegurar que los valores sean únicos
+    const valoresUnicos = new Set();
+
+    // Recorremos el array de objetos
+    array.forEach((objeto) => {
+      if (objeto.hasOwnProperty(atributo)) {
+        // Añadimos el valor del atributo al Set
+        valoresUnicos.add(objeto[atributo]);
+      }
+    });
+
+    // Convertimos el Set de nuevo a un array y lo retornamos
+    return [...valoresUnicos];
+  }
+
   useEffect(() => {
     console.log(selectedKeys);
   }, [selectedKeys]);
@@ -107,6 +123,30 @@ function JSONMigrator() {
           }}
         >
           MIGRAR
+        </Button>
+        <Button
+          onClick={() => {
+            // console.log(table);
+            console.log(jsonData);
+            console.log(selectedKeys);
+            selectedKeys.forEach((key) => {
+              console.group(key);
+              const unique = obtenerValoresUnicos(jsonData, key);
+              if (unique.length < 20) {
+                console.log(unique);
+              }
+              // jsonData.forEach((data) => {
+              //   const unique = obtenerValoresUnicos(data, key);
+              //   if (unique.length > 20) {
+              //     console.log(unique);
+              //   }
+              // });
+              console.groupEnd();
+            });
+            // obtenerValoresUnicos(array, atributo)
+          }}
+        >
+          UNIQUE
         </Button>
       </div>
       <div style={{ height: "80vh" }} className="overflow-auto">
