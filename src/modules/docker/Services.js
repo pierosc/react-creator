@@ -22,6 +22,10 @@ function Services() {
   const [hasAdminer, setHasAdminer] = useState(true);
   const [adminerPort, setAdminerPort] = useState("8081");
 
+  // ADMINER
+  const [hasReact, setHasReact] = useState(true);
+  const [reactURL, setReactURL] = useState("./ruta_dockerfile");
+
   return (
     <div className="col-span-2 ">
       <div className="grid grid-cols-3 gap-2">
@@ -156,43 +160,27 @@ function Services() {
           {/* FRONTEND */}
           <div className="flex flex-col gap-4 bg-zinc-700 p-2 rounded-lg w-full">
             <div className="flex justify-between items-center">
-              <label className="text-white">KEYCLOAK</label>
+              <label className="text-white">REACT</label>
               <IconButton
                 onClick={() => {
-                  setHasKeycloak(!hasKeycloak);
+                  setHasReact(!hasReact);
                 }}
               >
-                {hasKeycloak ? (
+                {hasReact ? (
                   <RemoveCircleIcon sx={{ color: "white" }} />
                 ) : (
                   <AddCircleIcon sx={{ color: "white" }} />
                 )}
               </IconButton>
             </div>
-            {hasKeycloak && (
+            {hasReact && (
               <>
                 <TextField
-                  label="KEYCLOAK USER"
+                  label="BUILD URL"
                   size="small"
-                  value={keycloakUser}
+                  value={reactURL}
                   onChange={(e) => {
-                    setKeycloakUser(e.target.value);
-                  }}
-                />
-                <TextField
-                  label="KEYCLOAK PASSWORD"
-                  size="small"
-                  value={keycloakPassword}
-                  onChange={(e) => {
-                    setKeycloakPassword(e.target.value);
-                  }}
-                />
-                <TextField
-                  label="KEYCLOAK PORT"
-                  size="small"
-                  value={keycloakPort}
-                  onChange={(e) => {
-                    setKeycloakPort(e.target.value);
+                    setReactURL(e.target.value);
                   }}
                 />
               </>
@@ -224,22 +212,6 @@ services:
         networks:
         - db_network
         restart: always
-
-    # Backup: Contenedor para crear backups periódicos
-    db-backup:
-        image: postgres:latest
-        environment:
-        - POSTGRES_USER=admin
-        - POSTGRES_PASSWORD=admin
-        - POSTGRES_DB=mydb
-        volumes:
-        - postgres-backups:/backups
-        - postgres-data:/var/lib/postgresql/data
-        entrypoint: /bin/bash -c "while true; do pg_dump -U admin mydb > /backups/backup_$(date +'%Y%m%d%H%M%S').sql; find /backups -type f -mtime +5 -exec rm -f {} \;; sleep 3600; done"
-        networks:
-        - app-network
-        depends_on:
-        - db
 `
         : ``
     }${
@@ -255,20 +227,20 @@ services:
         restart: always
 `
         : ``
-    }
+    }${
+      hasReact
+        ? `
     # Frontend: React
     frontend:
-        image: node:16
-        working_dir: /app
-        volumes:
-        - ./frontend:/app
-        command: ["npm", "start"]
+        build: ./Yachayhuasi_Frontend  # Ruta al Dockerfile de tu aplicación React
+        container_name: react_frontend
         ports:
-        - "3000:3000"
+        - "80:80"  # Nginx sirve la app en el puerto 80
         networks:
-        - app-network
-        depends_on:
-        - backend
+        - db_network
+    restart: always`
+        : ``
+    }
 
     # Backend: Spring Boot
     backend:
@@ -325,7 +297,7 @@ services:
 
 networks:
     app-network:
-        driver: bridge0
+        driver: bridge
 
 volumes:
     postgres-data:
@@ -343,3 +315,19 @@ volumes:
 }
 
 export default Services;
+
+// # Backup: Contenedor para crear backups periódicos
+// db-backup:
+//     image: postgres:latest
+//     environment:
+//     - POSTGRES_USER=admin
+//     - POSTGRES_PASSWORD=admin
+//     - POSTGRES_DB=mydb
+//     volumes:
+//     - postgres-backups:/backups
+//     - postgres-data:/var/lib/postgresql/data
+//     entrypoint: /bin/bash -c "while true; do pg_dump -U admin mydb > /backups/backup_$(date +'%Y%m%d%H%M%S').sql; find /backups -type f -mtime +5 -exec rm -f {} \;; sleep 3600; done"
+//     networks:
+//     - app-network
+//     depends_on:
+//     - db

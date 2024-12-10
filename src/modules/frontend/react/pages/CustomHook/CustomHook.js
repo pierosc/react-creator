@@ -7,17 +7,19 @@ import { MenuItem } from "@mui/material";
 import CustomHookVisualizer from "./CustomHookVisualizer";
 
 function CustomHook() {
-  const [table, setTable] = React.useState({});
-  const isTableSelected = Object.keys(table).length !== 0;
+  const { db } = useContext(DatabaseContext);
+  const { reactPJ } = useContext(ReactContext);
+
+  const selectedDB = db.dataBases.find(
+    (db) => db.name === reactPJ.selected?.db
+  );
+  const [table, setTable] = React.useState(selectedDB?.json[0]);
+  //   const isTableSelected = Object.keys(table).length !== 0;
 
   const handleChangeTable = (event) => {
     setTable(selectedDB?.json.find((t) => t.name === event.target.value));
   };
-  const { db } = useContext(DatabaseContext);
-  const { reactPJ } = useContext(ReactContext);
-  const selectedDB = db.dataBases.find(
-    (db) => db.name === reactPJ.selected?.db
-  );
+
   console.log(selectedDB.json);
   return (
     <div>

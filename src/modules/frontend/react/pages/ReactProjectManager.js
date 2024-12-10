@@ -24,6 +24,10 @@ function ReactProjectManager() {
             label: "CUSTOM HOOKS",
             content: <CustomHook />,
           },
+          {
+            label: "COMMANDS",
+            content: <CustomHook />,
+          },
         ]}
       />
     </div>

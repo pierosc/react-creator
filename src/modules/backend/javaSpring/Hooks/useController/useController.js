@@ -150,7 +150,7 @@ export const useController = (springProject) => {
         },
       },
       filterExcel: {
-        url: `/${CC(table.name)}FilterExcel`,
+        url: `/filterExcel`,
         name: `${CC(table.name)}FilterExcel`,
         fileName: `${UCC(table.name)}Excel`,
         input: {
