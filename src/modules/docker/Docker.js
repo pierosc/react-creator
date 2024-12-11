@@ -5,6 +5,7 @@ import NetworkCommands from "./NetworkCommands";
 import Services from "./Services";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Diagram from "./Diagram";
 
 function Docker() {
   return (
@@ -37,6 +38,7 @@ function Docker() {
         </Accordion>
       </div>
       <Services />
+      <Diagram />
       {/* <DockerCompose /> */}
     </div>
   );

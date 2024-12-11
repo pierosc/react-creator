@@ -40,12 +40,12 @@ function useFile() {
 
   function downloadFile(code, filename, extension = "java") {
     const text = code;
-    const blob = new Blob([text], { type: "text/plain" });
+    const blob = new Blob([text], { type: "application/octet-stream" });
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${filename}.${extension}`;
+    a.download = extension !== "" ? `${filename}.${extension}` : filename;
 
     document.body.appendChild(a);
     a.click();

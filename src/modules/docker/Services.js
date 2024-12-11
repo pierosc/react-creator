@@ -4,7 +4,10 @@ import CodeEditor from "../../components/CodeEditor/CodeEditor";
 import { IconButton, TextField } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import useFile from "../../hooks/useFile/useFile";
 function Services() {
+  const { downloadFile } = useFile();
   //  KEYCLOAK
   const [keycloakUser, setKeycloakUser] = useState("admin");
   const [keycloakPassword, setKeycloakPassword] = useState("admin");
@@ -22,9 +25,24 @@ function Services() {
   const [hasAdminer, setHasAdminer] = useState(true);
   const [adminerPort, setAdminerPort] = useState("8081");
 
-  // ADMINER
+  // REACT
   const [hasReact, setHasReact] = useState(true);
   const [reactURL, setReactURL] = useState("./ruta_dockerfile");
+  const [reactPORT, setReactPORT] = useState("80");
+
+  // sprintboot
+  const [hasSpring, setHasSpring] = useState(true);
+  const [springURL, setSpringURL] = useState("./ruta_dockerfile");
+  const [sprintPORT, setSpringPORT] = useState("80");
+
+  // JMETER
+  const [hasJMeter, setHasJMeter] = useState(false);
+
+  // PORTAINER
+  const [hasPortainer, setHasPortainer] = useState(true);
+
+  // JENKINS
+  const [hasJenkins, setHasJenkins] = useState(true);
 
   return (
     <div className="col-span-2 ">
@@ -175,18 +193,153 @@ function Services() {
             </div>
             {hasReact && (
               <>
+                <div className="flex">
+                  <TextField
+                    label="DOCKERFILE URL"
+                    size="small"
+                    value={reactURL}
+                    onChange={(e) => {
+                      setReactURL(e.target.value);
+                    }}
+                  />
+                  <IconButton
+                    onClick={() => {
+                      //   setHasReact(!hasReact);
+                    }}
+                  >
+                    <FileDownloadIcon sx={{ color: "white" }} />
+                  </IconButton>
+                </div>
                 <TextField
-                  label="BUILD URL"
+                  label="PORT"
                   size="small"
-                  value={reactURL}
+                  value={reactPORT}
                   onChange={(e) => {
-                    setReactURL(e.target.value);
+                    setReactPORT(e.target.value);
                   }}
                 />
               </>
             )}
           </div>
+          {/* BACKEND */}
+          <div className="flex flex-col gap-4 bg-zinc-700 p-2 rounded-lg w-full">
+            <div className="flex justify-between items-center">
+              <label className="text-white">SPRING BOOT</label>
+              <IconButton
+                onClick={() => {
+                  setHasSpring(!hasSpring);
+                }}
+              >
+                {hasSpring ? (
+                  <RemoveCircleIcon sx={{ color: "white" }} />
+                ) : (
+                  <AddCircleIcon sx={{ color: "white" }} />
+                )}
+              </IconButton>
+            </div>
+            {hasSpring && (
+              <>
+                <div className="flex">
+                  <TextField
+                    label="BUILD URL"
+                    size="small"
+                    value={springURL}
+                    onChange={(e) => {
+                      setSpringURL(e.target.value);
+                    }}
+                  />
+                  <IconButton
+                    onClick={() => {
+                      downloadFile(javaDockerfile, "dockerfile", "java");
+                    }}
+                  >
+                    <FileDownloadIcon sx={{ color: "white" }} />
+                  </IconButton>
+                </div>
+                <TextField
+                  label="PORT"
+                  size="small"
+                  value={sprintPORT}
+                  onChange={(e) => {
+                    setSpringPORT(e.target.value);
+                  }}
+                />
+              </>
+            )}
+          </div>
+          {/* JMETER */}
+          <div className="flex flex-col gap-4 bg-zinc-700 p-2 rounded-lg w-full">
+            <div className="flex justify-between items-center">
+              <label className="text-white">JMETER</label>
+              <IconButton
+                onClick={() => {
+                  setHasJMeter(!hasJMeter);
+                }}
+              >
+                {hasJMeter ? (
+                  <RemoveCircleIcon sx={{ color: "white" }} />
+                ) : (
+                  <AddCircleIcon sx={{ color: "white" }} />
+                )}
+              </IconButton>
+            </div>
+            {hasJMeter && (
+              <>
+                {/* <TextField
+                  label="BUILD URL"
+                  size="small"
+                  value={springURL}
+                  onChange={(e) => {
+                    setSpringURL(e.target.value);
+                  }}
+                />
+                <TextField
+                  label="PORT"
+                  size="small"
+                  value={sprintPORT}
+                  onChange={(e) => {
+                    setSpringPORT(e.target.value);
+                  }}
+                /> */}
+              </>
+            )}
+          </div>
+          {/* PORTAINER */}
+          <div className="flex flex-col gap-4 bg-zinc-700 p-2 rounded-lg w-full">
+            <div className="flex justify-between items-center">
+              <label className="text-white">PORTAINER</label>
+              <IconButton
+                onClick={() => {
+                  setHasPortainer(!hasPortainer);
+                }}
+              >
+                {hasPortainer ? (
+                  <RemoveCircleIcon sx={{ color: "white" }} />
+                ) : (
+                  <AddCircleIcon sx={{ color: "white" }} />
+                )}
+              </IconButton>
+            </div>
+          </div>
+          {/* JENKINS */}
+          <div className="flex flex-col gap-4 bg-zinc-700 p-2 rounded-lg w-full">
+            <div className="flex justify-between items-center">
+              <label className="text-white">JENKINS</label>
+              <IconButton
+                onClick={() => {
+                  setHasJenkins(!hasJenkins);
+                }}
+              >
+                {hasJenkins ? (
+                  <RemoveCircleIcon sx={{ color: "white" }} />
+                ) : (
+                  <AddCircleIcon sx={{ color: "white" }} />
+                )}
+              </IconButton>
+            </div>
+          </div>
         </div>
+
         <div className="col-span-2 overflow-auto" style={{ height: "90vh" }}>
           <CodeEditor
             title="docker-compose.yml"
@@ -232,21 +385,23 @@ services:
         ? `
     # Frontend: React
     frontend:
-        build: ./Yachayhuasi_Frontend  # Ruta al Dockerfile de tu aplicación React
+        build: ${reactURL}
         container_name: react_frontend
         ports:
-        - "80:80"  # Nginx sirve la app en el puerto 80
+        - "${reactPORT}:80"
         networks:
         - db_network
-    restart: always`
+        restart: always`
         : ``
     }
 
-    # Backend: Spring Boot
+    ${
+      hasSpring
+        ? `# Backend: Spring Boot
     backend:
         build:
-        context: ./backend
-        dockerfile: Dockerfile
+            context: ./backend
+            dockerfile: Dockerfile
         environment:
         - SPRING_PROFILES_ACTIVE=dev
         - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydb
@@ -258,15 +413,21 @@ services:
         - app-network
         depends_on:
         - db
-        - keycloak
+        - keycloak`
+        : ``
+    }
 
-    # JMeter: Para pruebas de carga
+    ${
+      hasJMeter
+        ? `# JMeter: Para pruebas de carga
     jmeter:
         image: justb4/jmeter
         ports:
         - "60000:60000"
         networks:
-        - app-network
+        - app-network`
+        : ``
+    }
 
     ${
       hasKeycloak
@@ -276,15 +437,15 @@ services:
         command: start-dev
         container_name: keycloak
         environment:
-        - KC_BOOTSTRAP_ADMIN_USERNAME=admin
-        - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+        - KC_BOOTSTRAP_ADMIN_USERNAME=${keycloakUser}
+        - KC_BOOTSTRAP_ADMIN_PASSWORD=${keycloakPassword}
         - DB_VENDOR=POSTGRES
         - DB_ADDR=db
         - DB_DATABASE=mydatabase
         - DB_USER=admin
         - DB_PASSWORD=secret  
         ports:
-        - "8080:8080"  # Puerto donde estará disponible el UI de Keycloak
+        - "${keycloakPort}:8080"
         depends_on:
         - db
         networks:
@@ -292,11 +453,48 @@ services:
         restart: always`
         : ``
     }
+    ${
+      hasPortainer
+        ? `# Portainer: Gestión de contenedores
+    portainer:
+        image: portainer/portainer-ce:latest
+        container_name: portainer
+        ports:
+        - "9000:9000"
+        volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - portainer-data:/data
+        networks:
+        - app-network
+        restart: always`
+        : ``
+    }
 
-    
+    ${
+      hasJenkins
+        ? `# Jenkins: Integración continua
+    jenkins:
+        image: jenkins/jenkins:lts
+        container_name: jenkins
+        user: root
+        environment:
+        - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+        ports:
+        - "8083:8080"
+        - "50000:50000"
+        volumes:
+        - jenkins-data:/var/jenkins_home
+        - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+        - app-network
+        restart: always`
+        : ``
+    }
 
 networks:
     app-network:
+        driver: bridge
+    db_network:
         driver: bridge
 
 volumes:
@@ -304,8 +502,24 @@ volumes:
         driver: local
     postgres-backups:
         driver: local
-    keycloak-data:
-        driver: local
+    ${
+      hasKeycloak
+        ? `keycloak-data:
+        driver: local`
+        : ``
+    }
+    ${
+      hasPortainer
+        ? `portainer-data:
+        driver: local`
+        : ``
+    }
+    ${
+      hasJenkins
+        ? `jenkins-data:
+        driver: local`
+        : ``
+    }
             `}
           />
         </div>
@@ -316,18 +530,9 @@ volumes:
 
 export default Services;
 
-// # Backup: Contenedor para crear backups periódicos
-// db-backup:
-//     image: postgres:latest
-//     environment:
-//     - POSTGRES_USER=admin
-//     - POSTGRES_PASSWORD=admin
-//     - POSTGRES_DB=mydb
-//     volumes:
-//     - postgres-backups:/backups
-//     - postgres-data:/var/lib/postgresql/data
-//     entrypoint: /bin/bash -c "while true; do pg_dump -U admin mydb > /backups/backup_$(date +'%Y%m%d%H%M%S').sql; find /backups -type f -mtime +5 -exec rm -f {} \;; sleep 3600; done"
-//     networks:
-//     - app-network
-//     depends_on:
-//     - db
+const javaDockerfile = `# Dockerfile para el backend Spring Boot
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
+`;
