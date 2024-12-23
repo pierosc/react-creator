@@ -91,7 +91,7 @@ function FormsIndex({ table }) {
             >
               ADD
             </Button>
-            <Typography
+            {/* <Typography
               variant="body2"
               component="span"
               width="75%"
@@ -99,7 +99,7 @@ function FormsIndex({ table }) {
               marginTop="12px"
             >
               Al confirmar el conductor podrá entrar a su App con correo y DNI.
-            </Typography>
+            </Typography> */}
           </Box>
         }
       >

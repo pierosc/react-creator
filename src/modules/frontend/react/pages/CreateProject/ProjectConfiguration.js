@@ -16,6 +16,7 @@ function ProjectConfiguration({ react, setReact, CloseInitialConfModal }) {
   const { reactPJ } = useContext(ReactContext);
 
   const handleChange = (e) => {
+    console.log(e.target.value);
     // db.setSelected(db.dataBases.find((t) => t.name === event.target.value));
     setReact((prevReact) => {
       const newReact = { ...prevReact };
@@ -49,7 +50,7 @@ function ProjectConfiguration({ react, setReact, CloseInitialConfModal }) {
         <FormControl fullWidth>
           <InputLabel>DATABASE</InputLabel>
           <Select
-            value={db?.selected?.name ?? ""}
+            value={react.db ?? ""}
             size="small"
             label="PROJECT"
             onChange={handleChange}

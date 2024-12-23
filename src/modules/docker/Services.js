@@ -33,7 +33,7 @@ function Services() {
   // sprintboot
   const [hasSpring, setHasSpring] = useState(true);
   const [springURL, setSpringURL] = useState("./ruta_dockerfile");
-  const [sprintPORT, setSpringPORT] = useState("80");
+  const [sprintPORT, setSpringPORT] = useState("8080");
 
   // JMETER
   const [hasJMeter, setHasJMeter] = useState(false);
@@ -204,7 +204,7 @@ function Services() {
                   />
                   <IconButton
                     onClick={() => {
-                      //   setHasReact(!hasReact);
+                      downloadFile(reactDockerfile, "dockerfile", "");
                     }}
                   >
                     <FileDownloadIcon sx={{ color: "white" }} />
@@ -241,7 +241,7 @@ function Services() {
               <>
                 <div className="flex">
                   <TextField
-                    label="BUILD URL"
+                    label="DOCKERFILE URL"
                     size="small"
                     value={springURL}
                     onChange={(e) => {
@@ -250,7 +250,7 @@ function Services() {
                   />
                   <IconButton
                     onClick={() => {
-                      downloadFile(javaDockerfile, "dockerfile", "java");
+                      downloadFile(javaDockerfile, "dockerfile", "");
                     }}
                   >
                     <FileDownloadIcon sx={{ color: "white" }} />
@@ -400,15 +400,15 @@ services:
         ? `# Backend: Spring Boot
     backend:
         build:
-            context: ./backend
-            dockerfile: Dockerfile
+            context: ${springURL}
+            dockerfile: dockerfile
         environment:
         - SPRING_PROFILES_ACTIVE=dev
         - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydb
         - SPRING_DATASOURCE_USERNAME=admin
         - SPRING_DATASOURCE_PASSWORD=admin
         ports:
-        - "8080:8080"
+        - "${sprintPORT}:8080"
         networks:
         - app-network
         depends_on:
@@ -530,9 +530,41 @@ volumes:
 
 export default Services;
 
-const javaDockerfile = `# Dockerfile para el backend Spring Boot
+const javaDockerfile = `
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 COPY target/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
+`;
+
+const reactDockerfile = `
+FROM node:18 AS build
+
+# Establecemos el directorio de trabajo
+WORKDIR /app
+
+# Copiamos el package.json y package-lock.json para instalar las dependencias
+COPY package*.json ./
+
+# Instalamos las dependencias
+RUN npm install
+
+# Copiamos el resto de los archivos del proyecto
+COPY . .
+
+# Creamos la versión optimizada para producción de la app
+RUN npm run build
+
+# Usamos una imagen de Nginx para servir la aplicación estática
+FROM nginx:alpine
+
+# Copiamos los archivos generados por React en la imagen Nginx
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Exponemos el puerto 80 para acceder al frontend
+EXPOSE 80
+
+# Iniciamos Nginx para servir la aplicación
+CMD ["nginx", "-g", "daemon off;"]
+
 `;

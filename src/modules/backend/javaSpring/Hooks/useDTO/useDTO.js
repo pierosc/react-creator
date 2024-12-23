@@ -130,7 +130,7 @@ public class ${UCC(DTOName)} {`;
       // console.log(relationsData);
       const attrVar =
         relationsData.length === 0
-          ? `  ${!attr.nullabe && destination === "input" ? `@NotBlank(message = "${TC(attr.name)} is required")` : ""}
+          ? `  ${!attr.nullable && destination === "input" ? `@NotBlank(message = "${TC(attr.name)} is required")` : ""}
   private ${sqlVarToJavaVar(attr.type)} ${CC(attr.name)};`
           : "";
       const attrsVars =

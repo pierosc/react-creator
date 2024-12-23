@@ -44,6 +44,11 @@ function APP() {
                 label: "Docker",
                 content: <Docker />,
               },
+              {
+                // img: { kafkaLogo },
+                label: "Authentication",
+                content: <Docker />,
+              },
             ]}
           />
         </SpringProvider>

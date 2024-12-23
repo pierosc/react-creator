@@ -26,6 +26,7 @@ function TabMenu({
           <TabList onChange={handleChange}>
             {menu.map((tab, i) => (
               <Tab
+                sx={{ color: "white" }}
                 key={i}
                 label={
                   tab?.img !== undefined ? (

@@ -33,9 +33,9 @@ function useValidator(springProject) {
       `import ${metaData.group}.exceptions.EntityAlreadyExistsException;`,
       `import ${metaData.group}.exceptions.EntityNotFoundException;`,
       `import ${metaData.group}.repositories.${UCC(table.name)}Repository;`,
-      `import com.users.entities.${UCC(table.name)}Entity;`,
+      `import ${metaData.group}.entities.${UCC(table.name)}Entity;`,
       `import org.springframework.beans.factory.annotation.Autowired;`,
-      `import com.users.utils.Filter;`,
+      `import ${metaData.group}.utils.Filter;`,
       `import java.util.List;`,
       `import org.springframework.stereotype.Component;`,
     ];
