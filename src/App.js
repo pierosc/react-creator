@@ -11,6 +11,7 @@ import JavaModule from "./modules/backend/javaSpring/JavaModule";
 import { SpringProvider } from "./modules/backend/javaSpring/Context/SpringProvider";
 import TabMenu from "./components/TabMenu/TabMenu";
 import Docker from "./modules/docker/Docker";
+import AuthModule from "./modules/authentication/AuthModule";
 
 function APP() {
   let theme = useTheme();
@@ -47,7 +48,7 @@ function APP() {
               {
                 // img: { kafkaLogo },
                 label: "Authentication",
-                content: <Docker />,
+                content: <AuthModule />,
               },
             ]}
           />
