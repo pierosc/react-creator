@@ -19,29 +19,30 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
+// const names = [
+//   "Oliver Hansen",
+//   "Van Henry",
+//   "April Tucker",
+//   "Ralph Hubbard",
+//   "Omar Alexander",
+//   "Carlos Abbott",
+//   "Miriam Wagner",
+//   "Bradley Wilkerson",
+//   "Virginia Andrews",
+//   "Kelly Snyder",
+// ];
 
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight: personName.includes(name)
-      ? theme.typography.fontWeightMedium
-      : theme.typography.fontWeightRegular,
-  };
-}
+// function getStyles(name, personName, theme) {
+//   return {
+//     fontWeight: personName.includes(name)
+//       ? theme.typography.fontWeightMedium
+//       : theme.typography.fontWeightRegular,
+//   };
+// }
 
-export default function MultipleSelectChip() {
-  const theme = useTheme();
+export default function MultipleSelectChip({ names }) {
+  // const theme = useTheme();
+  console.log(names);
   const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
@@ -57,10 +58,14 @@ export default function MultipleSelectChip() {
   return (
     <div>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+        <InputLabel
+        //  id="demo-multiple-chip-label"
+        >
+          Chip
+        </InputLabel>
         <Select
-          labelId="demo-multiple-chip-label"
-          id="demo-multiple-chip"
+          // labelId="demo-multiple-chip-label"
+          // id="demo-multiple-chip"
           multiple
           value={personName}
           onChange={handleChange}
@@ -68,7 +73,7 @@ export default function MultipleSelectChip() {
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((value) => (
-                <Chip key={value} label={value} />
+                <Chip key={value} label={value} style={{ color: "white" }} />
               ))}
             </Box>
           )}
@@ -78,7 +83,7 @@ export default function MultipleSelectChip() {
             <MenuItem
               key={name}
               value={name}
-              style={getStyles(name, personName, theme)}
+              // style={getStyles(name, personName, theme)}
             >
               {name}
             </MenuItem>

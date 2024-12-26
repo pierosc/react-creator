@@ -87,7 +87,7 @@ function Users({ users, setUsers, roles }) {
                   ]);
                 }}
               />
-              <MultipleSelectChip />
+              <MultipleSelectChip names={roles.map((r) => r.name)} />
             </>
           </div>
         );
