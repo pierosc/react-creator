@@ -18,10 +18,7 @@ import SpringContext from "./Context/SpringProvider";
 
 function SpringProjectManager() {
   const { db } = useContext(DatabaseContext);
-  const { reactPJ } = useContext(SpringContext);
-  const selectedDB = db.dataBases.find(
-    (db) => db.name === reactPJ.selected?.db
-  );
+
   // SELECTION CONTROLS --------------------------------
   const [table, setTable] = React.useState({});
   const isTableSelected = Object.keys(table).length !== 0;
