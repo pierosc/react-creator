@@ -4,6 +4,7 @@ import FormsIndex from "./Forms/FormsIndex";
 import FormsConfiguration from "./Configuration/FormsConfiguration";
 import TabMenu from "../../../../components/TabMenu/TabMenu";
 import CustomHook from "./CustomHook/CustomHook";
+import Authentication from "./Authentication/Authentication";
 
 function ReactProjectManager() {
   return (
@@ -23,6 +24,10 @@ function ReactProjectManager() {
           {
             label: "CUSTOM HOOKS",
             content: <CustomHook />,
+          },
+          {
+            label: "AUTHENTICATION",
+            content: <Authentication />,
           },
           {
             label: "COMMANDS",

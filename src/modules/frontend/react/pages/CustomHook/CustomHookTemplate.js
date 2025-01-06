@@ -3,30 +3,21 @@ import { CC, JoinNewLine, UCC } from "../../../../../StringFunctions";
 export const usequery = (table) => `
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
-
-const baseURL = process.env.REACT_APP_API_BASE_URL
+import axiosInstance from '../api/axiosInstance';
 
 const use${UCC(table.name)} = (token) => {
   const queryClient = useQueryClient()
 
-${JoinNewLine(getUseStates(table))}
-${getSingleUseState(table)}
-  // Configuramos axios para usar la baseURL y el token
-  const axiosInstance = axios.create({
-    baseURL,
-    headers: {
-      Authorization: "Bearer " + token
-    }
-  })
+  ${getSingleUseState(table)}
 
   // GET ALL
-  const getAllQuery = useQuery(['${CC(table.name)}', 'getAll'], async () => {
+  const getAll = useQuery(['${CC(table.name)}', 'getAll'], async () => {
     const { data } = await axiosInstance.get('/${CC(table.name)}/getAll')
     return data
   })
 
   // ADD
-  const addMutation = useMutation(
+  const add = useMutation(
     async (payload) => {
       const { data } = await axiosInstance.post('/${CC(table.name)}/add', payload)
       return data
@@ -40,7 +31,7 @@ ${getSingleUseState(table)}
   )
 
   // EDIT
-  const editMutation = useMutation(
+  const edit = useMutation(
     async (payload) => {
       const { data } = await axiosInstance.put('/${CC(table.name)}/edit', payload)
       return data
@@ -53,7 +44,7 @@ ${getSingleUseState(table)}
   )
 
   // DELETE
-  const deleteMutation = useMutation(
+  const delete = useMutation(
     async (payload) => {
      
       const { data } = await axiosInstance.delete('/${CC(table.name)}/delete', {
@@ -69,7 +60,7 @@ ${getSingleUseState(table)}
   )
 
   // FILTER
-  const filterMutation = useMutation(
+  const filter = useMutation(
     async (payload) => {
       const { data } = await axiosInstance.post('/${CC(table.name)}/filter', payload)
       return data
@@ -77,7 +68,7 @@ ${getSingleUseState(table)}
   )
 
   // FILTER EXCEL
-  const filterExcelMutation = useMutation(
+  const filterExcel = useMutation(
     async (payload) => {
       const { data } = await axiosInstance.post('/${CC(table.name)}/filterExcel', payload, {
         responseType: 'blob'
@@ -104,6 +95,8 @@ const state = (attr) =>
     attr.type
   )});`;
 
+const toObjectAttr = (attr) => `${CC(attr.name)} : ${varType(attr.type)}`;
+
 const getUseStates = (table) => {
   let states = [];
   table.attributes.map((attr) => {
@@ -118,11 +111,13 @@ const getSingleUseState = (table) => {
   let states = [];
   table.attributes.map((attr) => {
     if (!attr.pk) {
-      states = [...states, state(attr)];
+      states = [...states, toObjectAttr(attr)];
     }
   });
 
-  return ` const [${CC(table.name)}, set${UCC(table.name)}] = useState([])`;
+  return ` const [${CC(table.name)}, set${UCC(table.name)}] = useState({
+  ${JoinNewLine(states)}
+  })`;
 };
 
 const getExports = (table) => {
