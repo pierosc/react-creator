@@ -10,10 +10,10 @@ import Diagram from "./Diagram";
 function Docker() {
   return (
     <div
-      className="grid grid-cols-5 px-8 py-4 gap-4 items-start"
+      className="grid grid-cols-8 px-8 py-4 gap-4 items-start"
       style={{ height: "90vh" }}
     >
-      <div>
+      <div className="col-span-2">
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}

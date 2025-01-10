@@ -1,7 +1,7 @@
 import JSZip from "jszip";
 
 function useFile() {
-  const createRarFile = async (structure) => {
+  const createRarFile = async (structure, name = "jpa") => {
     const zip = new JSZip();
 
     const createStructure = (parentFolder, items) => {
@@ -29,7 +29,7 @@ function useFile() {
     // Crear un enlace (link) para la descarga
     const link = document.createElement("a");
     link.href = url;
-    link.download = "jpa.rar";
+    link.download = `${name}.rar`;
 
     // Simular un clic en el enlace para iniciar la descarga
     link.click();

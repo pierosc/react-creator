@@ -45,7 +45,7 @@ function Services() {
   const [hasJenkins, setHasJenkins] = useState(true);
 
   return (
-    <div className="col-span-2 ">
+    <div className="col-span-3 ">
       <div className="grid grid-cols-3 gap-2">
         <div className="flex flex-col gap-2 justify-start items-start">
           {/* DATABASE */}

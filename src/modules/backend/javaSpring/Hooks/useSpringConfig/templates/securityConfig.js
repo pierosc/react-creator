@@ -25,6 +25,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(http -> {
                     http.requestMatchers("/users/**").permitAll();
                     http.requestMatchers("/doc/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll();
+                    http.requestMatchers("/login").permitAll();
+                    http.requestMatchers("/logout").permitAll();
                     http.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(oauth -> {
