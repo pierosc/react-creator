@@ -91,6 +91,7 @@ export const useController = (springProject) => {
       delete: {
         url: `/delete${UCC(table.name)}`,
         name: `delete${UCC(table.name)}`,
+        resource: `${UCC(table.name)}`,
         input: {
           class: `${UCC(table.name)}DeleteDTO`,
           instance: `${CC(table.name)}DeleteDTO`,
@@ -107,6 +108,7 @@ export const useController = (springProject) => {
       edit: {
         url: `/edit${UCC(table.name)}`,
         name: `edit${UCC(table.name)}`,
+        resource: `${UCC(table.name)}`,
         input: {
           class: `${UCC(table.name)}EditDTO`,
           instance: `${CC(table.name)}EditDTO`,
@@ -123,6 +125,7 @@ export const useController = (springProject) => {
       list: {
         url: `/getAll${UCC(table.name)}`,
         name: `getAll${UCC(table.name)}`,
+        resource: `${UCC(table.name)}`,
         output: {
           service: {
             class: `${UCC(table.name)}Service`,
@@ -135,6 +138,7 @@ export const useController = (springProject) => {
       filter: {
         // url: `/${CC(table.name)}Filter`,
         name: `${CC(table.name)}Filter`,
+        resource: `${UCC(table.name)}`,
         input: {
           class: `${UCC(table.name)}FilterDTO`,
           instance: `${CC(table.name)}FilterDTO`,
@@ -153,6 +157,7 @@ export const useController = (springProject) => {
         url: `/filterExcel`,
         name: `${CC(table.name)}FilterExcel`,
         fileName: `${UCC(table.name)}Excel`,
+        resource: `${UCC(table.name)}`,
         input: {
           class: `${UCC(table.name)}FilterDTO`,
           instance: `${CC(table.name)}FilterDTO`,
@@ -173,6 +178,7 @@ export const useController = (springProject) => {
           ? `/add${UCC(table.name)}To${UCC(table.transactional.name)}`
           : `/add${UCC(table.name)}`,
         name: `create${UCC(table.name)}`,
+        resource: `${UCC(table.name)}`,
         input: {
           class: `${UCC(table.name)}AddDTO`,
           instance: `${CC(table.name)}AddDTO`,

@@ -1,5 +1,5 @@
 export const getDeleteTemplate = (conf) => {
-  return `//@PreAuthorize("hasPermission('Documents', 'delete')")  
+  return `@PreAuthorize("hasPermission('${conf.resource}', 'delete')")  
   @DeleteMapping("/delete")
   public ResponseEntity<ApiResponse<Void>> ${conf.name} (@Valid ${conf.input.all}) {
 

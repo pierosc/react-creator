@@ -1,5 +1,5 @@
 export const getFilterExcelTemplate = (conf) => {
-  return `  //@PreAuthorize("hasPermission('Documents', 'delete')")
+  return `  @PreAuthorize("hasPermission('${conf.resource}', 'filterExcel')")
     @PostMapping("${conf.url}")
     public ResponseEntity<Resource> ${conf.name}(@Valid ${conf.input.all}) {
     try {

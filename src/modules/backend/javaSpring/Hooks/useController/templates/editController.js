@@ -1,5 +1,5 @@
 export const getEditTemplate = (conf) => {
-  return `  //@PreAuthorize("hasPermission('Documents', 'delete')")
+  return `  @PreAuthorize("hasPermission('${conf.resource}', 'edit')")
   @PutMapping("/edit")
   public ResponseEntity<ApiResponse<Void>> ${conf.name}(@Valid ${conf.input.all}) {
     ${conf.output.service.instance}.${conf.output.service.method}(dto);

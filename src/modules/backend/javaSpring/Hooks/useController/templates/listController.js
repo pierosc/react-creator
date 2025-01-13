@@ -1,5 +1,5 @@
 export const getListTemplate = (conf) => {
-  return `  //@PreAuthorize("hasPermission('Documents', 'delete')")
+  return `  @PreAuthorize("hasPermission('${conf.resource}', 'get')")
   @GetMapping("/getAll")
   public ResponseEntity<ApiResponse<${conf.output.type}>> ${conf.name}() {
     ${conf.output.type} list = ${conf.output.service.instance}.${conf.output.service.method}();

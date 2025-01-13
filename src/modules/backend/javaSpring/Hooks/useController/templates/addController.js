@@ -1,5 +1,5 @@
 export const getAddTemplate = (conf) => {
-  return `  //@PreAuthorize("hasPermission('Documents', 'delete')")
+  return `  @PreAuthorize("hasPermission('${conf.resource}', 'add')")
   @PostMapping("/add")
   public ResponseEntity<ApiResponse<Void>> ${conf.name}(@Valid ${conf.input.all}) {
 

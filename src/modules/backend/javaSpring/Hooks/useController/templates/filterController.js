@@ -1,5 +1,5 @@
 export const getFilterTemplate = (conf) => {
-  return `  //@PreAuthorize("hasPermission('Documents', 'delete')")
+  return `  @PreAuthorize("hasPermission('${conf.resource}', 'filter')")
   @PostMapping("/filter")
   public ResponseEntity<ApiResponse<${conf.output.type}>> ${conf.name}(@Valid ${conf.input.all}) {
 

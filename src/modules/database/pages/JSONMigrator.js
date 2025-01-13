@@ -274,7 +274,14 @@ function JSONMigrator() {
         const values = columns.map((col) => {
           const colType = keyDataTypes[col] || "VARCHAR(255)";
           const val = row[col] ?? "";
-          return shouldQuote(colType) ? `"${val}"` : `${val}`;
+          console.log(val);
+          return val.length === 0
+            ? "NULL"
+            : shouldQuote(colType)
+              ? typeof val === "string" && val.includes("'")
+                ? `'${val.replace("'", "''")}'`
+                : `'${val}'`
+              : `${val}`;
         });
 
         const renamedCols = columns.map((col) => keyRenames[col] || col);
@@ -299,16 +306,16 @@ function JSONMigrator() {
     setOutput(fullOutput);
 
     // Guardar esta migración en localStorage
-    const newMigration = {
-      date: new Date().toISOString(),
-      table,
-      keys,
-      selectedKeys,
-      keyDataTypes,
-      keyRenames,
-      output: fullOutput,
-    };
-    saveToLocalStorage(newMigration);
+    // const newMigration = {
+    //   date: new Date().toISOString(),
+    //   table,
+    //   keys,
+    //   selectedKeys,
+    //   keyDataTypes,
+    //   keyRenames,
+    //   output: fullOutput,
+    // };
+    // saveToLocalStorage(newMigration);
   };
 
   /** ==============================
