@@ -1,16 +1,16 @@
 import React from "react";
 import CodeEditor from "../../components/CodeEditor/CodeEditor";
-import { UCC } from "../../StringFunctions";
+import { CC, JoinNewLine, UCC } from "../../StringFunctions";
 
 function Authorization({ actualDb }) {
   console.log(actualDb);
-  const db = actualDb?.json;
-
+  const db = actualDb?.json ?? [];
+  console.log(db);
   const getResource = (table) => {
     return `{
-      "name": "${UCC(table)}",
+      "name": "${UCC(table.name)}",
       "ownerManagedAccess": false,
-      "displayName": "${UCC(table)}",
+      "displayName": "${UCC(table.name)}",
       "attributes": {},
       "uris": [],
       "scopes": [
@@ -37,16 +37,18 @@ function Authorization({ actualDb }) {
     }
     `;
   };
+  console.log(db.map((table) => getResource(table)));
+  console.log(JoinNewLine(db.map((table) => getResource(table))));
 
   const getPermission = (table) => {
     return `{
-      "name": "Customers-get-permission",
+      "name": "${CC(table.name)}-get-permission",
       "description": "",
       "type": "scope",
       "logic": "POSITIVE",
       "decisionStrategy": "UNANIMOUS",
       "config": {
-        "resources": "[\"Customers\"]",
+        "resources": "[\"${CC(table.name)}\"]",
         "scopes": "[\"get\"]",
         "applyPolicies": "[\"new_poli\"]"
       }
@@ -55,7 +57,7 @@ function Authorization({ actualDb }) {
 
   const getPolicy = (table) => {
     return `{
-      "name": "new_poli",
+      "name": "${CC(table.name)}Policy",
       "description": "",
       "type": "role",
       "logic": "POSITIVE",
@@ -86,19 +88,10 @@ function Authorization({ actualDb }) {
         "/*"
       ]
     },
-    {
-      "name": "Customers",
-      "ownerManagedAccess": false,
-      "displayName": "Customers",
-      "attributes": {},
-      "uris": [],
-      "scopes": [
-        {
-          "name": "get"
-        }
-      ],
-      "icon_uri": ""
-    }
+${JoinNewLine(
+  db.map((table) => getResource(table)),
+  ","
+)}
   ],
   "policies": [
     {
@@ -111,6 +104,10 @@ function Authorization({ actualDb }) {
         "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
       }
     },
+    ${JoinNewLine(
+      db.map((table) => getPolicy(table)),
+      ","
+    )}
     {
       "name": "new_poli",
       "description": "",
@@ -133,6 +130,10 @@ function Authorization({ actualDb }) {
         "applyPolicies": "[\"Default Policy\"]"
       }
     },
+${JoinNewLine(
+  db.map((table) => getPermission(table)),
+  ","
+)}
     {
       "name": "Customers-get-permission",
       "description": "",
