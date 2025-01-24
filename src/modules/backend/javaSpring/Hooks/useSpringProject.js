@@ -26,11 +26,11 @@ function useSpringProject() {
         (pj) => pj.name !== projectName
       );
       let modifiedProject = prevProjects.find((pj) => pj.name === projectName);
-      // console.log("----");
-      // console.log(modifiedProject);
-      // console.log(attrFromProject);
-      // console.log(attrFromTable);
-      // console.log("----");
+      console.log("----");
+      console.log(modifiedProject);
+      console.log(attrFromProject);
+      console.log(attrFromTable);
+      console.log("----");
 
       let modifiedProject2 = {
         ...modifiedProject,

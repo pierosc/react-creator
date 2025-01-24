@@ -34,6 +34,7 @@ function useEntity(springProject) {
       `import lombok.*;`,
       `import java.util.UUID;`,
       `import java.util.List;`,
+      `import java.sql.Timestamp;`,
       // `import lombok.Data;`,
       `import java.sql.Timestamp;`,
       // `import lombok.NoArgsConstructor;`,

@@ -2,12 +2,12 @@ import { CC, JoinNewLine, UCC } from "../../../../../StringFunctions";
 
 export const usequery = (table) => `
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
 import axiosInstance from '../api/axiosInstance';
+import { useState } from "react";
 
-const use${UCC(table.name)} = (token) => {
+const use${UCC(table.name)} = () => {
   const queryClient = useQueryClient()
-
+  const [${CC(table.name)}List, set${UCC(table.name)}List] = useState([])
   ${getSingleUseState(table)}
 
   const handleChangeField = (e) =>{
@@ -15,48 +15,50 @@ const use${UCC(table.name)} = (token) => {
   }
 
   // GET ALL
-  const getAll = useQuery(['${CC(table.name)}', 'getAll'], async () => {
-    const { data } = await axiosInstance.get('/${CC(table.name)}/getAll')
-    return data
-  })
+  const getAll = useQuery({
+    queryKey: ["${CC(table.name)}", "getAll"],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get("/${CC(table.name)}/getAll");
+      set${UCC(table.name)}List(data?.data)
+      return data;
+    },
+    enabled: false, // No ejecutar automáticamente
+  });
 
   // ADD
   const add = useMutation(
-    async (payload) => {
+    {mutationFn: async (payload) => {
       const { data } = await axiosInstance.post('/${CC(table.name)}/add', payload)
       return data
     },
-    {
-      onSuccess: () => {
-        // Invalida la cache para refrescar la lista
-        queryClient.invalidateQueries(['${CC(table.name)}', 'getAll'])
-      }
+    onSuccess: () => {
+      // Invalida la cache para refrescar la lista
+      queryClient.invalidateQueries(['${CC(table.name)}', 'getAll'])
+    }
     }
   )
 
   // EDIT
   const edit = useMutation(
-    async (payload) => {
+  { mutationFn: async (payload) => {
       const { data } = await axiosInstance.put('/${CC(table.name)}/edit', payload)
       return data
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['${CC(table.name)}', 'getAll'])
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries(['${CC(table.name)}', 'getAll'])
+    }
     }
   )
 
   // DELETE
   const eliminate = useMutation(
-    async (payload) => {
+{  mutationFn:  async (payload) => {
      
       const { data } = await axiosInstance.delete('/${CC(table.name)}/delete', {
         data: payload
       })
       return data
     },
-    {
       onSuccess: () => {
         queryClient.invalidateQueries(['${CC(table.name)}', 'getAll'])
       }
@@ -65,26 +67,28 @@ const use${UCC(table.name)} = (token) => {
 
   // FILTER
   const filter = useMutation(
-    async (payload) => {
+    { mutationFn: async (payload) => {
       const { data } = await axiosInstance.post('/${CC(table.name)}/filter', payload)
       return data
-    }
+    }}
   )
 
   // FILTER EXCEL
   const filterExcel = useMutation(
-    async (payload) => {
+{    mutationFn: async (payload) => {
       const { data } = await axiosInstance.post('/${CC(table.name)}/filterExcel', payload, {
         responseType: 'blob'
       })
       return data // data es un Blob
-    }
+    }}
   )
 
   return {
     ${CC(table.name)},
     set${UCC(table.name)},
-    getAllQuery,
+    ${CC(table.name)}List,
+    handleChangeField,
+    getAll,
     add,
     edit,
     eliminate,
